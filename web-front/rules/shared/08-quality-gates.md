@@ -1,0 +1,69 @@
+# Quality Gate Rules
+
+用于测试、CI、监控、发布和灰度。
+
+## 本地与 CI
+
+优先运行项目实际存在的 scripts：
+
+```bash
+pnpm lint
+pnpm type-check
+pnpm test
+pnpm build
+pnpm api:check
+```
+
+如果脚本不存在，记录“项目未配置该门禁”，不要编造执行结果。
+
+## 规则到工具映射
+
+| 规则域 | 工具 / 门禁 | 阻断级别 |
+|---|---|---|
+| TypeScript 类型 | `vue-tsc --noEmit` / `pnpm type-check` | PR 必须阻断 |
+| ESLint 代码规范 | `pnpm lint` | PR 必须阻断 |
+| views 禁原生 Element Plus import | `eslint-views-ban-el.mjs` | PR 必须阻断 |
+| views 禁 `<el-*>` / EP PascalCase | `ci-scan-views-el-tags.mjs` | PR 必须阻断 |
+| Schema / generated 一致性 | `pnpm api:check` 或等价脚本 | API 变更必须阻断 |
+| 单元 / 组件测试 | `pnpm test:unit` / `pnpm test` | 核心逻辑必须阻断 |
+| E2E 核心链路 | `pnpm test:e2e` | 发布分支必须阻断 |
+| a11y 关键页 | axe / Playwright / 项目等价检查 | 新增关键交互建议阻断 |
+| 依赖安全 / 许可证 | audit / license check / lockfile review | 高危漏洞必须阻断 |
+| Bundle 体积 | bundle analyzer / size-limit / CI 体积对比 | 超预算须说明或阻断 |
+| 敏感信息 | secret scan / CI 扫描 | PR 必须阻断 |
+
+缺失门禁时，在 PR / Codex 最终回复中记录“项目未配置”，不得声称已通过。
+
+## views 硬门禁（若已接入）
+
+须**组合** ESLint import 禁令与模板扫描（见 `00-must-follow` 第 40 条、`rules/examples/README.md`）：
+
+- `eslint-views-ban-el.mjs`：`element-plus` / `element-plus/*` import
+- `ci-scan-views-el-tags.mjs`：`<el-*>`、动态 `is`、`element-plus-pascal-denylist.mjs` 内 PascalCase
+
+业务仓 `lint:views-el` 应进入 PR 必跑链路；CI 勿对 ci-scan 使用 `--allow-empty`。
+
+## 测试
+
+1. 工具函数、composable、复杂组件应有单测。
+2. 核心流程需要 E2E 或最小回归用例。
+3. API / schema 改动必须通过类型与契约检查。
+4. UI 组件、Token、主题变更建议做视觉回归。
+5. 测试分层与 a11y 自动化见 `15-testing.md`。
+
+## 监控
+
+1. 错误上报须符合 `shared/18-logging-observability.md` 字段契约。
+2. 禁止上报未脱敏敏感信息。
+3. 关键流程失败应有业务埋点。
+4. 发布后观察 JS 错误率、白屏率、API 失败率、LCP、INP。
+
+## 发布
+
+1. 生产构建使用锁定依赖。
+2. 静态资源带 hash，入口 HTML 短缓存。
+3. 每次发布必须有关联 release、Git commit、sourcemap。
+4. 发布前确认回滚方式。
+5. 高峰期、结算窗口、重大活动期间冻结非紧急发布。
+6. Feature Flag 必须有 owner、默认值、创建原因和清理日期。
+7. 发布前确认错误恢复与白屏监控策略，见 `21-error-recovery.md`。

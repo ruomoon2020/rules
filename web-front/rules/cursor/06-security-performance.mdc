@@ -1,0 +1,21 @@
+---
+description: 安全、无障碍与性能
+globs:
+  - "src/**/*.vue"
+  - "src/**/*.ts"
+  - "src/**/*.scss"
+  - "packages/**/src/**/*.vue"
+  - "packages/**/src/**/*.ts"
+  - "packages/**/src/**/*.scss"
+alwaysApply: false
+---
+
+# 安全 / 无障碍 / 性能
+
+- 禁止裸 `v-html`；使用项目安全 HTML 封装。
+- 禁止密钥、生产内网地址、未脱敏敏感日志；勿公开生产 sourcemap。
+- 纯图标按钮须 `aria-label`；表单须 label；状态不单靠颜色。
+- 路由级大模块懒加载；大表格分页或虚拟滚动（>100 行参考预算）；搜索 debounce 并取消过期请求。
+- 图表 / 地图 / 富文本 / 编辑器须懒加载；构建体积异常须 bundle analyzer。
+
+全文：`rules/shared/07-security-performance.md` · 日志：`rules/shared/18-logging-observability.md`

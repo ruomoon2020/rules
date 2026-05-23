@@ -1,0 +1,106 @@
+name: backend-quality-gates
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "contracts/**"
+      - "pom.xml"
+      - "build.gradle*"
+      - ".github/workflows/backend-quality-gates.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Build and verify
+        run: mvn -B verify
+
+  openapi-diff:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('contracts/openapi.yaml') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: OpenAPI diff
+        run: |
+          if [ -f contracts/openapi.baseline.yaml ]; then
+            npx @redocly/cli diff contracts/openapi.baseline.yaml contracts/openapi.yaml
+          else
+            echo "contracts/openapi.baseline.yaml not found; record this skip in the PR."
+          fi
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@v2
+
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: OWASP dependency check
+        run: |
+          mvn -B org.owasp:dependency-check-maven:check
+
+  flyway-validate:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' }}
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d app"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Flyway validate MySQL
+        run: mvn -B -Dflyway.url=jdbc:mysql://127.0.0.1:3306/app -Dflyway.user=root -Dflyway.password=root flyway:validate
+
+      - name: Flyway validate PostgreSQL
+        run: mvn -B -Dflyway.url=jdbc:postgresql://127.0.0.1:5432/app -Dflyway.user=postgres -Dflyway.password=postgres flyway:validate

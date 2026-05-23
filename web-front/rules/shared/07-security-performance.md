@@ -1,0 +1,60 @@
+# Security, Accessibility, and Performance Rules
+
+用于安全、可访问性、性能相关改动。
+
+## Security
+
+1. 禁止裸用 `v-html`；必须使用安全封装和 HTML 消毒。
+2. 禁止提交密钥、Token、生产内网地址。
+3. Token、用户信息、租户信息的存储策略必须遵守项目安全要求。
+4. 生产 sourcemap 不得公开暴露。
+5. 新增依赖必须确认用途、体积、维护状态和许可证。
+6. 日志、埋点、错误上报必须脱敏；结构化字段见 `shared/18-logging-observability.md`。
+7. CSP、依赖漏洞扫描、许可证扫描按项目门禁执行。
+
+## Accessibility
+
+1. 目标等级建议 WCAG 2.2 AA。
+2. 所有可点击元素必须可键盘访问。
+3. 纯图标按钮必须有 `aria-label`。
+4. 表单项必须有关联 label。
+5. 错误信息必须可理解，必要时可被读屏感知。
+6. Modal / Drawer 必须管理焦点。
+7. 状态不能只靠颜色表达。
+8. 支持 `prefers-reduced-motion`。
+
+## Performance — 行为要求（必须）
+
+1. 路由和大型组件按需加载。
+2. 图表、地图、富文本、编辑器等重型依赖必须懒加载 / 按需 import，禁止打进首屏主 bundle。
+3. 大表格须服务端分页或虚拟滚动；禁止一次性渲染超过预算行数（见下表）。
+4. 搜索、筛选输入须 debounce，并取消或忽略过期请求（与 `19-list-pagination.md` 竞态规则一致）。
+5. 使用稳定 `key`；禁止无必要的 `watch(..., { deep: true })`。
+6. 关注 LCP、INP、CLS 和首屏接口耗时。
+7. 构建产物体积相对基线异常增长时，须用 bundle analyzer 定位并说明原因。
+
+## Performance — 参考预算
+
+**以项目 `PERFORMANCE_BUDGET.md`、CI 配置或 `vite.config` 为准**；若未定义，采用下表参考值，发版或大改路由时自检。超过预算不等于绝对禁止，但 PR 必须说明原因、影响范围、拆包/优化方案，或给出明确豁免依据与后续 owner。
+
+| 指标 | 参考上限 | 说明 |
+|---|---|---|
+| 首屏路由 JS（gzip） | ≤ 250 KB | 不含懒加载 chunk |
+| 单路由异步 chunk（gzip） | ≤ 150 KB | 超须拆包或懒加载 |
+| 首屏关键接口数 | ≤ 3 | 可并行；其余延迟或合并 |
+| 单张内容图（webp/avif 优先） | ≤ 200 KB | 大图须 CDN + 尺寸适配 |
+| 表格 DOM 行数（无虚拟滚动） | ≤ 100 行 | 超过须分页或 `virtual-scroll` |
+| 搜索 debounce | 200–400 ms | 按交互调整，须取消 stale 请求 |
+
+列表分页行为见 `shared/19-list-pagination.md`。
+
+## 大依赖懒加载（须遵守）
+
+以下类型默认不得静态 import 进首屏列表/详情页主 chunk：
+
+- ECharts / Chart.js / 地图 SDK
+- 富文本 / Markdown 编辑器
+- PDF / Office 预览
+- 重型拖拽 / 代码编辑器
+
+使用 `defineAsyncComponent`、路由级 `() => import()` 或项目约定方式。

@@ -1,0 +1,14 @@
+---
+description: 审计日志
+globs:
+  - "**/audit/**"
+  - "**/*Audit*.java"
+  - "**/api/**/*Controller.java"
+alwaysApply: false
+---
+
+# 审计日志
+
+敏感操作须结构化审计，禁止仅用 log.info。
+
+全文：`rules/shared/27-audit-log.md`

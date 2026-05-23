@@ -1,0 +1,14 @@
+---
+description: 异常、错误码、日志
+globs:
+  - "**/exception/**/*.java"
+  - "**/web/**/*Handler*.java"
+alwaysApply: false
+---
+
+# 异常与日志
+
+- 统一 `errorCode`、`traceId`。
+- 结构化日志；禁止 Token/密码。
+
+全文：`08-exception-errorcodes.md`、`09-logging-observability.md`
