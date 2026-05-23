@@ -16,7 +16,12 @@
 | 隐私 / 数据生命周期 | `29-data-privacy-lifecycle` |
 | Owner / ADR | `30-ownership-adr` |
 | 生产数据操作 | `31-production-data-ops` |
+| 可靠性 / SLO | `32-service-reliability` |
+| 非 REST 范式 | `33-alternate-api-paradigms` |
+| 数据归档 | `34-data-archival` |
+| 备份恢复 Runbook | `docs/backup-restore-runbook.md` |
 | 性能预算模板 | `docs/PERFORMANCE_BUDGET.template.md` |
+| 规则索引 | `docs/rules-package-index.md` |
 | 全栈对齐 | `docs/fullstack-contract.md` |
 
 AI **不读本文件**。

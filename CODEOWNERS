@@ -1,0 +1,11 @@
+# CODEOWNERS（code-rules monorepo 示例）
+# 团队名请替换为实际 GitHub Team；详见 web-backend/rules/docs/codeowners-guidance.md
+
+/contracts/                           @architecture-team
+/web-backend/rules/                     @architecture-team @backend-leads
+/web-front/rules/                       @architecture-team @frontend-leads
+/web-backend/rules/shared/00-must-follow.md  @architecture-team @security-team
+/web-front/rules/shared/00-must-follow.md    @architecture-team @security-team
+/web-backend/rules/evals/              @architecture-team @backend-leads
+/web-front/rules/evals/                @architecture-team @frontend-leads
+/.github/workflows/                   @devops-team

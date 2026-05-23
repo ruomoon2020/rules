@@ -19,6 +19,7 @@
 4. 数据库分库分表、索引重构、批量回填、跨库迁移策略。
 5. 消息、任务、Outbox、分布式锁、缓存一致性方案。
 6. 第三方核心集成、支付、短信、实名、风控等有外部 SLA 的能力。
+7. 引入 GraphQL、gRPC、WebSocket、SSE 等非 REST 对外范式（见 `33-alternate-api-paradigms.md`）。
 
 ## ADR 最小内容
 

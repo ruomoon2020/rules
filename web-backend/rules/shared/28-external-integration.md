@@ -31,6 +31,12 @@
 1. 第三方错误码映射为内部 `errorCode`（见 `08-exception-errorcodes.md`）。
 2. 对用户暴露统一文案；细节仅进日志（脱敏后）。
 
+## SSRF 防护
+
+1. **禁止**根据用户输入的 URL（Webhook 回调地址、导入文件 URL、图片链接等）直接由服务端发起请求，除非经过严格校验。
+2. 出站 URL 须：仅 `https`（按策略）、域名 **白名单**、禁止内网 IP/metadata（`169.254.169.254`、`127.0.0.1`、`10.0.0.0/8` 等）、禁止重定向跳转到内网。
+3. Webhook 须签名验证 + 幂等 + 审计（见 `35-threat-modeling.md`、`27-audit-log.md`）。
+
 ## 凭证
 
 1. AK/SK、API Key 走配置中心或环境变量（见 `21-configuration-secrets.md`）。

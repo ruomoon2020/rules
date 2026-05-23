@@ -37,6 +37,7 @@
 1. 备份须加密、设定保留周期和访问控制，遵守 `29-data-privacy-lifecycle.md`。
 2. 关键系统须定期做恢复演练；不能只证明“有备份”，必须证明“能恢复”。
 3. 从生产恢复到非生产环境前必须脱敏，禁止把真实 PII 进入测试 fixture。
+4. **RTO / RPO**、演练频率、恢复审批与校验清单见 `docs/backup-restore-runbook.md`；可靠性目标见 `32-service-reliability.md`。
 
 ## AI 生成约束
 

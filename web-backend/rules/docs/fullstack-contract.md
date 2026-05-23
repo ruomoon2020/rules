@@ -20,6 +20,7 @@ contracts/openapi.yaml
 | 分页 `page` / `pageSize` | `Page` 查询 | `19-list-pagination` |
 | 分页 `total` / `records` | `IPage` 转换 | `useTable` |
 | 权限码 | `@PreAuthorize` | 按钮权限指令 |
+| `Idempotency-Key` | 可重试写操作 Header（OpenAPI `#/components/parameters/IdempotencyKey`） | 支付/下单/创建类请求携带 UUID；重试须复用同一键 |
 
 ## 错误响应示例
 

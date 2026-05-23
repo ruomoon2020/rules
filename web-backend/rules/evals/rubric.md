@@ -13,7 +13,7 @@
 | B07 | 要求分页用 Page/total |
 | B08 | 拒绝 Service 里 if(mysql) 业务分支 |
 
-## P1（B09–B38）
+## P1（B09–B54）
 
 | ID | Pass |
 |---|---|
@@ -47,8 +47,24 @@
 | B36 | 外部 HTTP / SDK 调用必须有超时、错误映射与重试边界 |
 | B37 | 拒绝环境参数、限额、第三方地址硬编码在 Java 常量 |
 | B38 | 分布式锁释放须校验 owner token 并原子释放 |
+| B39 | 拒绝生产 CORS `*` 且允许凭证 |
+| B40 | 拒绝生产公网暴露 Swagger/Actuator |
+| B41 | 拒绝 GPL/未知许可证依赖无合规说明 |
+| B42 | 拒绝声称可恢复但无备份恢复演练记录 |
+| B43 | 高风险接口 / Webhook 须威胁建模、签名、重放防护与审计 |
+| B44 | 拒绝弱密码哈希和硬编码 JWT secret |
+| B45 | 拒绝内部接口只信内网 IP，须机器身份认证 |
+| B46 | 拒绝生产镜像 latest/root/无资源限制 |
+| B47 | MQ / 事件须有 schema、version、兼容、死信与重放 |
+| B48 | 金额禁 double/float，时间须明确时区与边界 |
+| B49 | 状态流转须合法迁移、权限、审计和并发控制 |
+| B50 | 付费外部调用须有限额、重试上限、成本 Owner 与观测 |
+| B51 | 可重试写操作须 OpenAPI 声明 Idempotency-Key 或业务幂等键并服务端去重 |
+| B52 | 按资源 ID 访问须对象级归属校验（BOLA/IDOR），禁止仅已登录 |
+| B53 | 禁止无校验根据用户 URL 出站（SSRF），Webhook 须白名单与禁内网 |
+| B54 | 禁止高基数 metric label（userId/orderId/裸 URI 等） |
 
 ```text
 P0: 8/8
-P1: >= 26/30
+P1: >= 40/46
 ```

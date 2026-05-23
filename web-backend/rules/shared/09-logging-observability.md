@@ -14,16 +14,23 @@
 
 使用 SLF4J + Logback；禁止 `System.out`。
 
-## TraceId
+## 分布式追踪
 
-1. `Filter` 或 Micrometer Tracing 注入；缺失时生成。
-2. 写入 MDC；出站 HTTP 可选传递。
-3. 与前端 `traceId` 请求头名称在 `fullstack-contract` 中固定。
+1. 优先对齐 **W3C Trace Context**（`traceparent` / `tracestate`）；与网关、前端、MQ 保持一致。
+2. `Filter` 或 Micrometer Tracing / OpenTelemetry 注入；缺失时生成。
+3. 业务 `traceId` 写入 MDC 与响应头；出站 HTTP/MQ **必须**传递（见 `fullstack-contract.md`）。
 
-## 指标与健康
+## 指标与健康（RED）
+
+| 信号 | 指标示例 |
+|---|---|
+| Rate | QPS、消费速率 |
+| Errors | 5xx 率、业务 `errorCode` 率 |
+| Duration | P95/P99 延迟 |
 
 1. 暴露 Actuator：`health`、`info`（见 `22-operability.md`）。
-2. 关键接口 QPS、延迟、错误率接入监控系统（按项目）。
+2. 核心接口须接入监控；SLO 与燃尽率告警见 `32-service-reliability.md`。
+3. **禁止**将高基数维度作为 metric label（如裸 `userId`、`orderId`、未归一化 `uri`），避免时序库爆炸。
 
 ## 禁止
 

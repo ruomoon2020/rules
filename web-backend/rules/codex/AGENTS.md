@@ -29,7 +29,20 @@
 | 外部 HTTP / 第三方 SDK | `rules/shared/28-external-integration.md`、`rules/shared/18-idempotency-concurrency.md`、`rules/shared/30-ownership-adr.md` |
 | 隐私与数据生命周期 | `rules/shared/29-data-privacy-lifecycle.md`、`rules/shared/24-data-access-cache.md` |
 | 架构决策 / 公共抽象 / Owner | `rules/shared/30-ownership-adr.md` |
-| 生产数据修复 / 手工 SQL / 回填 | `rules/shared/31-production-data-ops.md`、`rules/shared/27-audit-log.md`、`rules/shared/29-data-privacy-lifecycle.md` |
+| 生产数据修复 / 手工 SQL / 回填 | `rules/shared/31-production-data-ops.md`、`rules/docs/backup-restore-runbook.md`、`rules/shared/27-audit-log.md` |
+| 可靠性 / SLO / 降级 / 演练 | `rules/shared/32-service-reliability.md`、`rules/shared/22-operability.md` |
+| GraphQL / gRPC / WebSocket / SSE | `rules/shared/33-alternate-api-paradigms.md`、`rules/shared/30-ownership-adr.md` |
+| 数据归档 / 冷热分层 | `rules/shared/34-data-archival.md`、`rules/shared/25-jobs-scheduling.md` |
+| 威胁建模 / 高风险安全变更 | `rules/shared/35-threat-modeling.md`、`rules/shared/06-security-authz.md` |
+| 加密 / Token / 签名 / 密钥 | `rules/shared/36-crypto-key-management.md`、`rules/shared/21-configuration-secrets.md` |
+| 服务间认证 / Webhook / MQ 身份 | `rules/shared/37-service-to-service-auth.md`、`rules/shared/36-crypto-key-management.md` |
+| 容器 / K8s / IaC | `rules/shared/38-cloud-native-runtime.md`、`rules/shared/23-quality-gates.md` |
+| MQ / 事件契约 / Outbox | `rules/shared/39-event-contracts.md`、`rules/shared/17-messaging-async.md` |
+| 金额 / 时间 / 时区 / 精度 | `rules/shared/40-money-time-precision.md`、`rules/shared/11-domain-model.md` |
+| 字典 / 枚举 / 状态机 | `rules/shared/41-dictionary-state-machine.md`、`rules/shared/05-openapi-contract.md` |
+| 成本 / 配额 / 云资源 | `rules/shared/42-cost-governance.md`、`rules/shared/16-performance.md` |
+| OWASP / 合规映射 / 发版与事故 | `rules/docs/owasp-api-top10-mapping.md`、`rules/docs/compliance-cn-mapping.md`、`rules/docs/release-checklist.md`、`rules/docs/incident-postmortem-template.md` |
+| 新项目采纳分层 / PR 自检 | `rules/docs/rule-maturity-model.md`、`rules/docs/pull-request-template.md` |
 | AI 生成复杂后端代码 | `rules/shared/26-ai-generation.md` |
 | 收尾 / Review | `rules/shared/10-verification-checklist.md`、`rules/codex/05-verification.md` |
 
@@ -50,7 +63,11 @@
 - 敏感接口须覆盖越权测试；核心接口 / 批处理须说明性能预算与数据量上限。
 - 公共架构、依赖、跨模块契约须确认 Owner；触发条件满足时先补 ADR。
 - 生产数据修复 / 手工 SQL 必须有 dry-run、影响行数、审批、回滚和审计。
+- 高风险安全变更须做威胁建模；密码/Token/签名/密钥禁止弱加密与硬编码。
+- 内部服务、Webhook、MQ、Job 不得只信内网；须有机器身份、签名/幂等/审计。
+- 金额禁 double/float；时间须明确时区和边界；状态流转不得绕过状态机。
 - API breaking / deprecated 遵守 `05`；大表禁止无条件 `%keyword%` 模糊查询。
+- 对象级授权（BOLA/IDOR）与 SSRF 出站校验；可重试写操作须幂等键；metric 禁止高基数 label。
 
 ## 完成前
 

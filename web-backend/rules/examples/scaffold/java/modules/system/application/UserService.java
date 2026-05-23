@@ -93,13 +93,14 @@ public class UserService {
             throw new BusinessException(ErrorCodes.USER_NOT_FOUND, "用户不存在", HttpStatus.NOT_FOUND);
         }
         String beforeSummary = "username=" + user.getUsername() + ",status=" + user.getStatus();
-        userMapper.deleteById(id);
+        // 同一事务内先写审计再删数据；审计失败则整体回滚（阻断型操作，见 27-audit-log.md）
         auditRecorder.record(AuditRecordCommand.success(
                 "USER_DELETE",
                 "User",
                 String.valueOf(id),
                 beforeSummary
         ));
+        userMapper.deleteById(id);
     }
 
     private void applySort(LambdaQueryWrapper<User> wrapper, String sortField, String sortOrder) {

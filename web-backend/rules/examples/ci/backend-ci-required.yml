@@ -1,0 +1,57 @@
+# Required 门禁 — Level 0+ 建议复制到 .github/workflows/backend-ci-required.yml
+# 见 examples/README.md、shared/23-quality-gates.md
+
+name: backend-ci-required
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "contracts/**"
+      - "pom.xml"
+      - "build.gradle*"
+      - ".github/workflows/backend-ci-required.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Build and verify
+        run: mvn -B verify
+
+  openapi-diff:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('contracts/openapi.yaml') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: OpenAPI diff
+        run: |
+          if [ -f contracts/openapi.baseline.yaml ]; then
+            npx @redocly/cli diff contracts/openapi.baseline.yaml contracts/openapi.yaml
+          else
+            echo "contracts/openapi.baseline.yaml not found; record this skip in the PR."
+          fi
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@v2

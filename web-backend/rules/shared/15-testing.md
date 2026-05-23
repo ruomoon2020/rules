@@ -18,6 +18,8 @@
 
 1. OpenAPI 与 MockMvc 响应结构一致。
 2. 改 OpenAPI 须更新测试或契约测。
+3. **消费者驱动契约**（推荐）：Spring Cloud Contract / Pact 等，由 `contracts/openapi.yaml` 或契约件驱动前后端/服务间测试；CI 按项目启用，未配置须在 PR 说明。
+4. 敏感接口越权用例须与 `06` BOLA/IDOR 场景一致（他人 `id`、跨租户）。
 
 ## ArchUnit
 

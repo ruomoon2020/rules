@@ -10,4 +10,6 @@
 | `db/migration/*/V2__init_system_audit_log.sql` | 审计表样板，字段对齐 OpenAPI |
 | `resources/mapper/system/UserMapper.xml` | 可移植列表 SQL |
 
+| `../config/SecurityConfig.sample.java` | Security 鉴权样板（**复制前必读** CSRF / Swagger / Actuator 注释） |
+
 配套：`docs/scaffold-module-system.md`、`../config/`、`../db/migration/`。

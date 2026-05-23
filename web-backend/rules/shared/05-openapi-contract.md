@@ -18,11 +18,12 @@ contracts/openapi.yaml（或 openapi/ 目录）
 3. `operationId` 稳定，便于生成与追踪。
 4. 枚举在 OpenAPI 中声明；后端 DTO 与之一致。
 5. 分页参数、错误响应模型在 OpenAPI 中复用 `#/components/schemas`。
+6. 可重试写操作（支付、下单、创建资源等）在 OpenAPI 声明 **`Idempotency-Key`** Header（`#/components/parameters/IdempotencyKey`），与 `04-rest-api-design.md`、`18-idempotency-concurrency.md` 一致；未支持幂等须在描述中写明不可安全重试。
 
 ## 变更流程
 
 1. PR 含 OpenAPI diff。
-2. 运行契约校验（Spectral / openapi-diff）。
+2. 运行契约校验（Spectral / openapi-diff）。Monorepo 根建议维护 `contracts/openapi.baseline.yaml` 作为对比基线；契约稳定后由 Owner 更新 baseline（见 `examples/README.md`）。
 3. 通知前端执行 `api:gen` 或等价脚本。
 4. 下列变更视为 **breaking**，须 Review、版本说明与迁移计划（见下方兼容策略）。
 

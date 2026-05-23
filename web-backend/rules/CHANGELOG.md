@@ -1,5 +1,137 @@
 # Changelog
 
+## 1.10.2 — 2026-05-24
+
+### Added
+
+- 仓库根 `.github/workflows/validate-backend-rules.yml`：改 `web-backend/rules/**` 时自动跑一致性校验。
+- 仓库根 `CODEOWNERS`（monorepo 示例）。
+- `examples/ci/rules-package-validate.yml`：业务仓嵌入 `rules/` 时的校验 workflow 样板。
+
+### Changed
+
+- `scripts/validate-rules-package.py`：校验 Smoke 核心 P1、Security/Contract 套件与 `evals/README` 一致；校验 README 清单路径与 cursor→shared 引用。
+- `docs/monorepo-layout.md`、根 `README.md`：补充规则包 CI 与 CODEOWNERS 说明。
+
+## 1.10.1 — 2026-05-24
+
+### Added
+
+- `scripts/validate-rules-package.py`：校验 VERSION/CHANGELOG、evals 条数与门槛、`smoke-prompts` B 编号覆盖（不计入提示词正文计数）。
+- `examples/ci/backend-ci-required.yml`、`examples/ci/backend-ci-optional.yml`：按成熟度拆分 CI 样板。
+- `examples/.github/pull_request_template.md`：可直接复制到业务仓 `.github/` 的 PR 模板。
+
+### Changed
+
+- `evals/smoke-prompts.md`、`docs/contributing-rules-package.md`、`RELEASE.md`：明确 smoke-prompts 为索引、不参与 `### Bxx` 正文计数。
+- `docs/pull-request-template.md`：指向 `examples/.github/` 落地路径。
+- `examples/README.md`、`examples/ci/github-actions-backend.yml`：推荐 required + optional 拆分复制。
+
+## 1.10.0 — 2026-05-24
+
+### Added
+
+- `docs/rule-maturity-model.md`：企业采纳分层 Level 0–3（与包内 L0/L1/L2 架构词区分）。
+- `docs/pull-request-template.md`：业务仓 PR 检查清单（契约/DB/安全/SLO/PII/ADR 等）。
+- `docs/contributing-rules-package.md`：规则包硬变更清单与 Review 要求。
+- `evals/smoke-prompts.md`：Smoke / Security / Contract / Full 套件索引。
+
+### Changed
+
+- `evals/README.md`：回归套件表（Smoke、Security、Contract、Full）与门槛。
+- `shared/23-quality-gates.md`、`examples/README.md`、`examples/ci/github-actions-backend.yml`：CI Required / Conditional / Optional 分级。
+- `examples/config/SecurityConfig.sample.java`：CSRF、Swagger/Actuator 企业审查醒目说明。
+- `RELEASE.md`、`docs/onboarding-new-project.md`、`evals/adoption-checklist.md`、`docs/rules-package-index.md`、`README.md`、`codex/AGENTS.md`：链接新文档与分层 evals 策略。
+
+## 1.9.1 — 2026-05-24
+
+### Changed
+
+- `shared/00-must-follow.md`：将 BOLA/IDOR、SSRF 从 AI 生成小节移入硬安全规则序列，保持 48 条总数不变。
+- `shared/06-security-authz.md`：修正限流小节重复编号。
+- `docs/codeowners-guidance.md`：补充 `rules/**`、IaC、事件契约、Webhook/Consumer/Job、Crypto/Token/Secret 等高风险路径。
+- `docs/compliance-cn-mapping.md`：补充密评/密码应用、供应链安全、运维变更、数据生命周期映射。
+- `evals/adoption-checklist.md`：增加企业治理落地项：CODEOWNERS、发版、事故复盘、备份恢复、性能预算、合规映射 Review。
+
+## 1.9.0 — 2026-05-24
+
+### Added
+
+- `docs/owasp-api-top10-mapping.md`：OWASP API Top 10 与 shared 规则映射。
+- `docs/compliance-cn-mapping.md`：等保、个保、密评等与规则包对照。
+- `docs/release-checklist.md`、`docs/incident-postmortem-template.md`、`docs/codeowners-guidance.md`：发版、事故复盘、CODEOWNERS 指引。
+- `evals`：**B51–B54**（幂等头、BOLA/IDOR、SSRF、高基数 metric）。
+- `contracts/openapi.yaml`：`Idempotency-Key` 参数组件；创建用户 POST 示例引用。
+
+### Changed
+
+- **不新增** `shared/43+`；扩写 `04`/`05`/`06`/`07`/`09`/`13`/`15`/`24`/`26`/`28`/`32`/`10`（幂等、BOLA、SSRF、W3C trace/RED、读写分离、租户配额、Pact、发版复盘等）。
+- `shared/00-must-follow.md`：新增 BOLA/IDOR、SSRF 硬规则（共 48 条）。
+- `evals` 门槛：P1 为 **B09–B54 共 46 条，至少 40/46**；核心 P1 日常子集含 B51、B52（≥15/18）。
+- `README.md`、`RELEASE.md`、`docs/rules-package-index.md`、`docs/onboarding-new-project.md`、`cursor/00-project-overview.mdc`：同步 1.9.0 与 evals 门槛。
+- `contracts/openapi.baseline.yaml`：与 `openapi.yaml` 同步幂等头。
+
+## 1.8.0 — 2026-05-24
+
+### Added
+
+- `shared/35-threat-modeling.md`：高风险接口、Webhook、外部回调、跨租户、PII 等威胁建模。
+- `shared/36-crypto-key-management.md`：密码哈希、Token、签名、随机数、密钥轮换与吊销。
+- `shared/37-service-to-service-auth.md`：内部服务调用、Webhook、MQ、Job 的机器身份与最小权限。
+- `shared/38-cloud-native-runtime.md`：容器、K8s、Helm/Terraform/IaC 运行时安全。
+- `shared/39-event-contracts.md`：Topic/Event schema、版本、兼容、Outbox、死信与重放。
+- `shared/40-money-time-precision.md`：金额、币种、时间、时区、账期与精度。
+- `shared/41-dictionary-state-machine.md`：字典、枚举、状态码、状态机与主数据。
+- `shared/42-cost-governance.md`：付费外部调用、大查询、大导出、日志/归档/备份成本治理。
+- `cursor/27`–`cursor/34`：对应 35–42 的 Cursor 触发规则。
+- `evals`：**B43–B50**（威胁建模、弱加密、内部接口、运行时、事件契约、金额时间、状态机、成本）。
+
+### Changed
+
+- `README.md`、`codex/AGENTS.md`、`docs/rules-package-index.md`：同步 35–42 规则入口。
+- `shared/00-must-follow.md`：新增 35–42 对应硬规则，全文重新编号至 46 条。
+- `shared/10-verification-checklist.md`、`shared/26-ai-generation.md`：补充高阶治理收尾检查与 AI 读取顺序。
+- `evals` 门槛：P1 为 **B09–B50 共 42 条，至少 36/42**。
+
+## 1.7.1 — 2026-05-24
+
+### Added
+
+- 仓库根 `contracts/openapi.baseline.yaml`（与 `openapi.yaml` 同步，供 CI openapi-diff）。
+- `docs/rules-package-index.md`：shared 01–34 与 docs 附录索引。
+
+### Changed
+
+- `05-openapi-contract.md`、`examples/README.md`、`RELEASE.md`：baseline 维护说明。
+- `30-ownership-adr.md`：ADR 触发条件补充非 REST 范式。
+- `07-persistence-mybatis.md`：交叉引用 `34-data-archival.md`。
+- `docs/monorepo-layout.md`：baseline 路径、规则包版本独立说明。
+- `examples/archunit`：application 不得依赖 api 包。
+- `AuditLogController`：补充 `@PreAuthorize` 样板说明。
+
+## 1.7.0 — 2026-05-24
+
+### Added
+
+- `shared/32-service-reliability.md`：SLO/错误预算、降级、RTO/RPO、告警、故障演练。
+- `shared/33-alternate-api-paradigms.md`：GraphQL/gRPC/WebSocket/SSE 默认禁止、ADR 要求。
+- `shared/34-data-archival.md`：大表归档、冷热分层、归档任务与 API 行为。
+- `docs/backup-restore-runbook.md`：备份频率、恢复演练、审批、脱敏恢复、校验清单。
+- `examples/config/SecurityConfig.sample.java`。
+- `cursor/24-service-reliability.mdc`、`25-alternate-api-paradigms.mdc`、`26-data-archival.mdc`。
+- `evals`：**B39–B42**（CORS、Swagger/Actuator 暴露、GPL 依赖、无恢复演练）。
+
+### Changed
+
+- `20-dependency-governance.md`：SBOM、许可证白黑名单、abandoned 包、传递依赖、CVE SLA。
+- `06-security-authz.md`：CORS、CSRF、安全头、Cookie、登录态、Swagger/Actuator 生产规则。
+- `31-production-data-ops.md`：链到 backup runbook 与 `32`。
+- `00-must-follow.md`：可靠性、非 REST 范式、归档硬规则（38 条）。
+- `AuditLogService` 接入 `AuditLogMapper` 分页查询；`UserService.delete` 先审计后删除。
+- `scaffold-module-system.md`：SecurityConfig 指向 examples 样板。
+- `evals` 门槛 **≥29/34**；`evals/README.md` 增加核心 P1 日常子集。
+- `README.md`、`examples/README.md`、`23-quality-gates.md`：CI 样板须裁剪、禁止伪造通过。
+
 ## 1.6.1 — 2026-05-24
 
 ### Added

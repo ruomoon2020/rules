@@ -53,4 +53,13 @@ class LayeredArchitectureTest {
 
         rule.check(classes);
     }
+
+    @Test
+    void application_should_not_depend_on_api_layer() {
+        ArchRule rule = noClasses()
+                .that().resideInAPackage("..application..")
+                .should().dependOnClassesThat().resideInAPackage("..api..");
+
+        rule.check(classes);
+    }
 }

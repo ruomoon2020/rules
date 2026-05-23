@@ -12,7 +12,7 @@
 
 ```text
 L0  shared/00-must-follow.md
-L1  shared/01–31
+L1  shared/01–42
 L2  codex/*.md、cursor/*.mdc
 ```
 
@@ -70,7 +70,30 @@ L2  codex/*.md、cursor/*.mdc
 | `shared/29-data-privacy-lifecycle.md` | 隐私与数据生命周期 |
 | `shared/30-ownership-adr.md` | 架构归属 / ADR |
 | `shared/31-production-data-ops.md` | 生产数据操作 / 手工 SQL |
-| `evals/*` | AI 行为回归 B01–B38 |
+| `shared/32-service-reliability.md` | SLO / 降级 / RTO·RPO / 故障演练 |
+| `shared/33-alternate-api-paradigms.md` | GraphQL/gRPC/WS/SSE 引入约束 |
+| `shared/34-data-archival.md` | 归档与冷热分层 |
+| `shared/35-threat-modeling.md` | 威胁建模 |
+| `shared/36-crypto-key-management.md` | 加密与密钥管理 |
+| `shared/37-service-to-service-auth.md` | 服务间认证 / 机器身份 |
+| `shared/38-cloud-native-runtime.md` | 容器 / K8s / IaC 运行时 |
+| `shared/39-event-contracts.md` | MQ / 事件契约 |
+| `shared/40-money-time-precision.md` | 金额 / 时间 / 精度 |
+| `shared/41-dictionary-state-machine.md` | 字典 / 枚举 / 状态机 |
+| `shared/42-cost-governance.md` | 成本治理 |
+| `docs/backup-restore-runbook.md` | 备份恢复 Runbook 模板 |
+| `evals/*` | AI 行为回归 B01–B54 |
+| `docs/owasp-api-top10-mapping.md` | OWASP API Top 10 映射 |
+| `docs/compliance-cn-mapping.md` | 国内合规对照 |
+| `docs/release-checklist.md` | 发版检查清单 |
+| `docs/incident-postmortem-template.md` | 事故复盘模板 |
+| `docs/codeowners-guidance.md` | CODEOWNERS 指引 |
+| `docs/rule-maturity-model.md` | 采纳分层 Level 0–3 |
+| `docs/pull-request-template.md` | 业务仓 PR 模板 |
+| `docs/contributing-rules-package.md` | 规则包维护者变更治理 |
+| `scripts/validate-rules-package.py` | 规则包一致性校验（evals 计数、门槛、smoke 索引） |
+| `scripts/README.md` | 校验脚本说明 |
+| `examples/ci/rules-package-validate.yml` | 业务仓 rules/ 一致性校验 workflow |
 | `examples/scaffold/` | Java 源码样板（system 用户域） |
 | `examples/*` | ArchUnit、Checkstyle、CI、配置、Flyway、POM 依赖、数据修复样板 |
 | `docs/fullstack-contract.md` | 前后端契约 |
@@ -79,8 +102,22 @@ L2  codex/*.md、cursor/*.mdc
 | `docs/scaffold-module-system.md` | system 模块目录样板 |
 | `docs/adr/0000-template.md` | ADR 模板 |
 | `docs/PERFORMANCE_BUDGET.template.md` | 性能预算模板 |
+| `docs/rules-package-index.md` | shared 规则索引（维护者） |
+| 仓库根 `contracts/openapi.baseline.yaml` | OpenAPI CI diff 基线 |
 | 仓库根 `docs/monorepo-layout.md` | 全栈 monorepo 布局 |
 
 ## Evals
 
-**P0 8/8**，**P1 至少 26/30**（B09–B38）。见 `evals/README.md`。
+**P0 8/8**，**P1 至少 40/46**（B09–B54）。日常 **Smoke**、发版 **Full**；安全/契约 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+
+## 采纳与 PR
+
+- 分阶段接入：`docs/rule-maturity-model.md`
+- 业务仓 PR：复制 `examples/.github/` → 仓库根 `.github/`（或见 `docs/pull-request-template.md`）
+- 改规则包：`docs/contributing-rules-package.md`；发版前运行 `python scripts/validate-rules-package.py`
+
+## CI 样板说明
+
+`examples/ci/github-actions-backend.yml` 标注 **Required / Conditional / Optional**；须按项目裁剪（见 `examples/README.md`、`23-quality-gates.md`）。
+
+本 monorepo 改 `web-backend/rules/**` 时，CI 自动运行 `scripts/validate-rules-package.py`（见仓库根 `.github/workflows/validate-rules-packages.yml`）。**未接入的工具不得伪造「已通过」**。

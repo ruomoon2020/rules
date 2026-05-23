@@ -71,12 +71,22 @@ mybatis-plus:
 | 布尔/时间 | 由 Flyway 迁移定义类型，Java 用 `Boolean` / `Instant` |
 | 自增 | 优先雪花 ID |
 
+## 读写分离
+
+1. 若使用主从库：写后读敏感路径（创建后立即详情、支付后查单）须明确是否**读主库**，避免复制延迟导致「刚写入查不到」。
+2. 只读查询默认走从库须在文档与代码注释中说明；事务内读写在同一连接。
+3. 从库延迟须监控；超阈值时告警或自动读主（按项目策略）。
+
 ## 事务
 
 1. `@Transactional` 在 application 层；`rollbackFor = Exception.class`（按项目默认）。
 2. 只读：`@Transactional(readOnly = true)`。
 3. 禁止同类内自调用导致事务失效（须拆分或使用 `TransactionTemplate`）。
 4. 跨库操作禁止本地 `@Transactional` 假装分布式事务；须 Seata 等显式方案。
+
+## 归档与历史数据
+
+大表归档、冷热表、历史库查询限制见 `34-data-archival.md`；在线库禁止无计划全表扫描归档。
 
 ## 迁移（Flyway）
 

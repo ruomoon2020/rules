@@ -14,8 +14,8 @@ src/main/java/com/company/product/
 │  ├─ observability/TraceIdFilter.java
 │  └─ audit/AuditContext.java
 ├─ config/
-│  ├─ MybatisPlusConfig.java
-│  └─ SecurityConfig.java
+│  ├─ MybatisPlusConfig.java          ← 见 examples/config/MybatisPlusConfig.sample.java
+│  └─ SecurityConfig.java           ← 见 examples/config/SecurityConfig.sample.java
 └─ modules/system/
    ├─ api/
    │  ├─ UserController.java

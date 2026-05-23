@@ -39,5 +39,6 @@
 
 ## 评测
 
-- [ ] 已跑 `evals/prompts.md` 一轮并记录 `results-*.md`
-- [ ] P0 **8/8**，P1 **至少 21/23**（含 E17–E31 日志/分页/性能/批量/导入导出/命名/依赖/错误恢复/a11y）
+- [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E31
+- [ ] P0 **8/8**；P1 **至少 21/23**（Full）；Smoke 核心 P1 **≥10/12**
+- [ ] 已跑 `python rules/scripts/validate-rules-package.py`（嵌入 rules/ 时）

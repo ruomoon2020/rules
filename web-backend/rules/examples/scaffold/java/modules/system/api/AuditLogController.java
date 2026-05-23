@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 审计日志只读 API（样板）。与 contracts/openapi.yaml 对齐；禁止注入 Mapper。
+ * 业务仓接入 Security 后建议：{@code @PreAuthorize("hasAuthority('audit:read')")} 于类或方法。
  */
 @RestController
 @RequestMapping("/api/v1/system/audit-logs")

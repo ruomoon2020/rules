@@ -1,0 +1,26 @@
+# 规则包一致性校验 — 业务仓复制到 .github/workflows/rules-package-validate.yml
+# 默认 rules/ 在仓库根；若路径不同请改 --rules-dir
+#
+# on.pull_request.paths 建议包含 rules/** 与 .github/workflows/rules-package-validate.yml
+
+name: rules-package-validate
+
+on:
+  pull_request:
+    paths:
+      - "rules/**"
+      - ".github/workflows/rules-package-validate.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate embedded rules package
+        run: python rules/scripts/validate-rules-package.py --rules-dir rules

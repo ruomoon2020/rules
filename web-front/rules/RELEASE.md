@@ -2,6 +2,8 @@
 
 维护者发版 `rules/` 时按序执行。
 
+> 维护者完整清单见 `docs/contributing-rules-package.md`。
+
 ## 必做
 
 - [ ] 更新 `VERSION`
@@ -10,7 +12,9 @@
 - [ ] 核对 `README.md`「完整文件清单」与磁盘文件一致
 - [ ] 核对 `codex/AGENTS.md` 任务表与 `shared/` 文件存在性一致
 - [ ] 核对 `cursor/*.mdc` 中的 `rules/shared/...` 引用均存在，且 frontmatter `globs` 能覆盖目标场景
-- [ ] 核对 `README.md`、`evals/README.md`、`evals/rubric.md`、`evals/prompts.md` 的用例数量与通过门槛一致
+- [ ] 核对 `evals` 用例数与门槛（**计数 SSOT**：`prompts.md` + `rubric.md` + `results-template.md`；`smoke-prompts.md` **只校验 E 编号覆盖**）
+- [ ] 运行 `python scripts/validate-rules-package.py` 通过
+- [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`
 
 ## 大版本 / 改 ci-scan 或 Hard Rules 时追加
 

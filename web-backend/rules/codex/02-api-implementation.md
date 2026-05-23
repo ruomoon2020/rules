@@ -13,3 +13,7 @@
 ```
 
 分页列表须用 MP `Page` + `19-pagination-query` 白名单排序。
+
+可重试写操作须在 OpenAPI 声明 `Idempotency-Key` 并在 Service 去重（见 `04`、`18`）。按资源 ID 的接口须做对象级归属校验（见 `06` BOLA/IDOR）。
+
+非 REST 范式（GraphQL/gRPC/WebSocket/SSE）默认禁止，见 `33-alternate-api-paradigms.md`。

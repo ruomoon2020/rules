@@ -51,9 +51,22 @@
 30. 事务内禁止同步外部 HTTP/MQ；分布式锁须过期时间与释放校验（见 `18-idempotency-concurrency.md`）。
 31. 外部集成须超时、错误映射、禁止 Controller 直调 SDK（见 `28-external-integration.md`）。
 32. 测试禁止连接生产/预发库；多库须 Testcontainers 验证迁移（见 `15-testing.md`）。
+33. 核心链路须有 SLO/降级策略与 RTO/RPO 说明；禁止无熔断地依赖外部服务（见 `32-service-reliability.md`）。
+34. 禁止未经 ADR 引入 GraphQL、gRPC、WebSocket、SSE（见 `33-alternate-api-paradigms.md`）。
+35. 大表归档、冷热分层须幂等、防重并明确在线 API 行为（见 `34-data-archival.md`）。
+36. 登录、权限、支付、导入导出、Webhook、跨租户、PII 等高风险变更须做威胁建模（见 `35-threat-modeling.md`）。
+37. 禁止自研加密、弱密码哈希、硬编码 secret、弱随机 Token；密钥须可轮换可吊销（见 `36-crypto-key-management.md`）。
+38. 内部服务、Webhook、MQ、Job 不得只信内网；须有机器身份、签名/Token/mTLS 或等价认证（见 `37-service-to-service-auth.md`）。
+39. 通过资源 ID 访问/修改/删除须校验对象级归属（BOLA/IDOR），禁止仅「已登录」即放行（见 `06-security-authz.md`）。
+40. 禁止根据用户输入 URL 无校验出站请求（SSRF）；Webhook/回调须白名单、禁内网/metadata（见 `28-external-integration.md`）。
+41. 容器 / K8s / IaC 禁止 latest、root、硬编码密钥、无资源限制的生产配置（见 `38-cloud-native-runtime.md`）。
+42. MQ / 事件 / Webhook 是契约，须有 schema、version、幂等、死信与重放策略（见 `39-event-contracts.md`）。
+43. 金额禁止 `double` / `float`；时间须明确时区、格式、边界与账期语义（见 `40-money-time-precision.md`）。
+44. 字典、枚举、状态码、状态流转禁止静默改语义或绕过状态机（见 `41-dictionary-state-machine.md`）。
+45. 高成本外部调用、大导出、大查询、长期日志/备份/归档须说明配额、成本、Owner 与清理策略（见 `42-cost-governance.md`）。
 
 ## AI 生成
 
-33. 写 Mapper / SQL 前阅读项目 MP 配置、`Mapper` 接口与 XML 既有模式；禁止虚构 MP API。
-34. 写字段、DTO 前阅读 OpenAPI；禁止添加契约中不存在的字段。
-35. 输出前自检 `10-verification-checklist.md`。
+46. 写 Mapper / SQL 前阅读项目 MP 配置、`Mapper` 接口与 XML 既有模式；禁止虚构 MP API。
+47. 写字段、DTO 前阅读 OpenAPI；禁止添加契约中不存在的字段。
+48. 输出前自检 `10-verification-checklist.md`。

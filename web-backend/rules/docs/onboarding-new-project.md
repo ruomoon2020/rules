@@ -2,6 +2,10 @@
 
 > 维护者与架构 onboarding；AI 日常读 `README.md`、`codex/AGENTS.md`。
 
+## 0. 选择成熟度目标
+
+按 `docs/rule-maturity-model.md` 声明目标 **Level**（建议：首个迭代 Level 0，核心域上线前 Level 1–2）。不必一次接入全部 42 个 shared 文件。
+
 ## 1. 复制规则包
 
 ```text
@@ -30,6 +34,8 @@ your-backend/
 - `examples/pom-dependencies.sample.xml` — Maven 依赖参考
 - `examples/config/application-mybatis.sample.yml`
 - `examples/config/MybatisPlusConfig.sample.java`
+- `examples/config/SecurityConfig.sample.java`
+- `docs/backup-restore-runbook.md`、`docs/PERFORMANCE_BUDGET.template.md`
 
 ## 5. 硬门禁接入
 
@@ -46,5 +52,7 @@ your-backend/
 
 ## 7. 验证
 
-- `evals/adoption-checklist.md` 勾选
-- 跑 `evals/prompts.md` B01–B38（P0 8/8，P1 ≥26/30）
+- `evals/adoption-checklist.md` 按目标 Level 勾选
+- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B54（P0 8/8，P1 ≥40/46）
+- 业务仓 PR：复制 `rules/examples/.github/` → 仓库根 `.github/`
+- 契约 baseline：首次稳定后生成 `contracts/openapi.baseline.yaml` 供 CI diff（见 `examples/README.md`）

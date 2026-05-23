@@ -12,7 +12,7 @@
 | OpenAPI 契约 | openapi-diff / Spectral / contract test | API 变更必须阻断 |
 | Flyway 迁移 | `flyway validate` + Testcontainers 多库迁移 | DB 变更必须阻断 |
 | SQL 安全 | 扫描 / Review：`${}`、排序白名单、N+1 | PR 必须阻断 |
-| 依赖安全 | OWASP Dependency-Check / SCA / license check | 高危漏洞必须阻断 |
+| 依赖安全 | OWASP Dependency-Check / SCA / license check / SBOM | 高危漏洞必须阻断 |
 | Secret 扫描 | gitleaks / trufflehog / CI 等价工具 | PR 必须阻断 |
 | 性能回归 | 慢 SQL、关键接口基准、压测报告 | 核心接口建议阻断 |
 | 容器与运维 | Actuator health/readiness、配置检查 | 发布分支必须阻断 |
@@ -20,13 +20,26 @@
 | 集成测试环境 | CI 禁止 `prod`/`pre` 数据源 profile | PR 必须阻断 |
 | 生产数据操作 | Runbook + dry-run + 影响行数 + 审批记录 | 生产执行必须阻断 |
 
+## CI 门禁分级
+
+| 级别 | 门禁 | 说明 |
+|---|---|---|
+| **Required** | `mvn verify` / `./gradlew check` | 含编译、单测；ArchUnit 建议在 verify 内 |
+| **Required** | OpenAPI diff / Spectral | 契约 PR 必跑；无 baseline 须在 PR 说明 skip |
+| **Required** | Secret scan（gitleaks 等） | PR 必跑 |
+| **Conditional** | Flyway validate + 多库迁移 | 仅 DB migration PR；MySQL + PostgreSQL 各一次 |
+| **Conditional** | OWASP Dependency-Check / SCA / license | 按合规策略；高危 CVE 阻断 |
+| **Optional** | SBOM、container scan、Pact、perf smoke | 平台团队或核心域按需接入 |
+
+样板 job 标注见 `examples/ci/github-actions-backend.yml` 文件头注释；接入清单见 `examples/README.md`。
+
 ## CI 基线
 
-1. PR 至少运行编译、单测、静态检查、契约检查（若接口变更）。
-2. DB 变更必须跑 Flyway validate；多库项目至少 MySQL + PostgreSQL 各跑一次迁移。
+1. PR 至少运行 **Required** 项；契约变更加 OpenAPI diff。
+2. DB 变更必须跑 Flyway validate（**Conditional**）；多库项目至少 MySQL + PostgreSQL 各跑一次迁移。
 3. 生产发布分支必须运行集成测试或 Testcontainers 等价用例。
-4. 跳过门禁必须写明原因、风险、owner 与补跑计划。
-5. GitHub Actions 样板见 `examples/ci/github-actions-backend.yml`；接入后按项目 Maven / Gradle、数据库和契约路径调整。
+4. 跳过门禁必须写明原因、风险、owner 与补跑计划（`docs/pull-request-template.md`）。
+5. GitHub Actions 样板见 `examples/ci/github-actions-backend.yml`；**仅为参考**，须按项目裁剪；未启用的 job 不得伪造通过（见 `examples/README.md`）。
 
 ## Review 必看
 

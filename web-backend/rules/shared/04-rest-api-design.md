@@ -34,8 +34,18 @@
 
 ## 幂等
 
-1. 创建类接口若支持重试，使用 `Idempotency-Key` 或业务幂等键，见 `18-idempotency-concurrency.md`。
-2. `PUT` 按资源 ID 幂等；`POST` 非幂等须文档说明。
+1. 支付、下单、创建资源等**可重试写操作**须在 OpenAPI 声明 `Idempotency-Key`（HTTP Header）或等价业务幂等键，服务端去重；见 `05-openapi-contract.md`、`18-idempotency-concurrency.md`。
+2. `PUT` 按资源 ID 幂等；`POST` 若无幂等键须在文档明确「不可安全重试」。
+3. 幂等键建议 TTL ≥ 24h，冲突时返回与原请求一致的业务结果或 `409` + 明确 `errorCode`。
+
+## 管理端与对外 API
+
+1. 管理后台 API 建议使用独立路径前缀（如 `/api/v1/admin/`）或独立网关，鉴权强于开放 API。
+2. 禁止将仅内网使用的运维接口暴露到公网；BFF 聚合层不得绕过后端权限校验。
+
+## 限流响应（建议）
+
+触发限流时响应可包含（按项目统一）：`Retry-After`、`X-RateLimit-Limit`、`X-RateLimit-Remaining`；`errorCode` 与 `06-security-authz.md` 一致。
 
 ## 版本与兼容
 

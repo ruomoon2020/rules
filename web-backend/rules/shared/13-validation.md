@@ -5,3 +5,4 @@
 3. 校验消息与 OpenAPI `description` 一致；支持 i18n（按项目）。
 4. 业务规则（跨字段）在 Service 校验，返回明确 `errorCode`。
 5. 枚举使用契约枚举，禁止魔法字符串。
+6. **Mass Assignment**：`UpdateRequest` 仅含允许修改字段；禁止 `BeanUtils.copyProperties(entity, request)` 无字段白名单；敏感字段（角色、租户、状态）仅能通过受权接口修改。

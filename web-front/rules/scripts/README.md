@@ -1,0 +1,29 @@
+# Scripts
+
+## validate-rules-package.py
+
+校验前端规则包内部一致性（**不**执行 AI evals 对话）。
+
+```bash
+python scripts/validate-rules-package.py
+python rules/scripts/validate-rules-package.py --rules-dir rules
+```
+
+### 检查项
+
+| 项 | 说明 |
+|---|---|
+| VERSION ↔ CHANGELOG | 最新版本一致 |
+| evals 计数 | 仅 `prompts.md` 的 `### Exx` 计条数 |
+| smoke-prompts | **索引**：禁止 `### Exx`；E 编号须存在于 prompts |
+| 套件 | Smoke 核心 P1、Security、Contract 与 `evals/README.md` 一致 |
+| 门槛 | 多文件 `21/23` 一致 |
+| 硬规则 | `00` 条数与 `cursor/00`（若标注）一致 |
+| README / cursor | 清单路径与 shared 引用 |
+
+### CI
+
+| 场景 | Workflow |
+|---|---|
+| code-rules monorepo | 仓库根 `.github/workflows/validate-rules-packages.yml` |
+| 业务仓 | 复制 `examples/ci/rules-package-validate.yml` |

@@ -23,6 +23,7 @@ web-backend/                # Spring Boot 工程 + rules/
 |---|---|
 | 新建前端项目 | `web-front/rules/README.md` |
 | 新建后端项目 | `web-backend/rules/docs/onboarding-new-project.md` |
-| 共享 API 契约 | `contracts/openapi.yaml`（含用户 CRUD + 审计日志查询） |
+| 共享 API 契约 | `contracts/openapi.yaml` + `openapi.baseline.yaml`（CI diff） |
 | 全栈 monorepo 布局 | `docs/monorepo-layout.md` |
+| 规则包自动校验 | PR 改任一侧 `rules/**` 时运行 `validate-rules-package.py`（见 `.github/workflows/validate-rules-packages.yml`） |
 | 后端 Java 样板 | `web-backend/rules/examples/scaffold/` |

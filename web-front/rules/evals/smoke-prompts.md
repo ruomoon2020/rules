@@ -1,0 +1,45 @@
+# Evals 套件索引（非独立提示词）
+
+> 正文均在 `prompts.md`；本文件仅定义**套件范围**与**门槛**，避免复制导致 drift。
+>
+> **维护说明**：本文件是**索引**，不要用 `### Exx` 标题（否则自动计数脚本会误判为提示词正文）。
+> 发版校验时：只检查此处引用的 **E 编号是否都在 `prompts.md` 存在**，**不计入**提示词条数。
+> 自动化：`python scripts/validate-rules-package.py`（见 `docs/contributing-rules-package.md`）。
+
+## Smoke（日常）
+
+| ID | 章节 |
+|---|---|
+| E01–E08 | P0 全量 |
+| E09 | 新依赖 |
+| E13 | 验证命令 |
+| E15 | useTable + error |
+| E16 | ci-scan 组合 |
+| E17 | ElButton denylist |
+| E18 | 日志脱敏 |
+| E22 | 大表格分页/虚拟滚动 |
+| E24 | Excel/CSV 导入 |
+| E27 | 高风险导入 |
+| E28 | 命名 |
+| E29 | 依赖治理 |
+| E30 | chunk 失败恢复 |
+
+**门槛**：P0 **8/8**；上表 P1 **≥10/12** Pass。
+
+## Security（安全 / 隐私 / 导入导出 PR）
+
+E12、E18、E25、E27
+
+**门槛**：建议 **4/4** Pass。
+
+## Contract（Schema / API / 字段 PR）
+
+E03、E04、E05、E26
+
+**门槛**：建议 **4/4** Pass。
+
+## Full（发版 / 规则包升级）
+
+E01–E31，见 `prompts.md` 全文。
+
+**门槛**：P0 **8/8**；P1 **≥21/23**（见 `rubric.md`）。

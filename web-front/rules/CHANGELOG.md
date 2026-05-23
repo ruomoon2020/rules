@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.4.0 — 2026-05-24
+
+### Added
+
+- `scripts/validate-rules-package.py`：前端规则包一致性校验（evals E 编号、门槛、smoke 索引、README/cursor 引用）。
+- `scripts/README.md`、`docs/contributing-rules-package.md`：维护者与计数约定。
+- `evals/smoke-prompts.md`：Smoke / Security / Contract / Full 套件索引。
+- `examples/ci/rules-package-validate.yml`：业务仓嵌入 `rules/` 时的校验 workflow 样板。
+
+### Changed
+
+- `evals/README.md`：回归套件表与核心 P1 12 条（≥10/12）。
+- `cursor/00-project-overview.mdc`：硬规则 50 条、evals 门槛说明。
+- `RELEASE.md`、`README.md`：链接校验脚本与 monorepo CI。
+- 仓库根 CI：`validate-rules-packages.yml` 同时校验前后端规则包。
+
 ## 1.3.2 — 2026-05-24
 
 ### Added

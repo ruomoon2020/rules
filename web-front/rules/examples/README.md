@@ -9,6 +9,15 @@
 | `element-plus-pascal-denylist.mjs` | EP PascalCase 组件名列表（可随 EP 版本扩展） |
 | `run-ci-scan-fixtures.mjs` | 脚本回归测试 |
 | `package-scripts.sample.json` | 业务仓 scripts 示例 |
+| `ci/rules-package-validate.yml` | 嵌入 `rules/` 时 PR 校验规则包一致性（复制到 `.github/workflows/`） |
+
+## 规则包一致性（维护者 / 嵌入 rules/ 的业务仓）
+
+```bash
+python rules/scripts/validate-rules-package.py --rules-dir rules
+```
+
+Monorepo 见仓库根 `.github/workflows/validate-rules-packages.yml`。
 
 ## 业务仓（PR 必跑）
 

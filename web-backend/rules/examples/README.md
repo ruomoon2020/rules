@@ -10,7 +10,7 @@
 mvn test -Dtest=LayeredArchitectureTest
 ```
 
-规则：Controller 不依赖 Mapper、不使用 `@Transactional`；domain 不依赖 Spring Web（可按项目调整）。
+规则：Controller 不依赖 Mapper、不使用 `@Transactional`；domain 不依赖 Spring Web；application 不依赖 api（可按项目调整）。
 
 ## Checkstyle
 
@@ -18,7 +18,40 @@ mvn test -Dtest=LayeredArchitectureTest
 
 ## CI 样板
 
-复制 `ci/github-actions-backend.yml` 到 `.github/workflows/backend-quality-gates.yml`，按项目 Maven / Gradle、数据库、OpenAPI baseline 路径调整。
+**推荐（按成熟度）**：
+
+| 文件 | 复制目标 | 适用 |
+|---|---|---|
+| `ci/backend-ci-required.yml` | `.github/workflows/backend-ci-required.yml` | Level 0+：verify、OpenAPI diff、secret scan |
+| `ci/backend-ci-optional.yml` | `.github/workflows/backend-ci-optional.yml` | Level 1–2：dependency-check、Flyway 多库 |
+
+合并版（兼容）：`ci/github-actions-backend.yml` = required + optional。
+
+规则包维护（嵌入 `rules/` 的业务仓）：`ci/rules-package-validate.yml` → `.github/workflows/rules-package-validate.yml`。
+
+### 门禁分级（与 `shared/23-quality-gates.md` 一致）
+
+| 级别 | 建议 job / 工具 |
+|---|---|
+| **Required** | `mvn verify`（含 ArchUnit）、OpenAPI diff、secret scan（gitleaks） |
+| **Conditional** | Flyway validate（改 migration）、OWASP dependency-check（按合规策略） |
+| **Optional** | SBOM、container scan、Pact、license report、perf smoke — 本仓库样板未包含，按项目另加 workflow |
+
+**未配置的门禁不得在 PR 中声称已通过**（见 `shared/23-quality-gates.md`）。
+
+## PR 模板
+
+复制 `examples/.github/` → 业务仓根目录 `.github/`（含 `pull_request_template.md`）。说明见 `docs/pull-request-template.md`。
+
+## OpenAPI baseline
+
+Monorepo 根已提供 `contracts/openapi.baseline.yaml`（与当前 `openapi.yaml` 同步）。**每次有意接受的契约变更合并后**，由 Owner 更新 baseline：
+
+```bash
+cp contracts/openapi.yaml contracts/openapi.baseline.yaml
+```
+
+无 baseline 时 CI 会 skip openapi-diff，须在 PR 说明原因。
 
 ## OpenAPI
 

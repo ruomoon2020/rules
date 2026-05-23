@@ -1,0 +1,66 @@
+# Optional / Conditional 门禁 — Level 1–2 按需复制到 .github/workflows/backend-ci-optional.yml
+# dependency-scan：合规策略；flyway-validate：仅多库 + migration 变更
+# 另可按项目自增：SBOM、container scan、Pact、perf smoke（本文件未包含）
+
+name: backend-ci-optional
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "pom.xml"
+      - "src/main/resources/db/migration/**"
+      - ".github/workflows/backend-ci-optional.yml"
+
+jobs:
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: OWASP dependency check
+        run: |
+          mvn -B org.owasp:dependency-check-maven:check
+
+  flyway-validate:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' }}
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d app"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Flyway validate MySQL
+        run: mvn -B -Dflyway.url=jdbc:mysql://127.0.0.1:3306/app -Dflyway.user=root -Dflyway.password=root flyway:validate
+
+      - name: Flyway validate PostgreSQL
+        run: mvn -B -Dflyway.url=jdbc:postgresql://127.0.0.1:5432/app -Dflyway.user=postgres -Dflyway.password=postgres flyway:validate
