@@ -1,4 +1,4 @@
-# Codex Page Generation Rules
+# Codex 页面生成规则
 
 用于创建或修改 `src/views/**`（及 monorepo 内 `packages/*/src/views/**`）。
 

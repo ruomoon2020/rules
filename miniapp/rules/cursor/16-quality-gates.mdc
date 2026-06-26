@@ -1,0 +1,18 @@
+---
+description: 测试、CI 与发布验证
+globs:
+  - "package.json"
+  - ".github/**"
+  - "vitest.config.*"
+  - "eslint.config.*"
+---
+
+# Quality Gates
+
+Read `rules/shared/16-testing-quality-gates.md`、`rules/shared/19-release-ops.md`、`rules/codex/05-verification.md`。
+
+- PR 须跑 lint、type-check、build:mp-weixin、api:check（以 package.json 为准）。
+- 主包体积超阈值须 fail 或 Owner 审批。
+- 改依赖 / 锁文件时同步读取 `rules/shared/25-dependency-supply-chain.md`，并说明 audit、许可证、体积和平台兼容。
+- 缺少脚本时如实说明，禁止伪造通过。
+- 发版前见 `docs/compliance-wechat-checklist.md`。

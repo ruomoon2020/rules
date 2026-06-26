@@ -1,0 +1,22 @@
+---
+description: 本项目路径与栈（复制到业务仓 .cursor/rules/99-project-local.mdc）
+alwaysApply: true
+---
+
+# 本项目约定（示例，请按实际修改）
+
+- 业务模块路径：`src/main/java/com/acme/modules/{biz}/`
+- 公共层路径：`src/main/java/com/acme/{common,framework,system,generator}/`
+- 成熟后台栈：RuoYi-Vue-Plus 5.x（非 RuoYi 项目请删除 `35-business-module-extension.mdc` 或收窄其 globs）
+- OpenAPI SSOT：`contracts/openapi.yaml`
+- 采纳 Level：1（见 `rules/docs/rule-maturity-model.md`）
+- 新增 CRUD PR 建议跑 evals Business Extension B55–B63
+- 新增业务模块 / CRUD / 菜单 / 字典 / 导入导出时启用业务扩展；仅修 bug、改单字段或改样式类展示接口时不强制按业务扩展处理
+- 改 `common` / `system` / `generator` 时 Cursor 会命中 `36-platform-boundary.mdc`
+- 性能 Owner：后端负责人 / 业务负责人 / SRE（按项目填写）
+- 核心接口 P95 / P99：例如 P95 500ms，P99 1500ms（按接口分级）
+- 慢 SQL 阈值：例如 500ms / 1s
+- 单页最大 pageSize：例如 100
+- 导出最大行数：例如 100_000，超过走异步任务
+- 线程池 / 连接池饱和告警：例如 active > 80%
+- 性能看板 / 告警渠道：按项目填写

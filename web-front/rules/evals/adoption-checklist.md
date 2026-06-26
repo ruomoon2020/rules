@@ -37,8 +37,15 @@
 - [ ] CI：`lint` / `type-check` / `build`
 - [ ] `resetAllStores()` 登出实现
 
+## 成熟后台业务扩展（若适用）
+
+- [ ] 已阅读 `shared/22-business-module-extension.md` 与 `docs/business-feature-playbook-frontend.md`；全栈联调见 monorepo `web-backend/rules/docs/fullstack-contract.md` §新增业务功能
+- [ ] 后端 playbook 与 OpenAPI 已就绪后再开前端页面（权限码、菜单、字典）
+- [ ] 新增业务路由/菜单 PR 已对照后端权限码与 `action` 枚举
+
 ## 评测
 
-- [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E31
-- [ ] P0 **8/8**；P1 **至少 21/23**（Full）；Smoke 核心 P1 **≥10/12**
+- [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E40
+- [ ] P0 **8/8**；P1 **至少 29/32**（Full）；Smoke 核心 P1 **≥10/12**
+- [ ] 成熟后台新增业务页时，跑 **Business Extension** E32–E40（建议 9/9）
 - [ ] 已跑 `python rules/scripts/validate-rules-package.py`（嵌入 rules/ 时）

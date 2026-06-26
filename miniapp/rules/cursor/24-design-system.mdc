@@ -1,0 +1,18 @@
+---
+description: 移动设计 Token、Base 组件与触控热区
+globs:
+  - "src/base/**"
+  - "src/components/**"
+  - "src/styles/**"
+  - "src/pages/**/*.vue"
+  - "src/subpackages/**/*.vue"
+---
+
+# Design System Mobile
+
+Read `rules/shared/24-design-system-mobile.md`、`rules/shared/04-page-ui-lifecycle.md`。
+
+- 使用 Token，禁止页面魔法数样式。
+- 空/错/骨架/加载用 base 组件，与四态一致。
+- 可点击热区与表单错误提示符合移动规范。
+- 页面样式改动不得绕过 Base 组件、Token、安全区和移动触控规范。

@@ -1,4 +1,4 @@
-# Base Components Context（Context Pinning）
+# 基础组件上下文（Context Pinning）
 
 生成或修改 `src/views/**` 前，必须先阅读目标仓库中对应 Base 组件源码。
 

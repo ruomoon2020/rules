@@ -11,4 +11,4 @@ alwaysApply: false
 - 统一 `errorCode`、`traceId`。
 - 结构化日志；禁止 Token/密码。
 
-全文：`08-exception-errorcodes.md`、`09-logging-observability.md`
+全文：`rules/shared/08-exception-errorcodes.md`、`rules/shared/09-logging-observability.md`

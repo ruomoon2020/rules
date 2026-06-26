@@ -14,6 +14,15 @@
 
 使用 SLF4J + Logback；禁止 `System.out`。
 
+## 平台日志底座
+
+若项目基于 RuoYi-Vue-Plus / RuoYi-Cloud-Plus 或等价成熟后台平台：
+
+1. 日志标准以本规则包为准；实现层优先复用平台已有 `@Log`、AOP、事件发布、登录日志、操作日志、错误日志与监控权限。
+2. 业务模块禁止重复实现公共 `LogAspect`、`LogService`、登录日志、操作日志、错误日志表。
+3. 平台默认字段不足时，只允许在公共日志模块做兼容扩展，例如补齐 `traceId`、`tenantId`、`userId`、`durationMs`、`errorCode`。
+4. 业务代码只补充模块名、动作、资源 ID、结果摘要；不得在 Controller 手写散落式日志代替公共能力。
+
 ## 分布式追踪
 
 1. 优先对齐 **W3C Trace Context**（`traceparent` / `tracestate`）；与网关、前端、MQ 保持一致。

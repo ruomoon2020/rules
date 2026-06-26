@@ -1,4 +1,4 @@
-# Design Token Rules
+# 设计 Token 规则
 
 业务代码的视觉约束以**项目 Token 文件**为准（如 `src/styles/tokens`、CSS 变量、Tailwind 主题配置）。无项目文件时，遵守下列执行规则。
 

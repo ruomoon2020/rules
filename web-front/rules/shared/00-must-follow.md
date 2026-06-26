@@ -1,4 +1,4 @@
-# Must Follow Rules
+# 必须遵守的规则
 
 这些是违反即拒 PR 的硬规则。不要把 UI 细节放进本文件；细节规则见其他 shared 文件。
 
@@ -78,3 +78,4 @@
 48. 列表页分页、筛选、排序须有单一数据源；筛选或 pageSize 变化须回第一页；列表请求须防竞态；详见 `shared/19-list-pagination.md`。
 49. 文件导入 / 导出不得绕过 schema、权限、脱敏与审计；Excel / CSV / JSON / Word 规则见 `shared/14-upload-import-export.md`。
 50. 全局错误、路由 chunk 失败、登录过期、白屏恢复不得散落在页面中重复实现；详见 `shared/21-error-recovery.md`。
+51. 基于成熟后台平台新增业务页面时，须复用平台菜单、路由、权限、字典、壳层与 generated API；禁止重复实现全局权限 / 菜单体系或在 views 手改 generated（见 `22-business-module-extension.md`）。

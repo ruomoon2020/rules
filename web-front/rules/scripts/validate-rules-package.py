@@ -24,13 +24,20 @@ ID_TOKEN = re.compile(rf"\b{ID_PREFIX}(\d{{2}})\b")
 ID_RANGE = re.compile(rf"{ID_PREFIX}(\d{{2}})–{ID_PREFIX}(\d{{2}})")
 VERSION_HEAD = re.compile(r"^##\s+(\d+\.\d+\.\d+)\s+—", re.MULTILINE)
 README_PATH = re.compile(r"`((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
+AGENTS_PATH = re.compile(r"`rules/((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
 SHARED_REF = re.compile(r"shared/(\d{2}-[\w-]+\.md)")
+CROSS_BACKEND_REF = re.compile(
+    r"(?:\.\./web-backend/rules/|web-backend/rules/)([\w./-]+\.(?:md|mdc))"
+)
 
 P0_COUNT = 8
 P0_MAX_NUM = 8
 SMOKE_CORE_P1_COUNT = 12
 SECURITY_SUITE = ["E12", "E18", "E25", "E27"]
 CONTRACT_SUITE = ["E03", "E04", "E05", "E26"]
+BUSINESS_EXTENSION_SUITE = [
+    "E32", "E33", "E34", "E35", "E36", "E37", "E38", "E39", "E40",
+]
 
 THRESHOLD_FILES = [
     "README.md",
@@ -99,11 +106,23 @@ def parse_suite_line(text: str, header: str) -> list[str]:
     return re.findall(r"E\d+", block.split("**门槛**")[0])
 
 
+def expand_id_tokens(text: str, prefix: str = ID_PREFIX) -> list[str]:
+    """Expand E01, E09–E12 style tokens to sorted unique list."""
+    ids: set[str] = set()
+    for m in re.finditer(rf"{prefix}(\d{{2}})", text):
+        ids.add(f"{prefix}{m.group(1)}")
+    for m in re.finditer(rf"{prefix}(\d{{2}})\s*[–-]\s*{prefix}(\d{{2}})", text):
+        lo, hi = int(m.group(1)), int(m.group(2))
+        for n in range(lo, hi + 1):
+            ids.add(f"{prefix}{n:02d}")
+    return sorted(ids)
+
+
 def parse_evals_table_suite(text: str, suite_name: str) -> list[str]:
     m = re.search(rf"\|\s*\*\*{re.escape(suite_name)}\*\*\s*\|\s*([^|]+)\|", text)
     if not m:
         return []
-    return re.findall(r"E\d+", m.group(1))
+    return expand_id_tokens(m.group(1))
 
 
 def check_readme_paths(root: Path, errors: list[str]) -> None:
@@ -117,6 +136,15 @@ def check_readme_paths(root: Path, errors: list[str]) -> None:
             errors.append(f"README.md lists missing path: {path}")
 
 
+def check_agents_paths(root: Path, errors: list[str]) -> None:
+    agents = root / "codex" / "AGENTS.md"
+    if not agents.is_file():
+        return
+    for path in AGENTS_PATH.findall(read(agents)):
+        if not (root / path).is_file():
+            errors.append(f"codex/AGENTS.md: missing rules/{path}")
+
+
 def check_cursor_shared_refs(root: Path, errors: list[str]) -> None:
     cursor_dir = root / "cursor"
     if not cursor_dir.is_dir():
@@ -125,6 +153,37 @@ def check_cursor_shared_refs(root: Path, errors: list[str]) -> None:
         for rel in SHARED_REF.findall(read(mdc)):
             if not (root / "shared" / rel).is_file():
                 errors.append(f"{mdc.name}: missing shared/{rel}")
+
+
+def monorepo_root(rules_root: Path) -> Path | None:
+    """web-front/rules → repository root, when used in this monorepo."""
+    resolved = rules_root.resolve()
+    if resolved.name == "rules" and resolved.parent.name == "web-front":
+        return resolved.parent.parent
+    return None
+
+
+def check_cross_package_backend_refs(rules_root: Path, errors: list[str]) -> None:
+    repo = monorepo_root(rules_root)
+    if repo is None:
+        return
+    backend_rules = repo / "web-backend" / "rules"
+    if not backend_rules.is_dir():
+        errors.append(f"monorepo web-backend/rules not found at {backend_rules}")
+        return
+    seen: set[str] = set()
+    for path in rules_root.rglob("*"):
+        if not path.is_file() or path.suffix not in {".md", ".mdc"}:
+            continue
+        for rel in CROSS_BACKEND_REF.findall(read(path)):
+            if rel in seen:
+                continue
+            seen.add(rel)
+            if not (backend_rules / rel).is_file():
+                errors.append(
+                    f"cross-package ref missing web-backend/rules/{rel} "
+                    f"(from {path.relative_to(rules_root)})"
+                )
 
 
 def main() -> int:
@@ -201,8 +260,20 @@ def main() -> int:
         if sorted(con_smoke) != sorted(CONTRACT_SUITE) or sorted(con_readme) != sorted(CONTRACT_SUITE):
             errors.append(f"Contract suite mismatch")
 
+        biz_smoke = parse_suite_line(smoke, "## Business Extension")
+        biz_readme = parse_evals_table_suite(evals_readme, "Business Extension")
+        if sorted(biz_smoke) != sorted(BUSINESS_EXTENSION_SUITE) or sorted(biz_readme) != sorted(
+            BUSINESS_EXTENSION_SUITE
+        ):
+            errors.append(
+                f"Business Extension suite mismatch: smoke={biz_smoke} readme={biz_readme} "
+                f"expected={BUSINESS_EXTENSION_SUITE}"
+            )
+
     check_readme_paths(root, errors)
+    check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)
+    check_cross_package_backend_refs(root, errors)
 
     threshold = parse_p1_threshold(rubric)
     if not threshold:

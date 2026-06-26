@@ -1,4 +1,4 @@
-# Form and Detail Page Rules
+# 表单与详情页规则
 
 表单页、详情页的补充约束（列表页见 `04-ui-patterns.md`）。
 

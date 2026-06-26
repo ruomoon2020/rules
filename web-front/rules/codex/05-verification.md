@@ -1,4 +1,4 @@
-# Codex Verification Rules
+# Codex 验证规则
 
 收尾前必读 **`rules/shared/10-verification-checklist.md`**（与 Cursor Review 共用）。
 

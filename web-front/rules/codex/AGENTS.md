@@ -7,34 +7,53 @@
 1. `rules/codex/01-before-editing.md`
 2. `rules/shared/00-must-follow.md`
 
-## 按任务追加阅读
+## 实现前命中声明
 
-只读与当前任务相关的文件，不要一次加载全部规则。
+改代码前，先用 3-8 行说明本轮规则路由；纯问答、只审查不修改时可不声明。
+
+- **任务包**：命中下表哪一行。
+- **将读取**：本轮实际会读的 `rules/` 文件路径。
+- **不读取及原因**：例如“非成熟后台二开 / 无导入导出 / 仅改样式”。
+
+未声明即开始写代码，视为未遵守本文件。
+
+## 按任务包追加阅读
+
+先判断属于下表哪一行，只读该行和被点名的细则；不要一次加载全部 `shared/`。
 
 | 任务 | 必读规则 |
 |---|---|
 | 任意前端改动 | `rules/codex/01-before-editing.md`、`rules/shared/00-must-follow.md` |
-| 架构 / 目录 / 新模块 | `rules/shared/01-project-structure.md` |
-| **`src/views/**` 页面（基础）** | `rules/shared/04-ui-patterns.md`、`rules/shared/19-list-pagination.md`、`rules/shared/11-base-components-context.md`、`rules/shared/12-schema-ssot.md`、`rules/codex/02-page-generation.md` |
-| views **涉及时追加** | 表单/详情 → `13-form-and-detail.md`；权限/路由/缓存 → `06-state-route-permission.md`；接口字段 → `05-api-contract.md`；命名 → `02-naming.md`；AI 约束 → `09-ai-generation.md` |
-| 表单 / 详情页 | `rules/shared/13-form-and-detail.md`、`rules/shared/12-schema-ssot.md` |
-| 上传 / 导入 / 导出 / 模板下载 | `rules/shared/14-upload-import-export.md`、`rules/shared/05-api-contract.md`、`rules/shared/06-state-route-permission.md`、`rules/shared/18-logging-observability.md` |
+| 写 `src/views/**` 页面（列表 / 查询 / 表格） | `rules/shared/04-ui-patterns.md`、`rules/shared/11-base-components-context.md`、`rules/shared/12-schema-ssot.md`、`rules/shared/19-list-pagination.md`、`rules/codex/02-page-generation.md` |
+| 表单 / 详情 / 弹窗 | `rules/shared/13-form-and-detail.md`、`rules/shared/12-schema-ssot.md`、`rules/codex/02-page-generation.md` |
+| 成熟后台二开 / CRUD / 菜单 / 树表 / 主子表 | `rules/shared/22-business-module-extension.md`、`rules/docs/business-feature-playbook-frontend.md`、`rules/shared/06-state-route-permission.md`、`rules/shared/12-schema-ssot.md`、`rules/shared/14-upload-import-export.md`、`rules/shared/17-shell-navigation.md` |
 | `src/api/**`、schema、generated | `rules/shared/05-api-contract.md`、`rules/shared/12-schema-ssot.md`、`rules/codex/04-api-and-schema.md` |
-| `src/router/**`、`src/store/**`、权限 | `rules/shared/06-state-route-permission.md`、`rules/shared/05-api-contract.md` |
-| `src/components/**` | `rules/shared/02-naming.md`、`rules/shared/03-code-style.md`、`rules/shared/04-ui-patterns.md`、`rules/codex/03-component-generation.md` |
-| 设计 Token / 视觉 | `rules/shared/16-design-tokens.md`、`rules/shared/04-ui-patterns.md` |
-| 壳层 / 菜单 / 布局 | `rules/shared/17-shell-navigation.md`、`rules/shared/06-state-route-permission.md` |
-| 安全 / 无障碍 / 性能 | `rules/shared/07-security-performance.md`、`rules/shared/21-error-recovery.md` |
-| 日志 / 监控 / 错误上报 | `rules/shared/18-logging-observability.md` |
-| 列表分页 / 表格状态 / useTable | `rules/shared/19-list-pagination.md`、`rules/shared/04-ui-patterns.md` |
-| 新增 / 升级依赖 | `rules/shared/20-dependency-governance.md`、`rules/shared/07-security-performance.md` |
-| 测试 / CI / E2E / 发布 | `rules/shared/15-testing.md`、`rules/shared/08-quality-gates.md`、`rules/shared/21-error-recovery.md` |
+| 路由 / Store / 权限 / 菜单 | `rules/shared/06-state-route-permission.md`、`rules/shared/17-shell-navigation.md`、`rules/shared/05-api-contract.md` |
+| 上传 / 导入 / 导出 | `rules/shared/14-upload-import-export.md`、`rules/shared/05-api-contract.md`、`rules/shared/18-logging-observability.md` |
+| `src/components/**`、设计 Token | `rules/shared/02-naming.md`、`rules/shared/03-code-style.md`、`rules/shared/04-ui-patterns.md`、`rules/shared/16-design-tokens.md`、`rules/codex/03-component-generation.md` |
+| 安全 / 性能 / 错误恢复 | `rules/shared/07-security-performance.md`、`rules/shared/21-error-recovery.md` |
+| 测试 / CI / 依赖 / 发布 | `rules/shared/15-testing.md`、`rules/shared/08-quality-gates.md`、`rules/shared/20-dependency-governance.md` |
+| AI 生成复杂前端代码 | `rules/shared/09-ai-generation.md` |
+| i18n / 金额 / 日期 / 时区展示 | `rules/shared/23-i18n-locale.md`、`rules/shared/13-form-and-detail.md` |
+| WebSocket / SSE / 富文本 / 编辑器 | `rules/shared/24-realtime-rich-content.md`、`rules/shared/07-security-performance.md` |
+| 架构 / 新模块 | `rules/shared/01-project-structure.md` |
 | 收尾 / Review | `rules/shared/10-verification-checklist.md`、`rules/codex/05-verification.md` |
+
+## 业务扩展触发词
+
+出现 CRUD、业务模块、管理后台、CodeGen、菜单、按钮权限、字典、导入、导出、树表、主子表、RuoYi、Jeecg 等时，必须追加读取 `rules/shared/22-business-module-extension.md` 与 `rules/docs/business-feature-playbook-frontend.md`。
+
+## 路径触发
+
+- 编辑 `src/views/**`、`src/router/**`（业务域）→ 追加 `22` + playbook（成熟后台场景）。
+- 编辑 `contracts/schema.json`、`src/api/generated/**` → 追加 `12-schema-ssot.md` + `05-api-contract.md`。
+- 编辑 `src/components/base/**` → 追加 `11-base-components-context.md`。
+- 编辑 `src/layouts/**`、全局壳层 → 追加 `17-shell-navigation.md`。
 
 Codex 优先读 `rules/shared/*.md` 与 `rules/codex/*.md`。
 
 - 不要依赖 `rules/cursor/*.mdc`（该目录仅供 Cursor）。
-- 不要读 `rules/docs/`（如 `migration-from-template.md`），仅供维护者追溯历史章节，**不是**编码执行规则。
+- 不要读 `rules/docs/` 中**维护者专用**文件（如 `migration-from-template.md`、`contributing-rules-package.md`）。**例外**：成熟后台新增业务页可读 `rules/docs/business-feature-playbook-frontend.md`；编码约束以 `rules/shared/22-business-module-extension.md` 为准。
 
 ## Hard Rules
 

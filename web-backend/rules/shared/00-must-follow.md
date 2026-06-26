@@ -64,9 +64,10 @@
 43. 金额禁止 `double` / `float`；时间须明确时区、格式、边界与账期语义（见 `40-money-time-precision.md`）。
 44. 字典、枚举、状态码、状态流转禁止静默改语义或绕过状态机（见 `41-dictionary-state-machine.md`）。
 45. 高成本外部调用、大导出、大查询、长期日志/备份/归档须说明配额、成本、Owner 与清理策略（见 `42-cost-governance.md`）。
+46. 基于成熟后台平台新增业务时，须复用已有用户、权限、菜单、字典、文件、日志、任务、租户、数据权限、代码生成等公共能力；禁止在业务模块重复实现或污染系统模块（见 `43-business-module-extension.md`）。
 
 ## AI 生成
 
-46. 写 Mapper / SQL 前阅读项目 MP 配置、`Mapper` 接口与 XML 既有模式；禁止虚构 MP API。
-47. 写字段、DTO 前阅读 OpenAPI；禁止添加契约中不存在的字段。
-48. 输出前自检 `10-verification-checklist.md`。
+47. 写 Mapper / SQL 前阅读项目 MP 配置、`Mapper` 接口与 XML 既有模式；禁止虚构 MP API。
+48. 写字段、DTO 前阅读 OpenAPI；禁止添加契约中不存在的字段。
+49. 输出前自检 `10-verification-checklist.md`。

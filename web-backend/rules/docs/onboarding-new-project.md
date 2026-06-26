@@ -4,7 +4,7 @@
 
 ## 0. 选择成熟度目标
 
-按 `docs/rule-maturity-model.md` 声明目标 **Level**（建议：首个迭代 Level 0，核心域上线前 Level 1–2）。不必一次接入全部 42 个 shared 文件。
+按 `docs/rule-maturity-model.md` 声明目标 **Level**（建议：首个迭代 Level 0，核心域上线前 Level 1–2）。不必一次接入全部 43 个 shared 文件。
 
 ## 1. 复制规则包
 
@@ -53,6 +53,7 @@ your-backend/
 ## 7. 验证
 
 - `evals/adoption-checklist.md` 按目标 Level 勾选
-- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B54（P0 8/8，P1 ≥40/46）
+- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B63（P0 8/8，P1 ≥49/55）
+- 成熟后台新增业务：优先跑 **Business Extension** B55–B63（建议 9/9）
 - 业务仓 PR：复制 `rules/examples/.github/` → 仓库根 `.github/`
 - 契约 baseline：首次稳定后生成 `contracts/openapi.baseline.yaml` 供 CI diff（见 `examples/README.md`）

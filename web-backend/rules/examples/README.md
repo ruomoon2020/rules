@@ -39,6 +39,15 @@ mvn test -Dtest=LayeredArchitectureTest
 
 **未配置的门禁不得在 PR 中声称已通过**（见 `shared/23-quality-gates.md`）。
 
+## Cursor 规则与本地覆盖
+
+| 文件 | 复制目标 | 说明 |
+|---|---|---|
+| `cursor/*.mdc` | 业务仓 `.cursor/rules/` | 仅 `00-project-overview.mdc` 建议 `alwaysApply: true` |
+| `99-project-local.mdc.sample` | `.cursor/rules/99-project-local.mdc` | 填写真实包名、模块路径、栈与 Level |
+| `35-business-module-extension.mdc` | 同上 | RuoYi / Jeecg 二开；非成熟后台可删除或改 globs |
+| `36-platform-boundary.mdc` | 同上 | 改 common / system / generator 时触发 |
+
 ## PR 模板
 
 复制 `examples/.github/` → 业务仓根目录 `.github/`（含 `pull_request_template.md`）。说明见 `docs/pull-request-template.md`。

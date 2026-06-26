@@ -25,3 +25,4 @@
 21. 对象级授权（BOLA/IDOR）、Mass Assignment、用户可控 URL 出站（SSRF）须读 `06-security-authz.md`、`28-external-integration.md`；映射见 `docs/owasp-api-top10-mapping.md`。
 22. 可重试写操作、限流响应头须读 `04-rest-api-design.md`；追踪与 metric 高基数须读 `09-logging-observability.md`。
 23. 国内合规对照（等保、个保、密评等）见 `docs/compliance-cn-mapping.md`；发版与事故复盘见 `docs/release-checklist.md`、`docs/incident-postmortem-template.md`。
+24. 基于 RuoYi-Vue-Plus / RuoYi-Cloud-Plus / ruoyi-vue-pro / JeecgBoot 等成熟后台新增业务模块、CRUD、管理端功能时，须读 `43-business-module-extension.md` 与 `docs/business-feature-playbook.md`；禁止重复实现平台已有用户、权限、字典、日志、文件、任务等公共能力。

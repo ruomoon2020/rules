@@ -8,6 +8,6 @@ alwaysApply: false
 # Java 风格
 
 - 构造器注入；`@Transactional` 在 Service。
-- 命名、注释见 `02-naming.md`、`03-code-style.md`。
+- 命名、注释见 `rules/shared/02-naming.md`、`rules/shared/03-code-style.md`。
 
 全文：`rules/shared/03-code-style.md`

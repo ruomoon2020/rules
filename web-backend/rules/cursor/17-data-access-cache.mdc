@@ -1,7 +1,10 @@
 ---
 description: 数据权限、多租户、缓存一致性
 globs:
-  - "src/main/java/**/*.java"
+  - "src/main/java/**/*Cache*.java"
+  - "src/main/java/**/*Redis*.java"
+  - "src/main/java/**/*Permission*.java"
+  - "src/main/java/**/*DataScope*.java"
   - "src/main/resources/mapper/**/*.xml"
 alwaysApply: false
 ---

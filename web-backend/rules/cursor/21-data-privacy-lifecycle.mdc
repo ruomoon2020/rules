@@ -1,7 +1,10 @@
 ---
 description: 隐私与数据生命周期
 globs:
-  - "src/main/java/**/*.java"
+  - "src/main/java/**/*Export*.java"
+  - "src/main/java/**/*Import*.java"
+  - "src/main/java/**/*Privacy*.java"
+  - "src/main/java/**/*User*.java"
   - "src/test/**/*.java"
   - "src/main/resources/**/*.yml"
   - "src/main/resources/**/*.yaml"

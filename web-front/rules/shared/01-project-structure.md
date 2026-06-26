@@ -1,4 +1,4 @@
-# Project Structure Rules
+# 项目结构规则
 
 用于约束目录职责、依赖方向和文件归属。
 
@@ -59,4 +59,3 @@ api -> Element Plus message directly
 7. 多应用场景下，公共 UI 和工具抽到 `packages`，应用只依赖 packages。
 
 目录、文件、views 路径命名见 **`shared/02-naming.md`**。
-

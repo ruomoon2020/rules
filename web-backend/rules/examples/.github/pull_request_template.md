@@ -17,6 +17,7 @@
 - [ ] 依赖 / 许可证
 - [ ] 定时任务 / 批处理 / MQ
 - [ ] 配置 / 密钥 / IaC / 容器
+- [ ] 新增业务模块 / CRUD / CodeGen（成熟后台二开）
 - [ ] 仅文档 / 规则包
 - [ ] 其他：__________
 
@@ -62,6 +63,26 @@
 - [ ] 公共抽象 / 新依赖 / breaking API：已确认 Owner；需 ADR 时已补（`30`）
 - [ ] 已请求 CODEOWNERS 对应 Reviewer（契约 / DB / security / CI / rules）
 - [ ] 规则包变更（若改 `rules/**`）：见 `rules/docs/contributing-rules-package.md`
+
+### 新增业务模块（成熟后台 / RuoYi 系，若适用）
+
+- [ ] 变更仅在业务模块 `modules/{biz}`，未污染 `common` / `framework` / `system`（`43-business-module-extension.md`）
+- [ ] 已复用平台用户、角色、菜单、权限、字典、文件、日志、任务、租户、数据权限（非重复造轮子）
+- [ ] CodeGen 后已补：OpenAPI、权限码、菜单/按钮、数据权限、审计、索引、错误码、测试（`docs/business-feature-playbook.md`）
+- [ ] 后端权限注解、菜单权限码、前端按钮权限码一致或可追踪；禁止仅有菜单 / 前端权限
+- [ ] 模块名、表前缀、权限码、错误码、字典 type 前缀一致；全局表已说明非租户隔离原因
+- [ ] list / detail / export / delete / batch / job 数据权限与 BOLA 口径一致（`24`、`06`）
+- [ ] 树表 / 主子表已检查父子归属、跨租户、循环关系、事务回滚和孤儿数据
+- [ ] 未为单个业务修改 generator 全局模板；若修改，已补 Owner、ADR、兼容、回滚和生成场景回归
+- [ ] 建议跑 evals **Business Extension** B55–B63（建议 9/9；或说明 N/A：非成熟后台栈）
+
+**前端（若同 PR 含管理端页面）**
+
+- [ ] 已 `schema:sync` + `api:gen` + `api:check`；未手改 `src/api/generated`（`12-schema-ssot`）
+- [ ] 路由 `name`、菜单、按钮权限码与后端一致；禁止仅隐藏 UI（`06-state-route-permission`）
+- [ ] 树表 / 主子表（若有）：非法父节点禁选、主子表错误明细、失败态与后端一致（`22` §树表/主子表）
+- [ ] 列表四态、删除末条回退页码、导入导出 UI 与 `web-front/rules/shared/22-business-module-extension.md`、`web-front/rules/docs/business-feature-playbook-frontend.md` 一致
+- [ ] 已跑 `pnpm lint` / `type-check`（或项目等价命令）
 
 ---
 

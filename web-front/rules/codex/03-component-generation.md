@@ -1,4 +1,4 @@
-# Codex Component Generation Rules
+# Codex 组件生成规则
 
 Use this when creating or modifying shared or business components.
 
@@ -28,4 +28,3 @@ Use this when creating or modifying shared or business components.
 ## Verification
 
 Run component tests if configured. For visual components, also inspect affected pages or visual regression output when available.
-

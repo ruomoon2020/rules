@@ -1,0 +1,23 @@
+# 规则包一致性校验 — 业务仓复制为 .github/workflows/miniapp-rules-package-validate.yml
+
+name: miniapp-rules-package-validate
+
+on:
+  pull_request:
+    paths:
+      - "rules/**"
+      - ".github/workflows/miniapp-rules-package-validate.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate embedded miniapp rules package
+        run: python rules/scripts/validate-rules-package.py --rules-dir rules

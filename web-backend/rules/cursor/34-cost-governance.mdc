@@ -1,7 +1,9 @@
 ---
 description: 成本治理
 globs:
-  - "src/main/java/**/*.java"
+  - "src/main/java/**/*Client.java"
+  - "src/main/java/**/*Export*.java"
+  - "src/main/java/**/*Report*.java"
   - "src/main/resources/**/*.yml"
   - "src/main/resources/**/*.yaml"
   - "deploy/**/*"

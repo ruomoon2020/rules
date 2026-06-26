@@ -27,14 +27,18 @@
 | 30–31 | `30-ownership-adr.md`、`31-production-data-ops.md` | ADR、生产数据操作 |
 | 32–34 | `32-service-reliability.md`、`33-alternate-api-paradigms.md`、`34-data-archival.md` | 可靠性、API 范式、归档 |
 | 35–42 | `35`–`42` | 威胁建模、加密密钥、服务间认证、云原生、事件契约、金额时间、状态机、成本 |
+| 43 | `43-business-module-extension.md` | 成熟后台业务模块扩展 |
 
 ## Docs 附录
 
 | 文件 | 用途 |
 |---|---|
-| `fullstack-contract.md` | 前后端字段对齐 |
+| `fullstack-contract.md` | 前后端字段对齐（含 §新增业务功能） |
 | `backup-restore-runbook.md` | 备份恢复 |
 | `PERFORMANCE_BUDGET.template.md` | 性能预算 |
+| `business-feature-playbook.md` | 业务功能落地流程 |
+| `../web-front/rules/shared/22-business-module-extension.md` | 前端业务页 SSOT（跨包） |
+| `../web-front/rules/docs/business-feature-playbook-frontend.md` | 前端业务页面落地步骤（跨包） |
 | `sql-dialect-matrix.md` | 方言 SQL 登记 |
 | `adr/0000-template.md` | ADR 模板 |
 | `owasp-api-top10-mapping.md` | OWASP API Top 10 ↔ shared 映射 |
@@ -49,7 +53,9 @@
 | `../scripts/README.md` | 校验脚本说明 |
 | `../examples/ci/rules-package-validate.yml` | 业务仓 rules/ 校验 workflow |
 | `../examples/.github/pull_request_template.md` | 业务仓 PR 模板 |
+| `../cursor/35-business-module-extension.mdc` | Cursor 业务扩展触发规则 |
+| `../cursor/36-platform-boundary.mdc` | Cursor 公共层 / system / generator 边界触发规则 |
 
 ## Evals
 
-B01–B08 P0；B09–B54 P1（≥40/46）。套件：Smoke / Security / Contract / Full — 见 `evals/README.md`、`evals/smoke-prompts.md`。
+B01–B08 P0；B09–B63 P1（≥49/55）。套件：Smoke / Security / Contract / Business Extension / Full — 见 `evals/README.md`、`evals/smoke-prompts.md`。

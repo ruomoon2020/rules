@@ -1,4 +1,4 @@
-# List Pagination & Table State Rules
+# 列表分页与表格状态规则
 
 适用于带筛选、排序、分页的列表页（`src/views/**`）。若项目有 `useTable` 或等价 composable，**这些行为应在 composable 内默认实现**，页面只编排 UI。
 

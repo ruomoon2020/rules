@@ -1,4 +1,4 @@
-# Dependency Governance Rules
+# 依赖治理规则
 
 用于新增、升级、替换 npm 依赖和大型运行时库。
 

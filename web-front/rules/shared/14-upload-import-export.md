@@ -1,4 +1,4 @@
-# Upload, Import, and Export Rules
+# 上传、导入与导出规则
 
 适用于上传、模板下载、Excel / CSV / JSON / Word 导入导出。执行配合 `05-api-contract.md`、`06-state-route-permission.md`、`18-logging-observability.md` 与业务仓上传组件；具体解析库、下载 API、任务轮询 API 以目标仓库为准，AI 不得虚构方法签名。
 

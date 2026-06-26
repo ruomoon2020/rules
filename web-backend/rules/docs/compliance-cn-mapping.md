@@ -16,5 +16,6 @@
 | 供应链安全 | 依赖漏洞、许可证、SBOM、CI 防篡改 | `20-dependency-governance`、`23-quality-gates`、`38-cloud-native-runtime` |
 | 运维变更 | 发版、回滚、灰度、故障演练 | `22-operability`、`32-service-reliability`、`docs/release-checklist.md` |
 | 数据生命周期 | 留存、归档、销毁、恢复至非生产脱敏 | `29`、`31`、`34-data-archival` |
+| 权限与职责分离（二开） | 不重复造用户/角色/审计/任务；业务模块边界清晰；树表/主子表/generator 边界 | `43-business-module-extension`、`27-audit-log`、`25-jobs-scheduling`；evals B55–B63 |
 
 等保 2.0 测评项请由安全团队做正式差距分析；本表仅作研发规则索引。

@@ -1,4 +1,4 @@
-# Security, Accessibility, and Performance Rules
+# 安全、无障碍与性能规则
 
 用于安全、可访问性、性能相关改动。
 
@@ -32,6 +32,9 @@
 5. 使用稳定 `key`；禁止无必要的 `watch(..., { deep: true })`。
 6. 关注 LCP、INP、CLS 和首屏接口耗时。
 7. 构建产物体积相对基线异常增长时，须用 bundle analyzer 定位并说明原因。
+8. 首屏接口按必要性分级：关键、可延后、用户触发；非关键接口不得阻塞首屏可交互。
+9. 图片须有尺寸、压缩、懒加载和 CDN 策略；禁止 base64 大图进入业务代码。
+10. PR 新增重依赖、静态资源或大 chunk 时，必须说明体积增量、影响路由、Owner 和后续优化计划。
 
 ## Performance — 参考预算
 
@@ -39,14 +42,26 @@
 
 | 指标 | 参考上限 | 说明 |
 |---|---|---|
+| LCP P75 | ≤ 2.5s | 关键页面；以 RUM / Lighthouse / 项目监控为准 |
+| INP P75 | ≤ 200ms | 核心交互；复杂后台页可由项目预算覆盖 |
+| CLS P75 | ≤ 0.1 | 禁止布局跳动影响表单 / 表格 |
 | 首屏路由 JS（gzip） | ≤ 250 KB | 不含懒加载 chunk |
 | 单路由异步 chunk（gzip） | ≤ 150 KB | 超须拆包或懒加载 |
+| bundle 增量（gzip） | ≤ 30 KB / PR | 超须说明原因与 Owner |
 | 首屏关键接口数 | ≤ 3 | 可并行；其余延迟或合并 |
+| 首屏关键接口 P95 | ≤ 800 ms | 与后端 trace 对齐 |
 | 单张内容图（webp/avif 优先） | ≤ 200 KB | 大图须 CDN + 尺寸适配 |
 | 表格 DOM 行数（无虚拟滚动） | ≤ 100 行 | 超过须分页或 `virtual-scroll` |
 | 搜索 debounce | 200–400 ms | 按交互调整，须取消 stale 请求 |
 
 列表分页行为见 `shared/19-list-pagination.md`。
+
+## 性能预算落地
+
+1. 项目应在业务仓 `PERFORMANCE_BUDGET.md`、CI 或 `99-project-local.mdc` 声明预算、Owner、看板与告警。
+2. 性能数据来源须明确：RUM、Lighthouse、Playwright、bundle analyzer 或监控平台。
+3. 超预算合并须有审批、复测计划和到期清理项；禁止长期无 Owner 豁免。
+4. 发版后观察 LCP、INP、CLS、首屏 API、白屏率、资源加载失败率。
 
 ## 大依赖懒加载（须遵守）
 

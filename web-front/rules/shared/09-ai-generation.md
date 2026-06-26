@@ -1,4 +1,4 @@
-# AI Generation Rules
+# AI 生成规则
 
 用于约束 Codex、Cursor、Copilot 等 AI 生成代码。
 
@@ -26,6 +26,8 @@
 3. 确认路由 `name`；需要缓存时写 `defineOptions({ name })`。
 4. 确认权限码、字典、错误处理模式。
 5. 确认使用 Base 组件，不用原生 Element Plus。
+
+基于 RuoYi / Jeecg 等成熟后台**新增业务模块 / CRUD 页**时，额外阅读 `shared/22-business-module-extension.md` 与 `docs/business-feature-playbook-frontend.md`；须等后端 OpenAPI 与权限码就绪后再生成页面。
 
 未阅读 Base 定义与 schema 前，不得开始编写业务页面。
 

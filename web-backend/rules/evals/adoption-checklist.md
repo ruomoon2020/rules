@@ -32,6 +32,14 @@
 - [ ] `docs/pull-request-template.md` 或已复制 `examples/.github/` 到业务仓 `.github/`
 - [ ] CI 已按 Required/Conditional 裁剪（`examples/README.md`）
 
+## 成熟后台业务扩展（若适用）
+
+- [ ] 已阅读 `docs/business-feature-playbook.md`；全栈联调见 `docs/fullstack-contract.md` §新增业务功能
+- [ ] 前端已阅读 `web-front/rules/shared/22-business-module-extension.md` 与 `web-front/rules/docs/business-feature-playbook-frontend.md`（菜单、权限、api:gen）
+- [ ] 新增业务默认在 `modules/{biz}`；改 `common`/`framework`/`system` 已有 Owner/ADR
+- [ ] PR 模板已复制且勾选「新增业务模块」段（`examples/.github/`）
+
 ## 评测
 
-- [ ] **Smoke**：B01–B08 + 核心 P1（≥15/18）；发版前 **Full** B01–B54（P0 8/8，P1 ≥40/46）
+- [ ] **Smoke**：B01–B08 + 核心 P1（≥17/20）；发版前 **Full** B01–B63（P0 8/8，P1 ≥49/55）
+- [ ] 成熟后台新增业务时，跑 **Business Extension**：后端 B55–B63、前端 E32–E40（均建议 9/9）

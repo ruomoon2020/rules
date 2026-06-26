@@ -1,4 +1,4 @@
-# Codex API and Schema Rules
+# Codex API 与 Schema 规则
 
 Use this when editing API files, request wrappers, schema, generated clients, or pages that depend on API fields.
 
@@ -48,4 +48,3 @@ pnpm type-check
 ```
 
 If a command is missing, report that the project has not wired the corresponding gate yet.
-

@@ -17,5 +17,6 @@ alwaysApply: false
 - 纯图标按钮须 `aria-label`；表单须 label；状态不单靠颜色。
 - 路由级大模块懒加载；大表格分页或虚拟滚动（>100 行参考预算）；搜索 debounce 并取消过期请求。
 - 图表 / 地图 / 富文本 / 编辑器须懒加载；构建体积异常须 bundle analyzer。
+- 改 `package.json`、`vite.config`、图表/编辑器/地图等重依赖时，必须核对 bundle 预算、性能 Owner 与看板。
 
 全文：`rules/shared/07-security-performance.md` · 日志：`rules/shared/18-logging-observability.md`

@@ -1,4 +1,4 @@
-# Error Recovery and Blank Screen Rules
+# 错误恢复与白屏治理规则
 
 用于全局异常、路由失败、白屏恢复、接口错误与用户可恢复体验。
 

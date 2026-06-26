@@ -1,4 +1,4 @@
-# Verification Checklist
+# 验证清单
 
 完成改动或声称「已完成」前，执行本清单。命令以项目 `package.json` 中实际 scripts 为准。
 
@@ -38,6 +38,7 @@ pnpm api:check
 15. 文件导入 / 导出：模板、字段、权限、脱敏、错误明细、异步任务、幂等标识、下载鉴权、审计日志已按 `14-upload-import-export.md` 检查。
 16. 未提交密钥、mock handler。
 17. 列表页使用 `useTable`（或项目等价封装）时包含 error 态与重试。
+18. 成熟后台新增业务页按 `22-business-module-extension.md` 检查：复用平台菜单 / 权限 / 字典；路由 `name` 与按钮权限码与后端一致；`api:gen` 后未手改 generated；列表四态与分页竞态；导入导出与操作记录刷新；树表 / 主子表 UI 与后端数据范围一致。
 
 ## 最终回复应包含
 

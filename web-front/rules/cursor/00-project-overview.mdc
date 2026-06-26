@@ -9,10 +9,11 @@ alwaysApply: true
 
 ## 唯一入口
 
-- 硬规则：`rules/shared/00-must-follow.md`（当前 50 条）
-- Evals：P0 8/8，P1 ≥21/23（E01–E31）；日常 Smoke、发版 Full（见 `evals/README.md`）
+- 硬规则：`rules/shared/00-must-follow.md`（当前 51 条）
+- Evals：P0 8/8，P1 ≥29/32（E01–E40）；成熟后台业务 PR 跑 **Business Extension** E32–E40（见 `evals/README.md`）
 - Codex：`rules/codex/AGENTS.md`（复制为仓库根 `AGENTS.md`）
 - Cursor：本目录 `.mdc` 文件（复制到业务仓 `.cursor/rules/`）
+- Cursor 路由：成熟后台新增业务页看 `18-business-module-extension.mdc`；列表/表单看 `10`/`11`/`13`；路由权限看 `06` 相关规则
 
 ## 落地要求
 

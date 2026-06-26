@@ -1,0 +1,22 @@
+# 业务仓规则落地 Checklist
+
+复制到小程序业务仓 `docs/` 或 PR 描述中勾选。
+
+## 必做
+
+- [ ] `rules/` 整包（或 submodule）+ 根 `AGENTS.md` + `.cursor/rules/*.mdc`
+- [ ] `99-project-local.mdc` 已填写：分包路径、主包预算、目标平台、契约路径
+- [ ] OpenAPI / schema SSOT：`contracts/openapi.yaml`（或等价）+ `api:gen` / `api:check`
+- [ ] 页面不走 `uni.request` / `uni.login` 直调；走 `api/`、`auth/`、`platform/`
+- [ ] 新业务页默认 `src/subpackages/**`
+- [ ] CI：`lint`、`type-check`、`build:mp-weixin`、`api:check`、`size:check`（以 `package.json` 为准）
+
+## 推荐
+
+- [ ] 跑 Smoke evals（M01–M08 + 核心 P1 ≥10/12）
+- [ ] 隐私 / 支付 / 分享 PR 跑 Security + Contract 套件
+- [ ] 新业务分包 PR 跑 Business Extension M21–M29
+- [ ] 与后端 `web-backend/rules/docs/fullstack-contract.md` §小程序 对齐 traceId / errorCode / 分页
+- [ ] 已复制 `examples/.github/pull_request_template.md`；可选 `examples/ci/rules-package-validate.yml`
+- [ ] 声明采纳 Level（`docs/rule-maturity-model.md`）写入 `99-project-local.mdc`
+- [ ] 已配置 `pnpm audit`（`25`）；错误恢复与 UGC 按 `22`/`23` 落地

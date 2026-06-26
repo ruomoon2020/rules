@@ -1,5 +1,79 @@
 # Changelog
 
+## 1.11.4 — 2026-06-27
+
+### Changed
+
+- 修复 B19 rubric 语义错位，并增加高风险 eval 主题守卫与回归测试。
+- Cursor shared 引用统一为 `rules/shared/...`；校验器拒绝裸 shared 引用并校验 Codex AGENTS 路径。
+- 收窄数据访问缓存、任务、隐私、密钥、金额时间、状态机和成本治理的 Cursor Java glob；新增前后端 Business Extension eval 对照。
+- CI 执行规则校验器单元测试；全栈契约新增跨包编号非对称说明。
+
+## 1.11.3 — 2026-05-24
+
+### Added
+
+- `examples/99-project-local.mdc.sample`：业务仓 Cursor 本地覆盖样板。
+- `codex/AGENTS.md`：新增“实现前命中声明”，要求改代码前说明任务包、将读取规则与不读取原因。
+
+### Changed
+
+- `cursor/04-rest-controller.mdc`、`05-service-transaction.mdc`：补充 `**/modules/**/*Controller|Service.java`，避免 RuoYi 结构漏触发 REST/事务规则。
+- `cursor/27-threat-modeling.mdc`：收窄 glob，减少任意 Java 文件误触发。
+- `cursor/00-project-overview.mdc`：区分 shared `35`–`42` 与 cursor/35 业务扩展。
+- `examples/README.md`：补充 Cursor 35/36 与 `99-project-local` 复制说明。
+- `examples/99-project-local.mdc.sample`：补充公共层路径、业务扩展启用条件与“仅修 bug/改单字段不强制业务扩展”的边界。
+- `shared/16-performance.md`、`docs/PERFORMANCE_BUDGET.template.md`、`shared/32-service-reliability.md`、`examples/99-project-local.mdc.sample`：补充容量预算、P95/P99、SQL/索引、资源池饱和、性能 Owner、看板与发布风险评审。
+
+## 1.11.2 — 2026-05-24
+
+### Added
+
+- `cursor/36-platform-boundary.mdc`：公共层 / system / generator 边界触发规则，防止单业务污染平台层。
+- `evals`：**B61–B63**（树表跨租户挂父节点、主子表失败留孤儿子表、单业务改 generator 全局模板）；Business Extension 套件扩至 **B55–B63**（建议 9/9）。
+
+### Changed
+
+- `cursor/35-business-module-extension.mdc`：收窄为业务域路径、菜单 SQL 与业务 mapper XML，避免全局 Controller / Service / Mapper 误触发。
+- `codex/AGENTS.md`：任务表合并为高频任务包，新增业务扩展触发词与路径触发，避免一次加载全部 shared。
+- `cursor/00-project-overview.mdc`：补充 Cursor 路由提示，业务模块看 `35`，公共层 / system / generator 看 `36`。
+- `README.md`：补充部署方式、Codex / Cursor 使用、业务仓本地覆盖层、真实业务开发流程与验证回归说明。
+- P1 门槛：**B09–B63 共 55 条，至少 49/55**（Full 发版）。
+- `docs/fullstack-contract.md` §新增业务功能：补充**树表 / 主子表**全栈对齐行；测试行覆盖 B61–B63。
+- `scripts/validate-rules-package.py`：校验 monorepo `web-front/rules/` 跨包引用存在性。
+- PR 模板、adoption-checklist、成熟度模型、OWASP/合规映射等同步 B55–B63 / 49/55。
+
+## 1.11.1 — 2026-05-24
+
+### Changed
+
+- `shared/43-business-module-extension.md`、`docs/business-feature-playbook.md`：补充公共模块例外条件、RuoYi 系平台能力适配、权限码三端一致、命名前缀、租户 / 系统表边界、树表 / 主子表和 generator 模板边界。
+- `scripts/validate-rules-package.py`：校验 **Business Extension** 套件（B55–B60）与 `evals/README` / `smoke-prompts` 一致；支持 `B55–B60` 范围写法解析。
+- `docs/pull-request-template.md`、`examples/.github/pull_request_template.md`：新增「成熟后台 / 业务模块 / CodeGen」检查段；含前端 playbook 联调项。
+- `docs/rule-maturity-model.md`：`43` + playbook 调整为 **Level 1 起**（成熟后台）；Level 3 不再重复业务扩展。
+- `docs/fullstack-contract.md`：新增「新增业务功能」全栈对齐表；链到前端 playbook。
+- `docs/owasp-api-top10-mapping.md`、`docs/compliance-cn-mapping.md`：补充 B55–B60 / `43` 映射。
+- `evals/adoption-checklist.md`：成熟后台 playbook 与 PR 模板落地项。
+
+### Added
+
+- `web-front/rules/docs/business-feature-playbook-frontend.md`：前端新增业务页面落地顺序（与后端 playbook 对称）。
+
+## 1.11.0 — 2026-05-24
+
+### Added
+
+- `shared/43-business-module-extension.md`：成熟后台业务模块扩展规则，明确基于 RuoYi-Vue-Plus / RuoYi-Cloud-Plus / ruoyi-vue-pro / JeecgBoot 时优先复用平台能力。
+- `docs/business-feature-playbook.md`：新增业务功能落地流程，覆盖 DB、OpenAPI、CodeGen、权限、字典、审计、数据权限与测试。
+- `cursor/35-business-module-extension.mdc`：新增业务模块 / CRUD 场景的 Cursor 触发规则。
+- `evals`：**B55–B60**（业务模块边界、复用平台用户权限字典、CodeGen 后补齐、数据权限一致性、导出文件审计、任务调度复用）。
+
+### Changed
+
+- `shared/00-must-follow.md`：新增成熟后台业务扩展硬规则，全文编号至 49 条。
+- `codex/AGENTS.md`、`shared/26-ai-generation.md`、`shared/10-verification-checklist.md`：新增业务模块时读取 `43` 和业务 playbook。
+- `evals` 门槛：P1 为 **B09–B60 共 52 条，至少 46/52**；Smoke 核心 P1 为 20 条（≥17/20）。
+
 ## 1.10.2 — 2026-05-24
 
 ### Added

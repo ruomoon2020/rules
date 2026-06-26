@@ -1,0 +1,37 @@
+---
+description: 本项目小程序路径、平台与预算（复制到业务仓 .cursor/rules/99-project-local.mdc）
+alwaysApply: true
+---
+
+# 本项目约定（示例，请按实际修改）
+
+- 技术栈：Vue 3 + TypeScript + uni-app + Vite。
+- 目标平台：微信小程序优先；支付宝 / 抖音等平台按需适配；不覆盖 App / nvue。
+- 主包页面：`src/pages/{home,login,mine}/`。
+- 业务分包：`src/subpackages/order/**`、`src/subpackages/member/**`、`src/subpackages/coupon/**`。
+- API generated：`src/api/generated`（禁止手改）。
+- 契约：`contracts/openapi.yaml` 或 `contracts/schema.json`。
+- 平台能力：`src/platform/**`；页面禁止直接调用支付、分享、订阅消息、手机号授权。
+- 登录态：`src/auth/**` + `src/stores/auth.ts`。
+- 隐私授权：`src/privacy/**`，新增敏感能力必须同步 manifest / 隐私说明。
+- 主包预算：按项目设置，例如 warning 1.5MB，fail 1.8MB。
+- 分包预算：例如单分包 warning 1.8MB，fail 2.0MB（按微信平台与项目策略调整）。
+- 单图大小上限：例如主包 50KB、分包 200KB、大图走 CDN。
+- 首屏关键 API P95 阈值：例如 800ms。
+- 首屏可交互 P95 阈值：例如 1800ms。
+- 分包加载失败率阈值：例如 0.1%。
+- 构建脚本：`pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`、`pnpm api:check`、`pnpm size:check`（以 `package.json` 为准）。
+- 环境变量：`VITE_APP_ENV`（dev/test/staging/prod）、`VITE_API_BASE_URL`；体验版/审核版禁止连生产 API 与生产支付。
+- API / 上传 / 下载合法域名白名单：维护在 `src/api/allowed-hosts.ts`（或项目约定路径）。
+- web-view 白名单：维护在 `src/platform/webview-allowlist.ts`（或项目约定路径）。
+- 监控 Owner：小程序负责人 / 业务负责人 / SRE（按项目填写）。
+- 冷启动 P95 阈值：例如 2500ms。
+- 白屏率阈值：例如 0.1%。
+- 支付失败率阈值：例如 1%（排除用户取消，按后端订单状态口径）。
+- 告警渠道：企业微信 / 飞书 / 值班群（按项目填写）。
+- 发版观察窗口：例如发布后 30 分钟、2 小时、24 小时。
+
+## 何时套用 shared/18 / cursor/18（业务扩展）
+
+- **适用**：新增业务分包域、新 CRUD、新支付/订阅/分享链路、`pages.json` 新增业务分包根。
+- **不适用**：修 bug、改样式/文案、单字段展示、不涉及契约或分包边界的改动。

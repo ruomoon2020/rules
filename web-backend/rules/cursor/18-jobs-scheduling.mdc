@@ -1,7 +1,10 @@
 ---
 description: 定时任务、批处理、异步补偿
 globs:
-  - "src/main/java/**/*.java"
+  - "src/main/java/**/*Job.java"
+  - "src/main/java/**/*Task.java"
+  - "src/main/java/**/*Scheduler*.java"
+  - "src/main/java/**/*Runner.java"
 alwaysApply: false
 ---
 

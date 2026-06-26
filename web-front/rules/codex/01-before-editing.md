@@ -1,4 +1,4 @@
-# Codex Before Editing Rules
+# Codex 修改前规则
 
 改前端代码前执行。
 

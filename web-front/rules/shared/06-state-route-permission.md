@@ -1,4 +1,4 @@
-# State, Route, and Permission Rules
+# 状态、路由与权限规则
 
 用于 Pinia、Vue Router、权限、缓存页面。
 
@@ -27,4 +27,3 @@
 3. 权限码命名保持模块化，例如 `system:user:create`。
 4. 字段级权限必须同时处理展示、编辑和提交。
 5. 权限刷新后应更新菜单、路由、按钮和缓存页状态。
-

@@ -1,7 +1,12 @@
 ---
 description: 金额、时间与精度
 globs:
-  - "src/main/java/**/*.java"
+  - "src/main/java/**/*Money*.java"
+  - "src/main/java/**/*Payment*.java"
+  - "src/main/java/**/*Order*.java"
+  - "src/main/java/**/*Billing*.java"
+  - "src/main/java/**/*Settlement*.java"
+  - "src/main/java/**/*Schedule*.java"
   - "src/main/resources/mapper/**/*.xml"
   - "contracts/**/*.yaml"
 alwaysApply: false

@@ -18,7 +18,7 @@
 
 ## 大版本 / 改 ci-scan 或 Hard Rules 时追加
 
-- [ ] 在测试业务仓跑 `evals/prompts.md` **E01–E31**，P0 **8/8**、P1 **至少 21/23**
+- [ ] 在测试业务仓跑 `evals/prompts.md` **E01–E40**，P0 **8/8**、P1 **至少 29/32**；成熟后台业务 PR 加 **Business Extension** E32–E40
 - [ ] 通知业务仓同步 `rules/` 或升级 submodule 版本
 
 ## 不要做

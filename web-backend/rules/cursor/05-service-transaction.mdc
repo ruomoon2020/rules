@@ -3,6 +3,7 @@ description: Application Service 与事务
 globs:
   - "**/application/**/*Service.java"
   - "**/service/**/*.java"
+  - "**/modules/**/*Service.java"
 alwaysApply: false
 ---
 

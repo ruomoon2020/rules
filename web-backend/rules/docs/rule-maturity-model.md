@@ -1,6 +1,6 @@
 # 规则成熟度模型（采纳分层）
 
-> **与包内架构层级区分**：`shared/00` 为 L0 硬规则；`shared/01–42` 为 L1 细则；`codex/`、`cursor/` 为 L2 入口。本文 **Level 0–3** 指企业**分阶段采纳**节奏，避免新项目被 42 个 shared 一次性压垮。
+> **与包内架构层级区分**：`shared/00` 为 L0 硬规则；`shared/01–43` 为 L1 细则；`codex/`、`cursor/` 为 L2 入口。本文 **Level 0–3** 指企业**分阶段采纳**节奏，避免新项目被 43 个 shared 一次性压垮。
 
 ## 总览
 
@@ -49,10 +49,11 @@
 | 文件 / 消息 | `14-file-import-export.md`、`17-messaging-async.md` |
 | 数据权限 | `24-data-access-cache.md`、`25-jobs-scheduling.md` |
 | 审计 / 外部 / 隐私 | `27-audit-log.md`、`28-external-integration.md`、`29-data-privacy-lifecycle.md` |
+| **成熟后台二开** | `43-business-module-extension.md`、`docs/business-feature-playbook.md`（**基于 RuoYi / Jeecg 等且持续加 CRUD 时，Level 1 起必读**） |
 | Docs | `fullstack-contract.md`、`sql-dialect-matrix.md` |
 | CI | OpenAPI diff、secret scan（见 `examples/README.md` 必选清单） |
 | PR | `docs/pull-request-template.md`（复制到业务仓） |
-| Evals | **Smoke**：B01–B08 + 核心 P1（见 `evals/README.md`，建议 ≥15/18） |
+| Evals | **Smoke**：B01–B08 + 核心 P1（见 `evals/README.md`，建议 ≥17/20） |
 
 ---
 
@@ -66,7 +67,7 @@
 | 安全高阶 | `35-threat-modeling.md` |
 | Docs | `release-checklist.md`、`incident-postmortem-template.md`、`backup-restore-runbook.md`、`PERFORMANCE_BUDGET.template.md`、`owasp-api-top10-mapping.md`、`compliance-cn-mapping.md`、`codeowners-guidance.md` |
 | CI | Flyway 多库（若声明多库）、dependency-check（按策略） |
-| Evals | **Security** 子集（见 `evals/README.md`）；发版前建议 **Full** |
+| Evals | **Security** 子集（见 `evals/README.md`）；成熟后台业务 PR 加 **Business Extension** B55–B63；发版前建议 **Full** |
 
 ---
 
@@ -87,10 +88,11 @@
 
 | 套件 | 范围 | 门槛 | 典型场景 |
 |---|---|---|---|
-| Smoke | B01–B08 + 核心 P1 18 条 | P0 8/8；核心 P1 ≥15/18 | 日常 PR、AI 快速回归 |
+| Smoke | B01–B08 + 核心 P1 20 条 | P0 8/8；核心 P1 ≥17/20 | 日常 PR、AI 快速回归 |
 | Security | 见 `evals/README.md` | 建议全 Pass | 鉴权/安全/隐私 PR |
 | Contract | 见 `evals/README.md` | 建议全 Pass | OpenAPI / 事件契约 PR |
-| Full | B01–B54 | P0 8/8；P1 ≥40/46 | 发版、规则包升级、大版本 |
+| Business Extension | B55–B63 | 建议 9/9 | 成熟后台新增业务 / CRUD / 树表主子表 PR |
+| Full | B01–B63 | P0 8/8；P1 ≥49/55 | 发版、规则包升级、大版本 |
 
 索引提示词：`evals/smoke-prompts.md`（仅索引，正文在 `prompts.md`）。
 
@@ -100,4 +102,5 @@
 
 1. 新项目在 `onboarding-new-project.md` 中声明目标 Level 与计划完成迭代。
 2. `adoption-checklist.md` 按 Level 勾选，不必一次勾满。
-3. 平台团队维护 Level 3；业务团队默认目标 Level 1，核心域升至 Level 2。
+3. **基于成熟后台平台**（RuoYi / Jeecg 等）的团队：Level 1 起纳入 `43` + playbook；Level 2 前须跑通 **Business Extension** evals。
+4. 平台架构团队维护 Level 3 高阶治理；纯业务团队默认目标 Level 1，核心域升至 Level 2。

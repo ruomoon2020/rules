@@ -1,7 +1,11 @@
 ---
 description: 威胁建模
 globs:
-  - "src/main/java/**/*.java"
+  - "**/api/**/*Controller.java"
+  - "**/controller/**/*.java"
+  - "**/modules/**/*Controller.java"
+  - "**/config/*Security*.java"
+  - "**/webhook/**"
   - "contracts/**/*.yaml"
   - "contracts/**/*.json"
 alwaysApply: false

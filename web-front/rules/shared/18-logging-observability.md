@@ -1,4 +1,4 @@
-# Logging & Observability Rules
+# 日志与可观测规则
 
 用于生产日志、错误上报、埋点与监控上下文。具体 **logger API 以目标仓库封装为准**（如 `src/utils/logger.ts`、`@/monitor`），禁止 AI 虚构方法签名；本文件定义**字段契约**与**禁止项**。
 

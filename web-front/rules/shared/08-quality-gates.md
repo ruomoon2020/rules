@@ -1,4 +1,4 @@
-# Quality Gate Rules
+# 质量门禁规则
 
 用于测试、CI、监控、发布和灰度。
 

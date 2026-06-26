@@ -26,14 +26,14 @@
 - [ ] `shared/10-verification-checklist.md`（若新增检查项）
 - [ ] `shared/26-ai-generation.md`（若 AI 须必读新文件）
 - [ ] `cursor/*.mdc`：引用路径有效；`alwaysApply` 概览条数/版本与 `00` 一致
-- [ ] `evals/README.md`（含 Smoke / Security / Contract / Full 套件）
+- [ ] `evals/README.md`（含 Smoke / Security / Contract / **Business Extension** / Full 套件）
 - [ ] `evals/prompts.md`、`evals/rubric.md`、`evals/results-template.md` 用例数与门槛**一致**（**仅此三文件**按 `### Bxx` / 表格计数）
 - [ ] `evals/smoke-prompts.md`（若改核心 P1 / 套件列表）：**只校验 B 编号覆盖**，不参与提示词正文计数；禁止添加 `### Bxx` 标题
 - [ ] 运行 `python scripts/validate-rules-package.py`（或 CI 等价）通过
 - [ ] `evals/adoption-checklist.md`、`RELEASE.md`、`docs/onboarding-new-project.md`
 - [ ] `cursor/00-project-overview.mdc` 中硬规则条数、evals 门槛
 - [ ] 仓库根 `contracts/openapi.yaml` 与 `05-openapi-contract.md` 描述一致
-- [ ] 发版前：`evals/prompts.md` **Full** B01–B54（P0 8/8，P1 ≥40/46）
+- [ ] 发版前：`evals/prompts.md` **Full** B01–B63（P0 8/8，P1 ≥49/55）
 
 ## Evals 计数约定
 

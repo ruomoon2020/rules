@@ -1,5 +1,75 @@
 # Changelog
 
+## 1.4.5 — 2026-06-27
+
+### Added
+
+- `shared/23`、`shared/24` 与 Cursor 22/23：补齐 i18n / locale、WebSocket / SSE、富文本与编辑器的通用边界。
+- `docs/`：新增 onboarding、规则索引、成熟度、PR、性能预算和 OWASP Web 映射；`examples/.github/` 新增 PR 模板样例。
+- `scripts/tests/`：校验器的 AGENTS 路径与跨包引用回归测试，并在 GitHub Actions 执行。
+
+### Changed
+
+- `shared/`、`codex/` H1 中文化；新增前端本地全栈契约和平台边界规则。
+- 校验器增加反向跨包引用与 AGENTS 路径检查；Cursor 新增测试、表单详情和 AI 生成触发规则。
+
+## 1.4.4 — 2026-05-24
+
+### Added
+
+- `evals`：**E32–E40**（成熟后台业务扩展，与后端 B55–B63 对称）；**Business Extension** 套件建议 9/9。
+- `codex/AGENTS.md`：新增“实现前命中声明”，要求改代码前说明任务包、将读取规则与不读取原因。
+
+### Changed
+
+- P1 门槛：**E09–E40 共 32 条，至少 29/32**（Full 发版）。
+- `evals/README.md`、`smoke-prompts.md`、`rubric.md`、`results-template.md`：新增 Business Extension 套件与 B↔E 对照表。
+- `scripts/validate-rules-package.py`：校验 Business Extension 套件与 `evals/README` 一致。
+- `docs/business-feature-playbook-frontend.md`：§4 全量 B55–B63 ↔ E32–E40 映射；PR 自检链 evals。
+- `evals/adoption-checklist.md`、`README.md`、`RELEASE.md`、`cursor/00`：同步门槛与套件。
+- `web-backend/rules/docs/fullstack-contract.md`：测试行增加前端 E32–E40。
+- `examples/99-project-local.mdc.sample`：补充业务扩展页面路径示例与“仅改样式/修 bug/单字段不强制业务扩展”的边界。
+- `shared/07-security-performance.md`、`cursor/06-security-performance.mdc`、`examples/99-project-local.mdc.sample`：补充 Web Vitals、bundle 增量、首屏 API、性能 Owner 与看板预算。
+
+## 1.4.3 — 2026-05-24
+
+### Added
+
+- `examples/99-project-local.mdc.sample`：业务仓 Cursor 本地覆盖样板。
+
+### Changed
+
+- `codex/AGENTS.md`：任务表合并为任务包，新增业务扩展触发词与路径触发（与后端对称）。
+- `cursor/00-project-overview.mdc`：补充 `18-business-module-extension` 路由提示。
+- `README.md`：Cursor 表修正为 `18-business-module-extension.mdc` + `shared/22`；`99-project-local` 指向 examples 样板。
+
+## 1.4.2 — 2026-05-24
+
+### Added
+
+- `shared/22-business-module-extension.md`：成熟后台业务页面前端 SSOT（契约、菜单权限、四态、导入导出、树表/主子表）。
+- `cursor/18-business-module-extension.mdc`：新增业务页 / CRUD / 菜单权限 Cursor 触发规则。
+
+### Changed
+
+- `shared/00-must-follow.md`：新增第 51 条（成熟后台复用平台能力、禁止手改 generated）。
+- `codex/AGENTS.md`：新增「成熟后台新增业务」任务行；`docs/` 例外说明 playbook。
+- `shared/09-ai-generation.md`、`shared/10-verification-checklist.md`：业务扩展生成与收尾检查项。
+- `docs/business-feature-playbook-frontend.md`：扩写 CodeGen 补齐、树表/主子表、PR 自检（SSOT 指向 `shared/22`）。
+- `evals/adoption-checklist.md`、`README.md`：纳入 `shared/22`；README 补充部署方式、Codex / Cursor 使用、业务仓本地覆盖层、真实业务开发流程与验证回归。
+- 全栈：`web-backend/rules/docs/fullstack-contract.md`、`business-feature-playbook.md`、`docs/monorepo-layout.md` 链到 `shared/22`。
+
+## 1.4.1 — 2026-05-24
+
+### Added
+
+- `docs/business-feature-playbook-frontend.md`：成熟后台新增业务页面前端落地顺序（与后端 playbook / fullstack-contract 对齐）。
+
+### Changed
+
+- `evals/adoption-checklist.md`：成熟后台业务扩展落地项（playbook、全栈契约）。
+- `scripts/validate-rules-package.py`：`evals/README` 套件表支持 `E09–E12` 范围写法解析。
+
 ## 1.4.0 — 2026-05-24
 
 ### Added

@@ -1,4 +1,4 @@
-# Code Style Rules
+# 代码风格规则
 
 适用于 Vue 3 + TypeScript + Vite 企业后台项目。
 
@@ -79,4 +79,3 @@ import { ElButton } from 'element-plus/es/components/button'
 2. 日志统一走 logger / monitor 封装。
 3. 错误日志须含 `event`、`route`、`traceId`（或 `requestId`）等可定位字段。
 4. 禁止记录密码、Token、完整证件号、未脱敏手机号、完整请求体。
-

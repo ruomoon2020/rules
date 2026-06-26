@@ -1,0 +1,19 @@
+---
+description: Vue3 + TypeScript + uni-app 页面与组件规则
+globs:
+  - "src/pages/**/*.vue"
+  - "src/subpackages/**/*.vue"
+  - "src/components/**/*.vue"
+  - "src/base/**/*.vue"
+  - "src/composables/**/*.ts"
+---
+
+# Vue3 uni-app
+
+Read `rules/shared/03-vue3-typescript-uniapp.md`、`rules/shared/04-page-ui-lifecycle.md`、`rules/shared/12-list-form-pagination.md`。
+
+- 使用 `<script setup lang="ts">`，禁止显式 `any`。
+- 页面只做编排；复杂流程进 composable / service。
+- 生命周期必须清理 timer、eventBus、轮询和监听器。
+- 列表必须有 loading、empty、error、content、finished、下拉刷新。
+- 不在页面直接调用 `uni.request`、`uni.login` 或平台敏感能力。

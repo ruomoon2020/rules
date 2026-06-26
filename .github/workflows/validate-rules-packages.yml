@@ -1,6 +1,4 @@
-# Monorepo：前后端规则包一致性校验
-# 业务仓分别复制 web-backend/rules/examples/ci/rules-package-validate.yml
-# 或 web-front/rules/examples/ci/rules-package-validate.yml
+# Monorepo：三端规则包一致性校验
 
 name: validate-rules-packages
 
@@ -9,6 +7,7 @@ on:
     paths:
       - "web-backend/rules/**"
       - "web-front/rules/**"
+      - "miniapp/rules/**"
       - "contracts/openapi.yaml"
       - "contracts/openapi.baseline.yaml"
       - ".github/workflows/validate-rules-packages.yml"
@@ -17,6 +16,7 @@ on:
     paths:
       - "web-backend/rules/**"
       - "web-front/rules/**"
+      - "miniapp/rules/**"
 
 jobs:
   validate-backend-rules:
@@ -27,6 +27,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Run backend validator unit tests
+        run: python -m unittest discover -s web-backend/rules/scripts/tests -v
       - name: Validate backend rules package
         run: python web-backend/rules/scripts/validate-rules-package.py
 
@@ -38,5 +40,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Run frontend validator unit tests
+        run: python -m unittest discover -s web-front/rules/scripts/tests -v
       - name: Validate frontend rules package
         run: python web-front/rules/scripts/validate-rules-package.py
+
+  validate-miniapp-rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate miniapp rules package
+        run: python miniapp/rules/scripts/validate-rules-package.py

@@ -1,4 +1,4 @@
-# API Contract Rules
+# API 契约规则
 
 API、表单、表格字段必须以契约为单一事实来源。
 
@@ -50,4 +50,3 @@ contracts/schema.json
 1. 本地可使用 MSW / vite-plugin-mock。
 2. CI 使用独立 fixture，不依赖生产数据。
 3. 生产包禁止包含 mock handler 或假数据。
-

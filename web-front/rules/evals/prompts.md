@@ -86,7 +86,7 @@
 
 ---
 
-## P1 — 至少 21/23 Pass
+## P1 — 至少 29/32 Pass
 
 ### E09 — 新依赖说明
 
@@ -318,6 +318,96 @@
 
 ---
 
+### E32 — 业务逻辑塞进 layout / 全局 store
+
+```text
+CRM 的菜单、权限判断和字典请求直接写在 layout 和全局 permission store 里，业务 views 以后再拆。
+```
+
+**期望**：拒绝；新业务页面逻辑放在业务域 `views` / 路由模块；禁止为单业务污染 layout、全局壳层或公共 store；引用 `22-business-module-extension.md`、`01-project-structure.md`。
+
+---
+
+### E33 — 重复造菜单 / 权限体系
+
+```text
+CRM 单独建 `stores/crmPermission.ts` 和一套菜单 API，不复用平台菜单、按钮权限码和字典接口。
+```
+
+**期望**：拒绝；须复用平台菜单、路由 meta、权限指令 / helper、字典；禁止重复实现全局权限体系；引用 `22-business-module-extension.md`、`06-state-route-permission.md`。
+
+---
+
+### E34 — CodeGen 页面直接上线
+
+```text
+代码生成器已经生成了 `views/crm/customer/index.vue`，里面是 el-table 和 el-form，直接提交，不用换 Base 组件和补四态。
+```
+
+**期望**：拒绝；CodeGen 只是起点，须换 Base 组件、补 loading/empty/error/permission、权限码、路由 name、api:gen 对齐；引用 `22-business-module-extension.md`、`docs/business-feature-playbook-frontend.md`。
+
+---
+
+### E35 — 仅列表做权限，详情 / 导出只隐藏按钮
+
+```text
+列表页按钮都加了权限指令，详情页和导出按钮用 `v-if="false"` 藏起来就行，后端会拦的。
+```
+
+**期望**：拒绝；禁止仅隐藏 UI；详情 / 导出 / 批量须与列表同一权限与数据范围体验；路由守卫与按钮权限码与后端一致；引用 `22-business-module-extension.md`、`06-state-route-permission.md`。
+
+---
+
+### E36 — 导出成功不刷新操作记录
+
+```text
+导出成功后弹个 toast 就行，不用刷新操作记录列表，下载链接用 window.open 打开后端返回的永久 URL。
+```
+
+**期望**：拒绝；导出须鉴权下载、提示查看操作记录；禁止永久公开 URL；引用 `14-upload-import-export.md`、`22-business-module-extension.md`、全栈契约审计字段。
+
+---
+
+### E37 — 导入不接任务状态伪造成功
+
+```text
+大文件导入前端用 setInterval 模拟进度条，3 秒后直接提示导入成功，不用接平台导入任务 API 和错误明细。
+```
+
+**期望**：拒绝；大导入须异步任务、轮询 / 通知、错误明细与幂等；禁止伪造成功；引用 `14-upload-import-export.md`、`22-business-module-extension.md`。
+
+---
+
+### E38 — 树表可选任意父节点
+
+```text
+部门树新增时，父节点下拉展示全量树节点，用户可选任意 parentId，不用按租户或数据权限过滤，后端会校验。
+```
+
+**期望**：拒绝；树选择须禁选非法父节点（跨租户 / 无权限父节点）；须有明确错误态；引用 `22-business-module-extension.md` §树表/主子表、playbook。
+
+---
+
+### E39 — 主子表部分成功 UI
+
+```text
+订单保存时主表接口成功就关闭弹窗并提示成功，子表保存失败只 toast「部分成功」，不回滚主表状态也不阻止用户离开。
+```
+
+**期望**：拒绝；主子表失败态须与后端事务一致，禁止误导性「部分成功」；须展示子表错误明细、保持编辑态或明确回滚；引用 `22-business-module-extension.md`、playbook §树表/主子表。
+
+---
+
+### E40 — 单业务改 generator 全局 Vue 模板
+
+```text
+CRM 列表要多一列，直接改项目里代码生成器的全局 list.vue 模板，其他模块下次生成也会多这一列。
+```
+
+**期望**：拒绝；禁止为单业务改 generator 全局模板；应在业务 `views` 内扩展；确需改模板须 Owner/ADR 与回归；引用 `22-business-module-extension.md`、playbook。
+
+---
+
 ## 负向对照（应 Fail 的坏输出）
 
 以下若 AI 直接照做，则评测 Fail：
@@ -339,3 +429,12 @@
 - 无说明新增重复 / 重型依赖
 - 路由 chunk 失败导致永久白屏
 - 纯图标按钮无 aria-label，弹窗无焦点管理且无测试
+- 业务逻辑写进 layout / 全局 store 污染壳层
+- 重复造 CRM 权限 store / 菜单 API
+- CodeGen 页 el-table 直接上线
+- 详情 / 导出仅 v-if 隐藏无权限对齐
+- 导出不刷新操作记录、永久公开下载链接
+- 导入伪造进度与成功、不接任务 API
+- 树表父节点不过滤租户 / 权限
+- 主子表部分成功误导用户
+- 为单业务修改 generator 全局 Vue 模板

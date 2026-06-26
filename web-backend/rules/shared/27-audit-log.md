@@ -46,14 +46,18 @@
 
 ## 实现约定
 
-1. 审计逻辑放在 application 层或专用 `AuditService`，禁止仅在 Controller `log.info` 代替。
-2. 管理端查询 API 与 DTO 以 `contracts/openapi.yaml` 中 `AuditLog*` 为准；表结构参考 `examples/db/migration/*/V2__init_system_audit_log.sql`。
-3. 写入样板：`examples/scaffold/java/modules/system/application/audit/`（`AuditRecorder`、`UserService.delete` 演示）。
-4. 与 `14-file-import-export.md` 导入导出审计字段对齐；前后端字段名与展示映射见 `docs/fullstack-contract.md` §审计日志。
-5. 跨租户操作须额外记录 `reason` 或工单号（若项目要求），见 `24-data-access-cache.md`。
+1. 审计规则以本文件和 `docs/fullstack-contract.md` 为准；若项目基于 RuoYi-Vue-Plus / RuoYi-Cloud-Plus，优先复用平台 `@Log`、AOP、事件、登录日志、操作日志、错误日志与监控权限。
+2. 审计逻辑放在 application 层、公共日志切面或专用 `AuditService`；禁止仅在 Controller `log.info` 代替。
+3. 业务模块禁止重复实现公共审计系统；字段不足时在公共日志 / 审计模块扩展，不得每个业务模块各建 `xxx_log`、`LogAspect`、`LogService`。
+4. RuoYi 系平台字段须映射到本规则字段：`operType` / `businessType` → `action`，`title` → `resourceType`，`operIp` → `ip`，`status` → `result`，`errorMsg` → `errorCode` 或失败摘要，`costTime` → `durationMs`；`resourceId`、`beforeSummary`、`afterSummary`、`traceId` 不足时须扩展。
+5. 管理端查询 API 与 DTO 以 `contracts/openapi.yaml` 中 `AuditLog*` 为准；表结构参考 `examples/db/migration/*/V2__init_system_audit_log.sql`。
+6. 写入样板：`examples/scaffold/java/modules/system/application/audit/`（`AuditRecorder`、`UserService.delete` 演示）。
+7. 与 `14-file-import-export.md` 导入导出审计字段对齐；前后端字段名与展示映射见 `docs/fullstack-contract.md` §审计日志。
+8. 跨租户操作须额外记录 `reason` 或工单号（若项目要求），见 `24-data-access-cache.md`。
 
 ## 禁止
 
 - 用 `log.info` 代替结构化审计。
 - 审计记录含敏感明文或可逆凭证。
+- 在业务模块重复造公共日志 / 审计能力，而不是复用平台底座。
 - 允许通过管理接口批量清空审计表且无超级管理员双人复核。
