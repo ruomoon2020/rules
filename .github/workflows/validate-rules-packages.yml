@@ -80,6 +80,8 @@ jobs:
         run: pip install pyyaml
       - name: Regenerate eval manifests (consistency check)
         run: python scripts/generate-eval-topic-manifest.py --all
+      - name: Ensure eval manifests are committed
+        run: git diff --exit-code -- web-backend/rules/evals/topic-manifest.yaml web-front/rules/evals/topic-manifest.yaml miniapp/rules/evals/topic-manifest.yaml
       - name: Governance script unit tests
         run: python -m unittest discover -s scripts/tests -v
       - name: Adoption fixture check

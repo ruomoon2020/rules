@@ -16,7 +16,7 @@
 | **公共模块 / Starter** | 架构 Owner + 领域 Owner | `common/**`、`framework/**`、全局拦截器 |
 | **生产配置 / 密钥引用** | DevOps + 安全 | `application-prod*`、`helm/**`、`k8s/**` |
 | **事件 / MQ 契约** | 平台 Owner + 消费方 Owner | `contracts/events/**`、Consumer/Producer |
-| **前端壳层 / 路由 / 全局 store** | 前端架构 Owner | `layout/**`、`router/**`、`stores/global*` |
+| **前端壳层 / 路由 / 全局 store** | 前端架构 Owner | `layouts/**`、`components/layout/**`、`router/**`、`stores/global*` |
 | **小程序分包 / 支付 / 隐私** | 小程序 Owner + 合规（若涉及） | `pages.json` 分包、支付、隐私弹窗 |
 | **性能 / SLO 预算变更** | 领域 Owner + SRE（若有） | `PERFORMANCE_BUDGET.md`、告警阈值 |
 | **数据分级 / PII 新字段** | 安全 + 数据 Owner + 各端 Owner | OpenAPI 敏感标注、导出、日志 |
@@ -45,8 +45,9 @@
 # 规则包
 /rules/                        @architecture-team @rules-maintainers
 
-# 前端壳层
-/src/layout/                   @frontend-arch
+# 前端壳层（若业务仓使用 layout/ 单数，请在本地 CODEOWNERS 改写）
+/src/layouts/                  @frontend-arch
+/src/components/layout/        @frontend-arch
 /src/router/                   @frontend-arch
 ```
 

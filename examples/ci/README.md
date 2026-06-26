@@ -6,4 +6,4 @@
 
 各端规则包另有 `web-*/rules/examples/ci/`（业务构建、rules 包校验等）。
 
-详见 [`docs/supply-chain-baseline.md`](../docs/supply-chain-baseline.md)。
+详见 [`docs/supply-chain-baseline.md`](../../docs/supply-chain-baseline.md)。
