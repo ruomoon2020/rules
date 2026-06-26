@@ -19,6 +19,8 @@
 
 原则：**外层 README 不替代各规则包 README**。真正写代码时，AI 先读对应业务仓的 `AGENTS.md`，再按任务读少量规则。
 
+**新业务接入**：全栈 monorepo / 前后端分仓 / 单端三种形态的完整步骤见 **[`docs/project-adoption-guide.md`](docs/project-adoption-guide.md)**。
+
 ## 推荐目录结构
 
 ### 全栈 monorepo
@@ -269,6 +271,7 @@ python scripts/check-project-adoption.py --repo /path/to/your-app --stack fronte
 
 | 场景 | 文档 |
 |---|---|
+| **全形态接入（首选）** | [`docs/project-adoption-guide.md`](docs/project-adoption-guide.md) — monorepo / 分仓 / 单端 |
 | 新建前端项目 | `web-front/rules/README.md` |
 | 新建后端项目 | `web-backend/rules/docs/onboarding-new-project.md` |
 | 新建小程序项目 | `miniapp/rules/docs/onboarding-new-project.md` |

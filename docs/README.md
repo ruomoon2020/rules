@@ -6,6 +6,7 @@
 
 | 文档 | 用途 |
 |---|---|
+| [`project-adoption-guide.md`](project-adoption-guide.md) | **业务项目接入总指南**（全栈 monorepo / 分仓 / 单端） |
 | [`definition-of-done.md`](definition-of-done.md) | 跨端 DoD（代码 / 契约 / 安全 / 数据 / 可观测 / 发布） |
 | [`rule-exception-process.md`](rule-exception-process.md) | 例外与豁免流程 |
 | [`codeowners-matrix.md`](codeowners-matrix.md) | 按变更类型的 Review 矩阵 |
