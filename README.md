@@ -183,7 +183,7 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 2. 后端不返回 Entity，前端不手写 generated 类型。
 3. 分页字段、错误码、traceId、权限码一致。
 4. 前端列表四态、删除末条回退页码、错误恢复完整。
-5. 后端跑 `mvn verify`，前端跑 `pnpm lint` / `type-check` / `build`。
+5. 后端跑 `mvn verify` / `./gradlew check`，前端跑 `pnpm lint` / `type-check` / `build`。
 
 ## 企业级治理（大厂执行闭环）
 

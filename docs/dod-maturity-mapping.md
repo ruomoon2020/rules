@@ -23,7 +23,7 @@
 |---|---|---|---|
 | **0** | 1–2 全绿；3 secret scan | `backend-ci-required.yml` | P0 B01–B08 |
 | **1** | + 3 audit；5 traceId；PR 模板 | + `supply-chain-required.yml` | Smoke ≥17/20 |
-| **2** | 1–6 核心项；数据 / 发版清单 | + `backend-ci-optional.yml` | Security + Business B55–B63；发版 Full |
+| **2** | 1–6 核心项；数据 / 发版清单 | + `backend-ci-optional.yml`（Maven）或 `backend-ci-optional-gradle.yml`（Gradle） | Security + Business B55–B63；发版 Full |
 | **3** | + SBOM / 镜像扫描 / 事件契约 | 自定义平台 workflow | Full + Contract |
 
 详见 `web-backend/rules/docs/rule-maturity-model.md`。

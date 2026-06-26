@@ -1,5 +1,6 @@
 # 供应链 Required 门禁 — 复制到业务仓 `.github/workflows/supply-chain-required.yml`
 # 见 monorepo `docs/supply-chain-baseline.md`；金融 / 政务建议 Required，其余至少 Conditional。
+# Java 依赖扫描：Maven → maven-dependency-check；Gradle（无 pom.xml）→ gradle-dependency-check（须应用 OWASP 插件，见 web-backend/rules/examples/gradle/）
 
 name: supply-chain-required
 
@@ -61,6 +62,29 @@ jobs:
 
       - name: OWASP Dependency-Check
         run: mvn -B -DskipTests org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+
+  gradle-dependency-check:
+    if: ${{ hashFiles('gradlew') != '' && (hashFiles('build.gradle') != '' || hashFiles('build.gradle.kts') != '') && hashFiles('pom.xml') == '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: OWASP Dependency-Check (Gradle)
+        run: |
+          chmod +x gradlew
+          if ./gradlew tasks --all --no-daemon 2>/dev/null | grep -q dependencyCheckAnalyze; then
+            ./gradlew dependencyCheckAnalyze --no-daemon
+          else
+            echo "::error::Apply org.owasp.dependencycheck plugin. See web-backend/rules/examples/gradle/build.gradle.kts.sample"
+            exit 1
+          fi
 
   license-scan-node:
     if: ${{ hashFiles('package.json') != '' }}

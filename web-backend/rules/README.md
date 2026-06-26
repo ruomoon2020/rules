@@ -22,7 +22,7 @@ L2  codex/*.md、cursor/*.mdc
 Cursor alwaysApply 概览
   → Cursor globs / Codex 任务包
   → 按需读取 shared 全文
-  → mvn verify / evals / PR checklist
+  → mvn verify / ./gradlew check / evals / PR checklist
 ```
 
 ## 部署到业务仓

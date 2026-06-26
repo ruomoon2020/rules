@@ -1,0 +1,78 @@
+# Optional / Conditional 门禁 — Gradle 后端按需复制到 .github/workflows/backend-ci-optional-gradle.yml
+# 适用：Level 1–2，且项目已应用 org.flywaydb.flyway 插件；DB migration PR 触发 MySQL + PostgreSQL validate。
+# Maven 项目使用 backend-ci-optional.yml。
+
+name: backend-ci-optional-gradle
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "build.gradle*"
+      - "settings.gradle*"
+      - "gradle/wrapper/**"
+      - "gradlew"
+      - "src/main/resources/db/migration/**"
+      - ".github/workflows/backend-ci-optional-gradle.yml"
+
+jobs:
+  flyway-validate-gradle:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('gradlew') != '' && (hashFiles('build.gradle') != '' || hashFiles('build.gradle.kts') != '') && hashFiles('src/main/resources/db/migration/**') != '' }}
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: app
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d app"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Verify Flyway Gradle task exists
+        run: |
+          chmod +x gradlew
+          if ! ./gradlew tasks --all --no-daemon | grep -q flywayValidate; then
+            echo "::error::Apply org.flywaydb.flyway plugin and configure Flyway locations before enabling this workflow."
+            echo "::error::See web-backend/rules/examples/gradle/build.gradle.kts.sample"
+            exit 1
+          fi
+
+      - name: Flyway validate MySQL
+        run: |
+          ./gradlew flywayValidate --no-daemon \
+            -Dflyway.url=jdbc:mysql://127.0.0.1:3306/app \
+            -Dflyway.user=root \
+            -Dflyway.password=root
+
+      - name: Flyway validate PostgreSQL
+        run: |
+          ./gradlew flywayValidate --no-daemon \
+            -Dflyway.url=jdbc:postgresql://127.0.0.1:5432/app \
+            -Dflyway.user=postgres \
+            -Dflyway.password=postgres

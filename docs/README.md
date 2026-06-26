@@ -22,7 +22,7 @@
 | 脚本 | 用途 |
 |---|---|
 | [`scripts/check-project-adoption.py`](../scripts/check-project-adoption.py) | 业务仓接入验收 |
-| [`examples/ci/supply-chain-required.yml`](../examples/ci/supply-chain-required.yml) | 供应链 Required CI 样板 |
+| [`examples/ci/supply-chain-required.yml`](../examples/ci/supply-chain-required.yml) | 供应链 Required CI（npm/pnpm audit + Maven/Gradle OWASP） |
 
 ## 业务仓最小落地
 

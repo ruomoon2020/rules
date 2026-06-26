@@ -4,9 +4,9 @@
 |---|---|
 | [`generate-eval-topic-manifest.py`](generate-eval-topic-manifest.py) | 从 `evals/prompts.md` + `rubric.md` 生成 `topic-manifest.yaml` |
 | [`eval_topic_manifest.py`](eval_topic_manifest.py) | 共享库：manifest 生成与校验（被各端 validator 引用） |
-| [`check-project-adoption.py`](check-project-adoption.py) | **业务仓**接入验收：AGENTS、rules、cursor、契约、CI 脚本 |
+| [`check-project-adoption.py`](check-project-adoption.py) | **业务仓**接入验收：AGENTS、rules、cursor、契约；后端接受 `pom.xml` 或 `gradlew` + `build.gradle*` |
 
-CI 自测：`examples/adoption-fixture/frontend/` + `python -m unittest discover -s scripts/tests`。
+CI 自测：`examples/adoption-fixture/frontend/`、`examples/adoption-fixture/backend-gradle/` + `python -m unittest discover -s scripts/tests`。
 
 ## 业务仓接入检查
 
@@ -16,6 +16,9 @@ python scripts/check-project-adoption.py --repo /path/to/frontend --stack fronte
 
 # 后端仓（严格：CODEOWNERS + PR 模板必填）
 python scripts/check-project-adoption.py --repo /path/to/backend --stack backend --strict
+
+# Gradle 后端自测 fixture
+python scripts/check-project-adoption.py --repo examples/adoption-fixture/backend-gradle --stack backend
 
 # 小程序
 python scripts/check-project-adoption.py --repo /path/to/miniapp --stack miniapp

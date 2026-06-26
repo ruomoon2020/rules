@@ -8,6 +8,8 @@
 
 ```bash
 mvn test -Dtest=LayeredArchitectureTest
+# 或
+./gradlew test --tests LayeredArchitectureTest
 ```
 
 规则：Controller 不依赖 Mapper、不使用 `@Transactional`；domain 不依赖 Spring Web；application 不依赖 api（可按项目调整）。
@@ -22,8 +24,9 @@ mvn test -Dtest=LayeredArchitectureTest
 
 | 文件 | 复制目标 | 适用 |
 |---|---|---|
-| `ci/backend-ci-required.yml` | `.github/workflows/backend-ci-required.yml` | Level 0+：verify、OpenAPI diff、secret scan |
-| `ci/backend-ci-optional.yml` | `.github/workflows/backend-ci-optional.yml` | Level 1–2：dependency-check、Flyway 多库 |
+| `ci/backend-ci-required.yml` | `.github/workflows/backend-ci-required.yml` | Level 0+：verify（Maven/Gradle 自动识别）、OpenAPI diff、secret scan |
+| `ci/backend-ci-optional.yml` | `.github/workflows/backend-ci-optional.yml` | Level 1–2：Maven dependency-check、Maven Flyway 多库 |
+| `ci/backend-ci-optional-gradle.yml` | `.github/workflows/backend-ci-optional-gradle.yml` | Level 1–2：Gradle Flyway 多库（须应用 Flyway 插件） |
 
 合并版（兼容）：`ci/github-actions-backend.yml` = required + optional。
 
@@ -33,11 +36,11 @@ mvn test -Dtest=LayeredArchitectureTest
 
 | 级别 | 建议 job / 工具 |
 |---|---|
-| **Required** | `mvn verify`（含 ArchUnit）、OpenAPI diff、secret scan（gitleaks） |
-| **Conditional** | Flyway validate（改 migration）、OWASP dependency-check（按合规策略） |
+| **Required** | `mvn verify` / `./gradlew check`（CI 自动识别）、OpenAPI diff、secret scan（gitleaks） |
+| **Conditional** | Flyway validate（Maven / Gradle 样板）、OWASP dependency-check（Maven 样板；Gradle 见根 `examples/ci/supply-chain-required.yml`） |
 | **Optional** | SBOM、container scan、Pact、license report、perf smoke — 本仓库样板未包含，按项目另加 workflow |
 
-**跨端供应链 Required**：monorepo 根 [`examples/ci/supply-chain-required.yml`](../../../../examples/ci/supply-chain-required.yml)（npm/pnpm audit + Maven OWASP）。
+**跨端供应链 Required**：monorepo 根 [`examples/ci/supply-chain-required.yml`](../../../examples/ci/supply-chain-required.yml)（npm/pnpm audit + Maven/Gradle OWASP + license-checker）。
 
 **未配置的门禁不得在 PR 中声称已通过**（见 `shared/23-quality-gates.md`）。
 
@@ -73,10 +76,12 @@ npx @redocly/cli diff contracts/openapi.yaml contracts/openapi.baseline.yaml
 
 ## Flyway 多库 CI
 
-对 MySQL、PostgreSQL 各执行：
+Maven 样板见 `ci/backend-ci-optional.yml`；Gradle 样板见 `ci/backend-ci-optional-gradle.yml`（须已应用 `org.flywaydb.flyway` 插件）。对 MySQL、PostgreSQL 各执行：
 
 ```bash
 mvn -Dflyway.url=... flyway:migrate
+# 或
+./gradlew flywayValidate -Dflyway.url=...
 ```
 
 或使用 Testcontainers（见 `15-testing.md`）。
@@ -105,12 +110,16 @@ rg '\$\{' src/main/resources/mapper
 
 `scaffold/` — `UserController`、`UserService`、`UserMapper`、DTO、MapStruct、`ApiResult`、`GlobalExceptionHandler` 等。复制后改包名。
 
+## Gradle 样板
+
+`gradle/` — `build.gradle.kts.sample`、`settings.gradle.kts.sample`（Spring Boot + ArchUnit + OWASP dependency-check）。ArchUnit 测试类仍用 `archunit/LayeredArchitectureTest.java`。
+
 ## 新建项目
 
 见 `docs/onboarding-new-project.md`、`docs/scaffold-module-system.md`。
 
 全栈目录见仓库根 `docs/monorepo-layout.md`。
 
-## Maven 脚本示例
+## Maven / Gradle 脚本示例
 
-见 `package-scripts.sample.json`。
+见 `package-scripts.sample.json`（`mvn verify` 与 `./gradlew check` 等价）。

@@ -10,6 +10,7 @@ alwaysApply: true
 - 成熟后台栈：RuoYi-Vue-Plus 5.x（非 RuoYi 项目请删除 `35-business-module-extension.mdc` 或收窄其 globs）
 - OpenAPI SSOT：`contracts/openapi.yaml`
 - 采纳 Level：1（见 `rules/docs/rule-maturity-model.md`）
+- 构建工具：`mvn verify` 或 `./gradlew check`（CI 见 `rules/examples/ci/backend-ci-required.yml`）
 - 新增 CRUD PR 建议跑 evals Business Extension B55–B63
 - 新增业务模块 / CRUD / 菜单 / 字典 / 导入导出时启用业务扩展；仅修 bug、改单字段或改样式类展示接口时不强制按业务扩展处理
 - 改 `common` / `system` / `generator` 时 Cursor 会命中 `36-platform-boundary.mdc`

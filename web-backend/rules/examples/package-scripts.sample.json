@@ -7,6 +7,10 @@
     "flyway-postgresql": "mvn -B flyway:migrate -Dflyway.configFiles=flyway-postgresql.conf"
   },
   "gradle": {
-    "check": "./gradlew check"
+    "check": "./gradlew check",
+    "test": "./gradlew test",
+    "dependency-check": "./gradlew dependencyCheckAnalyze",
+    "flyway-validate": "./gradlew flywayValidate",
+    "comment": "Flyway / OWASP：须先接对应 Gradle 插件；多库 URL / user / password 在 CI 中用 -Dflyway.* 覆盖"
   }
 }

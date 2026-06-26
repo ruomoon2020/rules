@@ -1,6 +1,6 @@
 # 规则成熟度（前端）
 
-DoD × Level 全栈对照：monorepo [`docs/dod-maturity-mapping.md`](../../../../docs/dod-maturity-mapping.md)。
+DoD × Level 全栈对照：monorepo [`docs/dod-maturity-mapping.md`](../../../docs/dod-maturity-mapping.md)。
 
 | 等级 | 最低能力 | 证据 |
 |---|---|---|

@@ -11,7 +11,7 @@
 | **2** | 企业治理 | SLO、威胁建模、生产数据、备份演练、合规映射 | 核心域上线前 |
 | **3** | 平台化治理 | 成本、云原生、事件契约、归档、状态机、多范式 API | 平台团队 / 多域成熟后 |
 
-**CI 复制**：Level 0 → `backend-ci-required.yml`；Level 1–2 追加 `backend-ci-optional.yml`；维护 `rules/` 时追加 `rules-package-validate.yml`（见 `examples/README.md`）。
+**CI 复制**：Level 0 → `backend-ci-required.yml`（Maven/Gradle 自动识别）；Level 1–2 追加 `backend-ci-optional.yml`（Maven）或 `backend-ci-optional-gradle.yml`（Gradle Flyway）+ 根 `supply-chain-required.yml`；维护 `rules/` 时追加 `rules-package-validate.yml`（见 `examples/README.md`）。
 
 行业监管较强（金融、政务、医疗）时：在 Level 0 基础上，**至少**完成 Level 1 的 `27`/`29`/`15` 越权测试，并按 `docs/compliance-cn-mapping.md` 追加 Level 2 项。
 
@@ -31,7 +31,7 @@
 | AI | `26-ai-generation.md`（生成边界） |
 | Codex | `codex/01-before-editing.md`、`codex/02-api-implementation.md` |
 | 契约 | 仓库根 `contracts/openapi.yaml` |
-| CI 最低 | `mvn verify`、ArchUnit、`examples/archunit` |
+| CI 最低 | `mvn verify` / `./gradlew check`、ArchUnit、`examples/archunit` |
 | Evals | **P0** B01–B08（8/8） |
 
 ---
@@ -100,7 +100,7 @@
 
 ## 推广建议
 
-采纳 Level 与 DoD 六道门禁对照见 monorepo [`docs/dod-maturity-mapping.md`](../../../../docs/dod-maturity-mapping.md)。金融 / 政务须配合 [`docs/compliance-evidence-log.md`](../../../../docs/compliance-evidence-log.md)。
+采纳 Level 与 DoD 六道门禁对照见 monorepo [`docs/dod-maturity-mapping.md`](../../../docs/dod-maturity-mapping.md)。金融 / 政务须配合 [`docs/compliance-evidence-log.md`](../../../docs/compliance-evidence-log.md)。
 
 1. 新项目在 `onboarding-new-project.md` 中声明目标 Level 与计划完成迭代。
 2. `adoption-checklist.md` 按 Level 勾选，不必一次勾满。

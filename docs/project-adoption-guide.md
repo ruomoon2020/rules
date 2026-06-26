@@ -121,13 +121,13 @@ git submodule add <backend-rules-repo-url> rules
 
 ### 1.5 monorepo CI 建议
 
-**后端构建工具**：规则包对 Maven / Gradle **等价**——门禁目标是「编译 + 单测 +（若配置）ArchUnit / Checkstyle」，对应命令为 `mvn verify` 或 `./gradlew check`（见 `web-backend/rules/shared/23-quality-gates.md`）。`examples/ci/backend-ci-required.yml` 默认写 Maven，Gradle 仓须把 verify job 改为 `./gradlew check` 并将 `setup-java` 的 `cache` 设为 `gradle`；脚本名对照见 `web-backend/rules/examples/package-scripts.sample.json`。
+**后端构建工具**：规则包对 Maven / Gradle **等价**——门禁目标是「编译 + 单测 +（若配置）ArchUnit / Checkstyle」，对应命令为 `mvn verify` 或 `./gradlew check`（见 `web-backend/rules/shared/23-quality-gates.md`）。`examples/ci/backend-ci-required.yml` 的 verify job **自动识别** `pom.xml` 与 `gradlew` + `build.gradle*`。Gradle 样板见 `web-backend/rules/examples/gradle/`；供应链 `examples/ci/supply-chain-required.yml` 含 `gradle-dependency-check`（须 OWASP Gradle 插件）。Optional 的 Flyway 样板按构建工具拆分：Maven 用 `web-backend/rules/examples/ci/backend-ci-optional.yml`，Gradle 用 `web-backend/rules/examples/ci/backend-ci-optional-gradle.yml`（须 Flyway Gradle 插件）。
 
 | Workflow | 路径触发 | 内容 |
 |---|---|---|
 | `backend-ci-required.yml` | `web-backend/**` | `mvn verify` / `./gradlew check`、OpenAPI diff、secret scan |
 | 前端 lint/build | `web-front/**` | `pnpm lint`、`type-check`、`build` |
-| `supply-chain-required.yml` | 根 / 各端 lockfile | audit、license-checker |
+| `supply-chain-required.yml` | 根 / 各端 lockfile | npm/pnpm audit、Maven/Gradle OWASP、license-checker |
 | `rules-package-validate.yml` | `**/rules/**` | 各端 `validate-rules-package.py` |
 
 样板：`web-backend/rules/examples/ci/`、`web-front/rules/examples/ci/`、`examples/ci/supply-chain-required.yml`。
@@ -137,7 +137,7 @@ git submodule add <backend-rules-repo-url> rules
 ```bash
 # 在 code-rules 仓或已复制 scripts/ 后
 python scripts/check-project-adoption.py --repo ./web-front --stack frontend --strict
-python scripts/check-project-adoption.py --repo ./web-backend --stack backend --strict
+python scripts/check-project-adoption.py --repo ./web-backend --stack backend --strict   # 接受 pom.xml 或 Gradle wrapper
 python scripts/check-project-adoption.py --repo ./miniapp --stack miniapp --strict
 ```
 
@@ -260,7 +260,10 @@ mvn verify                # Maven：含单测 + ArchUnit（若接入）
 
 **成熟度**：[`web-backend/rules/docs/rule-maturity-model.md`](../web-backend/rules/docs/rule-maturity-model.md)（Level 0 起；核心域 Level 1–2）。
 
-**样板代码**：`web-backend/rules/examples/scaffold/`、`examples/archunit/`。
+**样板代码**：
+
+- Maven：`web-backend/rules/examples/scaffold/`、`examples/archunit/`、`examples/pom-dependencies.sample.xml`
+- Gradle：`web-backend/rules/examples/gradle/`（`build.gradle.kts.sample` + 同上 ArchUnit / scaffold Java）
 
 ---
 
@@ -417,6 +420,8 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack miniapp
 python scripts/check-project-adoption.py --repo /path/to/project --stack frontend --strict
 ```
 
+后端 `--stack backend` 接受 **`pom.xml`** 或 **`gradlew` + `build.gradle` / `build.gradle.kts`**，不再强制 Maven。
+
 ### 7.2 人工清单
 
 各端：`<端>/rules/evals/adoption-checklist.md`，按 Level 勾选。
@@ -482,6 +487,7 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | 前后端各写字段 | 联调失败 | 契约 SSOT |
 | CodeGen 直接上线 | 缺权限/审计 | playbook 补齐 |
 | 只 submodule rules 不要治理 docs | DoD / 豁免无据 | 复制 `docs/code-rules-governance/` |
+| Gradle 仓只复制 Maven optional CI | Flyway / OWASP 门禁失效 | 用 `backend-ci-optional-gradle.yml` + `supply-chain-required.yml` |
 
 ---
 
@@ -497,6 +503,7 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | 跨包 shared 编号 | 同上 §跨包编号说明 |
 | 管理端规则包 | `web-front/rules/README.md` |
 | 后端规则包 | `web-backend/rules/README.md` |
+| 后端 Gradle 样板 | `web-backend/rules/examples/gradle/` |
 | 小程序规则包 | `miniapp/rules/README.md` |
 
 ---

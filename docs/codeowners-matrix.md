@@ -11,7 +11,7 @@
 | **鉴权 / 安全模型** | 安全 Owner + 后端 Owner | `**/*Security*`、`**/auth/**`、权限注解、CORS |
 | **密钥 / 加密 / Token** | 安全 Owner | `**/*Crypto*`、`**/*Secret*`、JWT 配置 |
 | **CI / 发布流水线** | DevOps Owner | `.github/workflows/**`、Jenkinsfile、`Dockerfile` |
-| **依赖 / 锁文件 / SBOM** | 领域 Owner + 安全（高危时） | `pom.xml`、`package.json`、`pnpm-lock.yaml` |
+| **依赖 / 锁文件 / SBOM** | 领域 Owner + 安全（高危时） | `pom.xml`、`build.gradle*`、`gradle.lockfile`、`package.json`、`pnpm-lock.yaml` |
 | **规则包 `rules/**`** | Rules Owner + 架构 | `rules/shared/**`、`rules/evals/**` |
 | **公共模块 / Starter** | 架构 Owner + 领域 Owner | `common/**`、`framework/**`、全局拦截器 |
 | **生产配置 / 密钥引用** | DevOps + 安全 | `application-prod*`、`helm/**`、`k8s/**` |

@@ -31,7 +31,7 @@
 | **Conditional** | OWASP Dependency-Check / SCA / license | 按合规策略；高危 CVE 阻断 |
 | **Optional** | SBOM、container scan、Pact、perf smoke | 平台团队或核心域按需接入 |
 
-样板 job 标注见 `examples/ci/github-actions-backend.yml` 文件头注释；接入清单见 `examples/README.md`。
+样板 job 标注见 `examples/ci/github-actions-backend.yml` 文件头注释；Maven/Gradle 拆分见 `backend-ci-optional.yml` / `backend-ci-optional-gradle.yml` 与根 `examples/ci/supply-chain-required.yml`；接入清单见 `examples/README.md`。
 
 ## CI 基线
 

@@ -32,6 +32,7 @@ your-backend/
 
 - `examples/scaffold/` — common + `modules/system` Java 与 Mapper XML
 - `examples/pom-dependencies.sample.xml` — Maven 依赖参考
+- `examples/gradle/` — Gradle（`build.gradle.kts.sample`、OWASP / ArchUnit）
 - `examples/config/application-mybatis.sample.yml`
 - `examples/config/MybatisPlusConfig.sample.java`
 - `examples/config/SecurityConfig.sample.java`
@@ -40,9 +41,9 @@ your-backend/
 ## 5. 硬门禁接入
 
 1. `examples/archunit/LayeredArchitectureTest.java` → `src/test/java`
-2. `mvn verify` 进 CI
+2. `mvn verify` / `./gradlew check` 进 CI（`examples/ci/backend-ci-required.yml` 自动识别构建工具）
 3. OpenAPI diff（契约 PR 必跑）
-4. Flyway：MySQL + PostgreSQL 各跑迁移（若声明多库）
+4. Flyway：MySQL + PostgreSQL 各跑迁移（若声明多库；Maven 样板见 `examples/ci/backend-ci-optional.yml`，Gradle 样板见 `examples/ci/backend-ci-optional-gradle.yml` 且须接 Flyway 插件）
 
 ## 6. 与前端联调
 

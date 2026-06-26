@@ -1,5 +1,5 @@
 # Optional / Conditional 门禁 — Level 1–2 按需复制到 .github/workflows/backend-ci-optional.yml
-# dependency-scan：合规策略；flyway-validate：仅多库 + migration 变更
+# dependency-scan、flyway-validate 当前为 Maven 样板；Gradle Flyway 见 backend-ci-optional-gradle.yml，Gradle OWASP 见根 examples/ci/supply-chain-required.yml
 # 另可按项目自增：SBOM、container scan、Pact、perf smoke（本文件未包含）
 
 name: backend-ci-optional
@@ -9,22 +9,29 @@ on:
     paths:
       - "src/**"
       - "pom.xml"
+      - "build.gradle*"
       - "src/main/resources/db/migration/**"
       - ".github/workflows/backend-ci-optional.yml"
 
 jobs:
   dependency-scan:
     runs-on: ubuntu-latest
+    if: ${{ hashFiles('pom.xml') != '' }}
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
       - name: OWASP dependency check
-        run: |
-          mvn -B org.owasp:dependency-check-maven:check
+        run: mvn -B org.owasp:dependency-check-maven:check
 
   flyway-validate:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' }}
+    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' && hashFiles('pom.xml') != '' }}
     services:
       mysql:
         image: mysql:8

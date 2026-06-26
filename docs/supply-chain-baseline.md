@@ -20,13 +20,13 @@
 | Medium | 90 天或下季度 | 跟踪单 |
 | Low | 按计划 | — |
 
-**阻断**：`mvn verify` / CI Required 在 Critical 未缓解时不得绿。
+**阻断**：`mvn verify` / `./gradlew check` / CI Required 在 Critical 未缓解时不得绿。
 
 ## 锁版本与来源
 
 | 端 | 要求 |
 |---|---|
-| 后端 | BOM 统一管理；禁止随意 major 升级无回归 |
+| 后端 | BOM（Maven）或 version catalog（Gradle）；禁止随意 major 升级无回归 |
 | 管理端 | `pnpm-lock.yaml` / `package-lock.json` 入库；禁止仅 `^` 漂移上线 |
 | 小程序 | 同左；第三方 SDK 须平台兼容说明 |
 | 私服 | npm / Maven 仅允许公司私服 + 官方源白名单；禁止随意 `registry` 指向未知 URL |
@@ -35,7 +35,7 @@
 
 | 产物 | 要求 |
 |---|---|
-| Java | CycloneDX / SPDX（`mvn` 插件或 CI 步骤） |
+| Java | CycloneDX / SPDX（`mvn` 插件、`./gradlew` 任务或 CI 步骤） |
 | Node | `npm sbom` / CycloneDX 或 Dependabot 导出 |
 | 发布分支 | 保留 SBOM 产物或构建链接 |
 | 容器 | 镜像扫描（Trivy / 云厂商）；禁止 `latest` 上生产；非 root 运行 |
@@ -44,7 +44,7 @@
 
 | 门禁 | 后端 | 管理端 | 小程序 | 级别 |
 |---|---|---|---|---|
-| 依赖 audit | OWASP DC / Dependabot | `pnpm audit` / Snyk | 同左 | **Required** |
+| 依赖 audit | OWASP DC（Maven / Gradle，见 `supply-chain-required.yml`）/ Dependabot | `pnpm audit` / Snyk | 同左 | **Required** |
 | 许可证 | license-check | license-check | 同左 | **Required**（金融政务） |
 | SBOM | 发版分支生成 | 发版分支生成 | 发版分支生成 | Optional → 核心域 Required |
 | 容器扫描 | 有镜像则 Required | N/A | Required |

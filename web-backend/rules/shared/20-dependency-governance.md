@@ -19,7 +19,7 @@
 1. 定期 **OWASP Dependency-Check**、GitHub Dependabot 或等价 SCA。
 2. CI 生成或更新 **SBOM**（CycloneDX / SPDX，按项目工具）；发布分支保留 SBOM 产物或构建链接。
 3. **高危 CVE**：按团队 SLA 修复（示例：Critical 7 天、High 30 天）；无法修复须风险登记与缓解措施。
-4. 禁止在 `mvn verify` 未跑依赖扫描时声称「无已知漏洞」。
+4. 禁止在 `mvn verify` / `./gradlew check` 未跑依赖扫描时声称「无已知漏洞」。
 
 ## AI 生成
 

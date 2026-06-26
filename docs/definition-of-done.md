@@ -19,9 +19,9 @@
 
 | 检查项 | 后端 | 管理端 | 小程序 |
 |---|---|---|---|
-| Lint | `mvn verify` / Checkstyle | `pnpm lint` | `pnpm lint` |
-| 类型 / 编译 | `mvn compile` / `test-compile` | `pnpm type-check` | `pnpm type-check` |
-| 单元 / 集成测试 | `mvn test`（含 ArchUnit 若接入） | 项目约定 Vitest | 项目约定单测 |
+| Lint | `mvn verify` / `./gradlew check`、Checkstyle | `pnpm lint` | `pnpm lint` |
+| 类型 / 编译 | `mvn compile` / `./gradlew compileJava` | `pnpm type-check` | `pnpm type-check` |
+| 单元 / 集成测试 | `mvn test` / `./gradlew test`（含 ArchUnit 若接入） | 项目约定 Vitest | 项目约定单测 |
 | 构建 | 可部署产物 | `pnpm build` | `pnpm build:mp-weixin` |
 | 分层 / 架构 | ArchUnit（推荐） | views 禁 EP 扫描 | 分包 / request 封装 |
 

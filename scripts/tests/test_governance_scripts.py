@@ -21,6 +21,32 @@ class CheckProjectAdoptionTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_backend_gradle_fixture_passes(self):
+        repo = ROOT / "examples" / "adoption-fixture" / "backend-gradle"
+        result = subprocess.run(
+            [sys.executable, str(CHECK_SCRIPT), "--repo", str(repo), "--stack", "backend"],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_backend_accepts_gradle_wrapper(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "gradlew").write_text("#!/bin/sh\n", encoding="utf-8")
+            (repo / "build.gradle.kts").write_text("plugins { java }\n", encoding="utf-8")
+            errors: list[str] = []
+            mod.check_build_tool(repo, errors)
+            self.assertEqual(errors, [])
+
 
 class EvalTopicManifestTests(unittest.TestCase):
     def test_suite_drift_detection_logic(self):

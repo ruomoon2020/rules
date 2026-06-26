@@ -100,6 +100,7 @@
 ```text
 # 示例
 mvn verify
+# 或 ./gradlew check
 npx @redocly/cli diff contracts/openapi.baseline.yaml contracts/openapi.yaml
 ```
 

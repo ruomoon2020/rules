@@ -5,6 +5,7 @@
 #
 # 本文件 = required + optional 合并版（兼容旧引用）。门禁分级见 examples/README.md、shared/23-quality-gates.md
 #
+# verify job 自动识别 Maven / Gradle。dependency-scan、flyway-validate 为 Maven 兼容样板；Gradle Flyway 见 backend-ci-optional-gradle.yml。
 # 未启用的 job 不得在 PR 中声称已通过。
 
 name: backend-quality-gates
@@ -16,6 +17,9 @@ on:
       - "contracts/**"
       - "pom.xml"
       - "build.gradle*"
+      - "settings.gradle*"
+      - "gradle/wrapper/**"
+      - "gradlew"
       - ".github/workflows/backend-quality-gates.yml"
 
 jobs:
@@ -26,14 +30,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect build tool
+        id: build
+        run: |
+          if [ -f gradlew ] && { [ -f build.gradle ] || [ -f build.gradle.kts ]; }; then
+            echo "tool=gradle" >> "$GITHUB_OUTPUT"
+          elif [ -f pom.xml ]; then
+            echo "tool=maven" >> "$GITHUB_OUTPUT"
+          else
+            echo "Expected pom.xml or Gradle wrapper (gradlew + build.gradle*)." >&2
+            exit 1
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
-          cache: maven
+          cache: ${{ steps.build.outputs.tool }}
 
-      - name: Build and verify
+      - name: Maven verify
+        if: steps.build.outputs.tool == 'maven'
         run: mvn -B verify
+
+      - name: Gradle check
+        if: steps.build.outputs.tool == 'gradle'
+        run: |
+          chmod +x gradlew
+          ./gradlew check --no-daemon
 
   # --- Required（有 contracts/openapi.yaml 时）---
   openapi-diff:
@@ -65,20 +88,26 @@ jobs:
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@v2
 
-  # --- Conditional：依赖策略 / 合规要求时启用；小团队可删此 job ---
+  # --- Conditional：Maven + 合规策略；Gradle 请接 OWASP dependency-check Gradle 插件 ---
   dependency-scan:
     runs-on: ubuntu-latest
+    if: ${{ hashFiles('pom.xml') != '' }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: OWASP dependency check
-        run: |
-          mvn -B org.owasp:dependency-check-maven:check
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
 
-  # --- Conditional：仅当存在 db/migration 变更时 ---
+      - name: OWASP dependency check
+        run: mvn -B org.owasp:dependency-check-maven:check
+
+  # --- Conditional：Maven + migration 变更；Gradle 使用 backend-ci-optional-gradle.yml ---
   flyway-validate:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' }}
+    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' && hashFiles('pom.xml') != '' }}
     services:
       mysql:
         image: mysql:8

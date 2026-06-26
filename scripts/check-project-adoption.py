@@ -114,14 +114,27 @@ def check_package_json_scripts(repo: Path, errors: list[str], required: tuple[st
             errors.append(f"package.json missing script: {name}")
 
 
-def check_pom(repo: Path, errors: list[str]) -> None:
-    pom = repo / "pom.xml"
-    if not pom.is_file():
-        errors.append("MISSING pom.xml for backend project")
+def _is_gradle_project(repo: Path) -> bool:
+    has_wrapper = (repo / "gradlew").is_file()
+    has_build = (repo / "build.gradle").is_file() or (repo / "build.gradle.kts").is_file()
+    return has_wrapper and has_build
+
+
+def _is_maven_project(repo: Path) -> bool:
+    return (repo / "pom.xml").is_file()
+
+
+def check_build_tool(repo: Path, errors: list[str]) -> None:
+    if _is_maven_project(repo):
+        text = (repo / "pom.xml").read_text(encoding="utf-8")
+        if "maven-surefire-plugin" not in text and "spring-boot" not in text:
+            print("WARN: pom.xml may lack standard test/build plugins")
         return
-    text = pom.read_text(encoding="utf-8")
-    if "maven-surefire-plugin" not in text and "spring-boot" not in text:
-        print("WARN: pom.xml may lack standard test/build plugins")
+    if _is_gradle_project(repo):
+        return
+    errors.append(
+        "MISSING backend build file: pom.xml or Gradle wrapper (gradlew + build.gradle*)"
+    )
 
 
 def check_local_override(repo: Path, errors: list[str]) -> None:
@@ -137,7 +150,7 @@ def run_stack(repo: Path, stack: str, strict: bool) -> list[str]:
     check_cursor_rules(repo, errors)
 
     if stack == "backend":
-        check_pom(repo, errors)
+        check_build_tool(repo, errors)
         check_contracts(repo, errors, required=True)
     elif stack == "frontend":
         check_package_json_scripts(repo, errors, REQUIRED_FRONTEND_SCRIPTS)
