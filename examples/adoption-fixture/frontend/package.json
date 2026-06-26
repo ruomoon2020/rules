@@ -1,0 +1,9 @@
+{
+  "name": "adoption-fixture-frontend",
+  "private": true,
+  "scripts": {
+    "lint": "echo lint ok",
+    "type-check": "echo type-check ok",
+    "build": "echo build ok"
+  }
+}

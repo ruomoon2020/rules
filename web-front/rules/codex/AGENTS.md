@@ -49,13 +49,15 @@
 - 编辑 `contracts/schema.json`、`src/api/generated/**` → 追加 `12-schema-ssot.md` + `05-api-contract.md`。
 - 编辑 `src/components/base/**` → 追加 `11-base-components-context.md`。
 - 编辑 `src/layouts/**`、全局壳层 → 追加 `17-shell-navigation.md`。
+- 编辑 `src/**/*i18n*`、locale、formatter → 追加 `23-i18n-locale.md`。
+- 编辑 WebSocket、SSE、富文本、编辑器相关代码 → 追加 `24-realtime-rich-content.md`。
 
 Codex 优先读 `rules/shared/*.md` 与 `rules/codex/*.md`。
 
 - 不要依赖 `rules/cursor/*.mdc`（该目录仅供 Cursor）。
 - 不要读 `rules/docs/` 中**维护者专用**文件（如 `migration-from-template.md`、`contributing-rules-package.md`）。**例外**：成熟后台新增业务页可读 `rules/docs/business-feature-playbook-frontend.md`；编码约束以 `rules/shared/22-business-module-extension.md` 为准。
 
-## Hard Rules
+## 硬规则
 
 - 未阅读目标仓库 Base 组件源码或 `rules/shared/11-base-components-context.md` 前，不得编写或重构 `src/views/**`。
 - 未阅读 `contracts/schema.json`（或 generated 类型）前，不得新增表单字段、表格列或 DTO。

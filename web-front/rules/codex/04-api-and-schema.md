@@ -1,44 +1,44 @@
 # Codex API 与 Schema 规则
 
-Use this when editing API files, request wrappers, schema, generated clients, or pages that depend on API fields.
+用于编辑 API 文件、请求封装、schema、generated 客户端，或依赖 API 字段的页面。
 
-Also read `rules/shared/12-schema-ssot.md`.
+同时阅读 `rules/shared/12-schema-ssot.md`。
 
-## Source of Truth
+## 单一事实来源
 
-Use this order:
+按以下顺序：
 
 ```text
 contracts/schema.json
   -> src/api/generated
-  -> src/api/* thin wrappers
+  -> src/api/* 薄封装
   -> views / components
 ```
 
-## Editing Rules
+## 编辑规则
 
-1. Do not manually edit `src/api/generated`.
-2. If generated types are wrong, update the contract source and regenerate.
-3. Keep handwritten API files thin; they compose generated clients and add business-friendly names.
-4. Keep request interceptors responsible for token, traceId, error normalization, and download handling.
-5. Do not show UI messages from the low-level API layer.
+1. 禁止手改 `src/api/generated`。
+2. generated 类型有误时，先改契约源再重新生成。
+3. 手写 API 文件保持薄封装：组合 generated 客户端并补充业务友好命名。
+4. 请求拦截器负责 token、traceId、错误归一化与下载处理。
+5. 底层 API 层不得弹出 UI 提示。
 
-## Schema Change Review
+## Schema 变更审查
 
-When schema changes, inspect:
+schema 变更时检查：
 
-- removed fields
-- renamed fields
-- required field changes
-- enum additions or removals
-- response wrapper changes
-- pagination shape changes
+- 删除字段
+- 重命名字段
+- 必填项变化
+- 枚举增删
+- 响应包装结构变化
+- 分页结构变化
 
-Breaking changes require migration notes and rollback awareness.
+破坏性变更须附迁移说明与回滚意识。
 
-## Commands
+## 命令
 
-Run when available:
+项目已配置时运行：
 
 ```bash
 pnpm schema:sync
@@ -47,4 +47,4 @@ pnpm api:check
 pnpm type-check
 ```
 
-If a command is missing, report that the project has not wired the corresponding gate yet.
+若某命令不存在，须说明项目尚未接入对应门禁，不得伪造通过。

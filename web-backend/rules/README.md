@@ -267,8 +267,7 @@ AI 行为回归：
 | `docs/PERFORMANCE_BUDGET.template.md` | 性能预算模板 |
 | `docs/business-feature-playbook.md` | 新增业务功能落地流程 |
 | `docs/rules-package-index.md` | shared 规则索引（维护者） |
-| `cursor/35-business-module-extension.mdc` | Cursor 业务扩展触发规则 |
-| `cursor/36-platform-boundary.mdc` | Cursor 公共层 / system / generator 边界触发规则 |
+| `cursor/*.mdc` | Cursor 触发摘要（编号≠shared；业务扩展见 `35`，平台边界见 `36`） |
 | 仓库根 `contracts/openapi.baseline.yaml` | OpenAPI CI diff 基线 |
 | 仓库根 `docs/monorepo-layout.md` | 全栈 monorepo 布局 |
 

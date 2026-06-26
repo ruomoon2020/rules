@@ -2,7 +2,7 @@
 
 用于创建或修改 `src/views/**`（及 monorepo 内 `packages/*/src/views/**`）。
 
-## Before Editing
+## 编辑前必读
 
 1. `rules/shared/00-must-follow.md`
 2. `rules/shared/04-ui-patterns.md`
@@ -13,7 +13,7 @@
 7. `rules/shared/11-base-components-context.md`
 8. `rules/shared/12-schema-ssot.md`
 
-## Page Shape
+## 页面骨架
 
 ```vue
 <BasePage>
@@ -30,7 +30,7 @@
 
 列表页优先 `useTable`（或项目等价封装），须含 error 态；分页、筛选、竞态见 `rules/shared/19-list-pagination.md`。
 
-## Keep Alive
+## 缓存页（Keep-Alive）
 
 ```ts
 defineOptions({ name: 'RouteName' })
@@ -38,6 +38,6 @@ defineOptions({ name: 'RouteName' })
 
 `RouteName` 与路由 `name` 完全一致。
 
-## Output Checklist
+## 输出检查清单
 
 见 `rules/shared/10-verification-checklist.md`。

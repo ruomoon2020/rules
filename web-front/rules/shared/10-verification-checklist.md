@@ -39,6 +39,9 @@ pnpm api:check
 16. 未提交密钥、mock handler。
 17. 列表页使用 `useTable`（或项目等价封装）时包含 error 态与重试。
 18. 成熟后台新增业务页按 `22-business-module-extension.md` 检查：复用平台菜单 / 权限 / 字典；路由 `name` 与按钮权限码与后端一致；`api:gen` 后未手改 generated；列表四态与分页竞态；导入导出与操作记录刷新；树表 / 主子表 UI 与后端数据范围一致。
+19. i18n / 区域格式：用户可见文案与枚举走 i18n 或字典；金额、日期、时区用统一 formatter；`errorCode` 映射为用户文案（见 `23-i18n-locale.md`）。
+20. WebSocket / SSE：鉴权不走 URL query 长期 Token；卸载取消订阅；未知消息禁止未校验 DOM 插入（见 `24-realtime-rich-content.md`）。
+21. 富文本 / 编辑器：禁止裸 `v-html`；须 sanitizer；重型编辑器按需加载（见 `24-realtime-rich-content.md`）。
 
 ## 最终回复应包含
 
@@ -47,3 +50,5 @@ pnpm api:check
 - 未运行的命令及原因
 
 Codex 详见 `rules/codex/05-verification.md`；质量门禁详见 `shared/08-quality-gates.md`。
+
+跨端发版与合并标准见 `docs/enterprise-governance.md`（monorepo `docs/definition-of-done.md`）。

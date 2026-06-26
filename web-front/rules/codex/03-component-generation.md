@@ -1,30 +1,30 @@
 # Codex 组件生成规则
 
-Use this when creating or modifying shared or business components.
+用于创建或修改共享组件或业务组件。
 
-## Component Categories
+## 组件分类
 
-| Category | Location | Rule |
+| 类型 | 位置 | 规则 |
 |---|---|---|
-| Base UI | `src/components/base` | Business independent |
-| Business component | `src/components/business` or feature-local | May know business concepts |
-| Page-local component | `src/views/**/components` | Used by one page or module |
+| Base UI | `src/components/base` | 与业务无关 |
+| 业务组件 | `src/components/business` 或功能目录内 | 可了解业务概念 |
+| 页面局部组件 | `src/views/**/components` | 仅单页或单模块使用 |
 
-## Base Components
+## Base 组件
 
-1. Do not depend on business API, business store, route-specific logic, or business fields.
-2. Props, emits, and slots must be typed and documented.
-3. Support common states: loading, disabled, readonly, empty, error where relevant.
-4. Use design tokens, not hardcoded theme values.
-5. Meet accessibility rules for keyboard and labels.
-6. Breaking changes require migration notes.
+1. 不得依赖业务 API、业务 store、路由特有逻辑或业务字段。
+2. props、emits、slots 须有类型与说明。
+3. 在适用场景支持 loading、disabled、readonly、empty、error 等常见状态。
+4. 使用设计 Token，禁止硬编码主题色值。
+5. 满足键盘与标签的可访问性要求。
+6. 破坏性变更须附迁移说明。
 
-## Business Components
+## 业务组件
 
-1. Keep module-specific logic close to the module.
-2. Do not move one-off page code into global components.
-3. If reused by multiple pages, document inputs and outputs.
+1. 模块特有逻辑靠近模块存放。
+2. 不要把一次性页面代码提升到全局组件。
+3. 若多页复用，须文档化输入与输出。
 
-## Verification
+## 验证
 
-Run component tests if configured. For visual components, also inspect affected pages or visual regression output when available.
+若项目已配置组件测试则运行；视觉类组件在可行时检查受影响页面或视觉回归结果。

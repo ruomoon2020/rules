@@ -1,5 +1,59 @@
 # Changelog
 
+## 1.12.2 — 2026-06-27
+
+### Added
+
+- 链到 monorepo `docs/dod-maturity-mapping.md`、`docs/compliance-evidence-log.md`。
+
+### Changed
+
+- `docs/compliance-cn-mapping.md`：证据留痕要求；PR 模板监管项。
+
+## 1.12.1 — 2026-06-27
+
+### Changed
+
+- PR 模板：企业 DoD / 供应链 / 数据分级 / 豁免自检项。
+
+## 1.12.0 — 2026-06-27
+
+### Added
+
+- `evals/topic-manifest.yaml`；校验器接入全量 eval topic manifest。
+- 链到 monorepo 企业治理文档（DoD、豁免、CODEOWNERS 矩阵、供应链、数据分级）。
+
+### Changed
+
+- `docs/codeowners-guidance.md`：指向根 `codeowners-matrix.md`。
+
+## 1.11.7 — 2026-06-27
+
+### Added
+
+- 校验器 `check_readme_shared_inventory`：README 文件清单须覆盖全部 `shared/*.md`。
+
+### Changed
+
+- `docs/fullstack-contract.md`：§跨包编号补充 23/24 三端对照与 E41–E43 / M35–M38 边界。
+- `docs/contributing-rules-package.md`：注明 E41–E43 无后端 B 对称。
+
+## 1.11.6 — 2026-06-27
+
+### Changed
+
+- `docs/fullstack-contract.md`：参考规则路径表补充 i18n/实时/富文本三端对照；小程序不适用 E41–E43。
+
+## 1.11.5 — 2026-06-27
+
+### Added
+
+- `docs/fullstack-contract.md`：§管理端 Platform Extension（i18n / 实时 / 富文本；E41–E43）。
+
+### Changed
+
+- `docs/pull-request-template.md`：同 PR 含管理端时补充 Platform Extension 自检项。
+
 ## 1.11.4 — 2026-06-27
 
 ### Changed

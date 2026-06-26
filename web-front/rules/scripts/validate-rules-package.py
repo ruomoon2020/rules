@@ -26,6 +26,7 @@ VERSION_HEAD = re.compile(r"^##\s+(\d+\.\d+\.\d+)\s+—", re.MULTILINE)
 README_PATH = re.compile(r"`((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
 AGENTS_PATH = re.compile(r"`rules/((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
 SHARED_REF = re.compile(r"shared/(\d{2}-[\w-]+\.md)")
+BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)(?!\w)")
 CROSS_BACKEND_REF = re.compile(
     r"(?:\.\./web-backend/rules/|web-backend/rules/)([\w./-]+\.(?:md|mdc))"
 )
@@ -38,6 +39,12 @@ CONTRACT_SUITE = ["E03", "E04", "E05", "E26"]
 BUSINESS_EXTENSION_SUITE = [
     "E32", "E33", "E34", "E35", "E36", "E37", "E38", "E39", "E40",
 ]
+PLATFORM_EXTENSION_SUITE = ["E41", "E42", "E43"]
+EVAL_TOPIC_GUARDS = {
+    "E41": "硬编码业务文案",
+    "E42": "Token 放 WebSocket URL",
+    "E43": "裸 v-html 渲染用户富文本",
+}
 
 THRESHOLD_FILES = [
     "README.md",
@@ -45,6 +52,10 @@ THRESHOLD_FILES = [
     "evals/README.md",
     "evals/rubric.md",
     "evals/results-template.md",
+    "docs/onboarding-new-project.md",
+    "docs/rules-package-index.md",
+    "docs/contributing-rules-package.md",
+    "scripts/README.md",
     "cursor/00-project-overview.mdc",
 ]
 
@@ -136,6 +147,18 @@ def check_readme_paths(root: Path, errors: list[str]) -> None:
             errors.append(f"README.md lists missing path: {path}")
 
 
+def check_readme_shared_inventory(root: Path, errors: list[str]) -> None:
+    """Ensure README file inventory lists every shared/*.md on disk."""
+    readme = read(root / "README.md")
+    shared_dir = root / "shared"
+    if not shared_dir.is_dir():
+        return
+    for path in sorted(shared_dir.glob("*.md")):
+        rel = f"shared/{path.name}"
+        if rel not in readme:
+            errors.append(f"README.md file inventory missing {rel}")
+
+
 def check_agents_paths(root: Path, errors: list[str]) -> None:
     agents = root / "codex" / "AGENTS.md"
     if not agents.is_file():
@@ -150,9 +173,60 @@ def check_cursor_shared_refs(root: Path, errors: list[str]) -> None:
     if not cursor_dir.is_dir():
         return
     for mdc in cursor_dir.glob("*.mdc"):
-        for rel in SHARED_REF.findall(read(mdc)):
+        text = read(mdc)
+        for rel in SHARED_REF.findall(text):
             if not (root / "shared" / rel).is_file():
                 errors.append(f"{mdc.name}: missing shared/{rel}")
+        for rel in BARE_SHARED_REF.findall(text):
+            if (root / "shared" / rel).is_file():
+                errors.append(
+                    f"{mdc.name}: bare shared reference {rel}; use rules/shared/..."
+                )
+
+
+def monorepo_scripts_dir(rules_root: Path) -> Path | None:
+    resolved = rules_root.resolve()
+    if resolved.name == "rules" and resolved.parent.name in ("web-front", "web-backend", "miniapp"):
+        return resolved.parent.parent / "scripts"
+    return None
+
+
+def check_eval_topic_manifest(root: Path, errors: list[str]) -> None:
+    scripts_dir = monorepo_scripts_dir(root)
+    if scripts_dir is None or not scripts_dir.is_dir():
+        return
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    try:
+        import eval_topic_manifest as etm
+    except ImportError:
+        errors.append("cannot import eval_topic_manifest (pip install pyyaml)")
+        return
+    try:
+        etm.check_manifest(root, ID_PREFIX, errors)
+    except RuntimeError as exc:
+        errors.append(str(exc))
+
+
+def check_eval_topic_guards(prompts: str, rubric: str, errors: list[str]) -> None:
+    """Ensure selected high-risk eval IDs cannot be silently repurposed."""
+    prompt_topics = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            rf"^###\s+({ID_PREFIX}\d+)\s+—\s+(.+)$", prompts, re.MULTILINE
+        )
+    }
+    rubric_rows = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            rf"^\|\s+({ID_PREFIX}\d+)\s+\|\s+(.+?)\s+\|$", rubric, re.MULTILINE
+        )
+    }
+    for eval_id, expected_topic in EVAL_TOPIC_GUARDS.items():
+        if prompt_topics.get(eval_id) != expected_topic:
+            errors.append(f"{eval_id}: prompt topic must be '{expected_topic}'")
+        if expected_topic not in rubric_rows.get(eval_id, ""):
+            errors.append(f"{eval_id}: rubric topic must contain '{expected_topic}'")
 
 
 def monorepo_root(rules_root: Path) -> Path | None:
@@ -270,7 +344,20 @@ def main() -> int:
                 f"expected={BUSINESS_EXTENSION_SUITE}"
             )
 
+        plat_smoke = parse_suite_line(smoke, "## Platform Extension")
+        plat_readme = parse_evals_table_suite(evals_readme, "Platform Extension")
+        if sorted(plat_smoke) != sorted(PLATFORM_EXTENSION_SUITE) or sorted(
+            plat_readme
+        ) != sorted(PLATFORM_EXTENSION_SUITE):
+            errors.append(
+                f"Platform Extension suite mismatch: smoke={plat_smoke} readme={plat_readme} "
+                f"expected={PLATFORM_EXTENSION_SUITE}"
+            )
+
+    check_eval_topic_guards(prompts, rubric, errors)
+    check_eval_topic_manifest(root, errors)
     check_readme_paths(root, errors)
+    check_readme_shared_inventory(root, errors)
     check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)
     check_cross_package_backend_refs(root, errors)

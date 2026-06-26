@@ -1,5 +1,7 @@
 # 规则成熟度模型（小程序）
 
+DoD × Level 对照：monorepo [`docs/dod-maturity-mapping.md`](../../../../docs/dod-maturity-mapping.md)。
+
 团队声明目标 Level，evals 与 CI 按 Level 勾选，避免「规则包全有、业务仓全没」。
 
 | Level | 适用 | 最低要求 |

@@ -48,6 +48,14 @@
 - [ ] `pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`
 - [ ] `pnpm size:check`（或说明预算与 skip 原因）
 
+### 企业 DoD（monorepo）
+
+- [ ] Required CI 全绿（`docs/definition-of-do.md`）
+- [ ] 改依赖 / 锁文件：`docs/supply-chain-baseline.md` + `pnpm audit`
+- [ ] UGC / PII / storage：`docs/data-classification-matrix.md`
+- [ ] 跳过门禁：豁免单 `docs/rule-exception-process.md`
+- [ ] CODEOWNERS：`docs/codeowners-matrix.md`
+
 ---
 
 ## Evals（建议）

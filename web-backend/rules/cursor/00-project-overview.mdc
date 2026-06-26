@@ -12,6 +12,6 @@ Spring Boot 3 + Java 17+ + MyBatis-Plus + MySQL/PostgreSQL。规则版本见 `ru
 - 全栈契约：`rules/docs/fullstack-contract.md`
 - Evals：P0 8/8，P1 ≥49/55（B09–B63）；日常 Smoke、发版 Full（见 `evals/README.md`）
 - 采纳分层：`rules/docs/rule-maturity-model.md`
-- Cursor 路由：改业务模块看 `35-business-module-extension.mdc`；改 `common/system/generator` 看 `36-platform-boundary.mdc`。
+- Cursor 路由：改业务模块看 `35-business-module-extension.mdc`；改 `common/system/generator` 看 `36-platform-boundary.mdc`；测试/性能/运维/AI 生成见 `codex/AGENTS.md` 任务表（`shared/15`、`16`、`22`、`26`），无独立 cursor 触发时按 AGENTS 追加阅读。
 
 须能访问完整 `rules/` 目录。持久化见 shared `07`；可靠性见 `32`；安全高阶治理见 shared `35`–`42`（非 cursor/35 业务扩展）；业务扩展见 shared `43`；CI 样板须按项目裁剪（见 `examples/README.md`）。

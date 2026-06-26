@@ -37,6 +37,8 @@ mvn test -Dtest=LayeredArchitectureTest
 | **Conditional** | Flyway validate（改 migration）、OWASP dependency-check（按合规策略） |
 | **Optional** | SBOM、container scan、Pact、license report、perf smoke — 本仓库样板未包含，按项目另加 workflow |
 
+**跨端供应链 Required**：monorepo 根 [`examples/ci/supply-chain-required.yml`](../../../../examples/ci/supply-chain-required.yml)（npm/pnpm audit + Maven OWASP）。
+
 **未配置的门禁不得在 PR 中声称已通过**（见 `shared/23-quality-gates.md`）。
 
 ## Cursor 规则与本地覆盖

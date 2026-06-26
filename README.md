@@ -183,6 +183,29 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 4. 前端列表四态、删除末条回退页码、错误恢复完整。
 5. 后端跑 `mvn verify`，前端跑 `pnpm lint` / `type-check` / `build`。
 
+## 企业级治理（大厂执行闭环）
+
+规则内容之外，本 monorepo 提供**强制落地**配套文档与脚本：
+
+| 文档 / 脚本 | 用途 |
+|---|---|
+| [`docs/definition-of-done.md`](docs/definition-of-done.md) | 跨端统一 DoD（代码 / 契约 / 安全 / 数据 / 可观测 / 发布） |
+| [`docs/rule-exception-process.md`](docs/rule-exception-process.md) | 例外与豁免流程（审批、有效期、ADR） |
+| [`docs/codeowners-matrix.md`](docs/codeowners-matrix.md) | 按变更类型的强制 Review 矩阵 |
+| [`docs/supply-chain-baseline.md`](docs/supply-chain-baseline.md) | 供应链强制基线（许可证、CVE SLA、SBOM） |
+| [`docs/data-classification-matrix.md`](docs/data-classification-matrix.md) | 数据分类分级跨端表 |
+| [`docs/slo-alerting-template.md`](docs/slo-alerting-template.md) | 管理端 / 小程序 SLO 与告警 Owner |
+| [`docs/dod-maturity-mapping.md`](docs/dod-maturity-mapping.md) | DoD × 采纳 Level 0–3 对照 |
+| [`docs/compliance-evidence-log.md`](docs/compliance-evidence-log.md) | 合规证据留痕（金融 / 政务） |
+| [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) | **业务仓**接入验收（AGENTS、rules、cursor、契约） |
+| [`scripts/generate-eval-topic-manifest.py`](scripts/generate-eval-topic-manifest.py) | Eval 全量 topic manifest（防 prompts/rubric drift） |
+
+业务仓落地后建议：
+
+```bash
+python scripts/check-project-adoption.py --repo /path/to/your-app --stack frontend --strict
+```
+
 ## 验证与 CI
 
 | 范围 | 命令 / 套件 |
@@ -195,7 +218,9 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | 小程序业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`、`pnpm api:check` |
 | 后端成熟业务扩展 | Business Extension B55–B63（建议 9/9） |
 | 前端成熟业务扩展 | Business Extension E32–E40（建议 9/9） |
-| 前端发版 / 大改规则 | Smoke / Full evals（E01–E40，P1 ≥29/32） |
+| 前端 i18n / 实时 / 富文本 | Platform Extension E41–E43（建议 3/3） |
+| 小程序 UGC / 富文本 / 恢复 | Resilience Extension M35–M38（建议 4/4） |
+| 前端发版 / 大改规则 | Smoke / Full evals（E01–E43，P1 ≥32/35） |
 | 全栈契约 | OpenAPI diff + 前端 api:gen / api:check |
 
 本仓库 CI：PR 改任一端 `rules/**` 时运行对应 `validate-rules-package.py`（含 miniapp），见 `.github/workflows/validate-rules-packages.yml`。
@@ -217,6 +242,8 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 - [ ] 小程序接入 `pnpm lint`、`type-check`、`build:mp-weixin`、api check 和包体积检查。
 - [ ] 业务 PR 模板已复制或等价接入，能覆盖契约、权限、数据权限、审计、导入导出和回滚。
 - [ ] 成熟后台新增业务时，后端跑 Business Extension B55–B63、前端跑 E32–E40（均建议 9/9）。
+- [ ] 前端 i18n / 实时 / 富文本相关 PR 跑 Platform Extension E41–E43（建议 3/3）。
+- [ ] 小程序 UGC / 富文本 / 错误恢复相关 PR 跑 Resilience Extension M35–M38（建议 4/4）。
 
 ### 推荐
 
@@ -247,7 +274,11 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | 新建小程序项目 | `miniapp/rules/docs/onboarding-new-project.md` |
 | 共享 API 契约 | `contracts/openapi.yaml` + `openapi.baseline.yaml`（CI diff） |
 | 全栈 monorepo 布局 | `docs/monorepo-layout.md` |
+| 企业治理文档索引 | `docs/README.md` |
+| 跨包 shared 编号对照 | `web-backend/rules/docs/fullstack-contract.md` §跨包编号说明 |
 | 规则包自动校验 | PR 改任一侧 `rules/**` 时运行 `validate-rules-package.py`（见 `.github/workflows/validate-rules-packages.yml`） |
+| 企业级 DoD / 豁免 / Owner | [`docs/definition-of-done.md`](docs/definition-of-done.md)、[`docs/rule-exception-process.md`](docs/rule-exception-process.md)、[`docs/codeowners-matrix.md`](docs/codeowners-matrix.md) |
+| 业务仓接入验收 | [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) |
 | 后端 Java 样板 | `web-backend/rules/examples/scaffold/` |
 
 ## 维护规则包
@@ -258,4 +289,5 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 2. 不要把所有 `.mdc` 设成 `alwaysApply: true`。
 3. 新增 shared 编号文件时，同步 README、AGENTS、Cursor、evals、release checklist。
 4. 改 eval 数量时，同步 prompts、rubric、results-template、smoke、README 和校验脚本。
-5. 外层 README 只写全栈部署和协作，不复制前后端规则全文。
+5. 跨包引用 shared 编号时，见 `web-backend/rules/docs/fullstack-contract.md` §跨包编号说明，勿只报「读 08 / 22」。
+6. 外层 README 只写全栈部署和协作，不复制前后端规则全文。

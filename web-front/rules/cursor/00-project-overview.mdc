@@ -10,10 +10,22 @@ alwaysApply: true
 ## 唯一入口
 
 - 硬规则：`rules/shared/00-must-follow.md`（当前 51 条）
-- Evals：P0 8/8，P1 ≥29/32（E01–E40）；成熟后台业务 PR 跑 **Business Extension** E32–E40（见 `evals/README.md`）
+- Evals：P0 8/8，P1 ≥32/35（E01–E43）；成熟后台业务 PR 跑 **Business Extension** E32–E40；i18n/实时/富文本 PR 跑 **Platform Extension** E41–E43（见 `evals/README.md`）
 - Codex：`rules/codex/AGENTS.md`（复制为仓库根 `AGENTS.md`）
 - Cursor：本目录 `.mdc` 文件（复制到业务仓 `.cursor/rules/`）
-- Cursor 路由：成熟后台新增业务页看 `18-business-module-extension.mdc`；列表/表单看 `10`/`11`/`13`；路由权限看 `06` 相关规则
+
+## Cursor 路由
+
+| 场景 | Cursor |
+|---|---|
+| 成熟后台业务页 | `18-business-module-extension.mdc` |
+| 改 layout / router / store / base | `19-platform-boundary.mdc` |
+| 表单 / 详情 | `20-form-detail.mdc` |
+| AI 生成复杂代码 | `21-ai-generation.mdc` |
+| i18n / 金额 / 时区 | `22-i18n-locale.mdc` |
+| WebSocket / 富文本 | `23-realtime-rich-content.mdc` |
+| 测试 / CI | `08-quality-testing.mdc` |
+| 列表 / schema / Base | `10` / `11` / `13`；路由权限见 `06` 相关规则 |
 
 ## 落地要求
 

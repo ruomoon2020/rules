@@ -28,6 +28,7 @@
 - [ ] `cursor/*.mdc`：引用路径有效；`alwaysApply` 概览条数/版本与 `00` 一致
 - [ ] `evals/README.md`（含 Smoke / Security / Contract / **Business Extension** / Full 套件）
 - [ ] `evals/prompts.md`、`evals/rubric.md`、`evals/results-template.md` 用例数与门槛**一致**（**仅此三文件**按 `### Bxx` / 表格计数）
+- [ ] 改 eval 主题后：更新 `evals/topic-manifest.yaml`（`python scripts/generate-eval-topic-manifest.py --rules-dir ...`）
 - [ ] `evals/smoke-prompts.md`（若改核心 P1 / 套件列表）：**只校验 B 编号覆盖**，不参与提示词正文计数；禁止添加 `### Bxx` 标题
 - [ ] 运行 `python scripts/validate-rules-package.py`（或 CI 等价）通过
 - [ ] `evals/adoption-checklist.md`、`RELEASE.md`、`docs/onboarding-new-project.md`
@@ -43,6 +44,8 @@
 | `evals/rubric.md` | 是（P1 表格行） | 与 prompts P1 一致 |
 | `evals/results-template.md` | 是（`\| Bxx \|` 行） | 与 prompts 全量一致 |
 | `evals/smoke-prompts.md` | **否**（套件索引） | 只校验引用的 B 编号 ⊆ `prompts.md` |
+
+管理端 evals **E41–E43**（Platform Extension：i18n / 实时 / 富文本）**无后端 B 对称用例**；全栈边界见 `docs/fullstack-contract.md` §跨包编号说明与 §管理端 Platform Extension。
 
 自动化：`python scripts/validate-rules-package.py`（发版前 / 改 evals 后必跑）。本 monorepo 已在 `.github/workflows/validate-rules-packages.yml` 接入。
 

@@ -31,6 +31,8 @@
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Bxx` 提示词计数；校验见 `scripts/validate-rules-package.py`）。
 
+**Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 evals 后运行 `python scripts/generate-eval-topic-manifest.py --rules-dir web-backend/rules`。
+
 ### 核心 P1（= Smoke 中的 20 条）
 
 B09、B11、B21、B25、B27、B28、B29、B31、B34、B36、B39、B40、B43、B44、B45、B48、B51、B52、B55、B58。
@@ -50,6 +52,8 @@ B09、B11、B21、B25、B27、B28、B29、B31、B34、B36、B39、B40、B43、B4
 | B61 | E38 | 树表父节点禁选非法项 |
 | B62 | E39 | 主子表失败态与回滚一致 |
 | B63 | E40 | 禁止改 generator 全局 Vue 模板 |
+
+**E41–E43** 为管理端 i18n / 实时通信 / 富文本专项（`web-front/rules/evals`），无后端 B 对称项；双端 PR 仍以 Business Extension B55–B63 ↔ E32–E40 为主。
 
 双端新增业务、树表、主子表、导入导出或 CodeGen PR 必须同时跑 B55–B63 与 E32–E40；仅 Smoke 不代表该场景已回归。
 

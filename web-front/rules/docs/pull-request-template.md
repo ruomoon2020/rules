@@ -18,4 +18,12 @@
 - [ ] `pnpm test`
 - [ ] `pnpm build`
 - [ ] `pnpm api:check`（若适用）
-- [ ] Rules eval（Smoke / Business Extension / Full）：
+- [ ] Rules eval（Smoke / Business Extension / Platform Extension / Full）：
+
+## 企业 DoD（monorepo）
+
+- [ ] Required CI 全绿：lint / type-check / test / build（`docs/definition-of-done.md`）
+- [ ] 改依赖 / 锁文件：已跑供应链门禁（`docs/supply-chain-baseline.md`）
+- [ ] 新 PII / 日志字段：已对照 `docs/data-classification-matrix.md`
+- [ ] 跳过门禁或超性能预算：豁免单（`docs/rule-exception-process.md`）
+- [ ] CODEOWNERS Reviewer 已指派（`docs/codeowners-matrix.md`）

@@ -16,6 +16,7 @@
 - [ ] 核对 `docs/rules-package-index.md` 与 `shared/00–25` 一致
 - [ ] 核对 `examples/README.md` 与脚手架/脚本样板一致
 - [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`
+- [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules` 并提交 `evals/topic-manifest.yaml`
 
 ## 大版本 / 改 Hard Rules 时追加
 

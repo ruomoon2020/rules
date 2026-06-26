@@ -20,7 +20,7 @@
 | 级别 | 用例 | 门槛 |
 |---|---|---|
 | **P0** | E01–E08（共 8 条） | **8/8** 必须 Pass |
-| **P1** | E09–E40（共 32 条） | **至少 29/32** Pass |
+| **P1** | E09–E43（共 35 条） | **至少 32/35** Pass |
 
 ## 回归套件（企业分层）
 
@@ -30,15 +30,18 @@
 | **Security** | E12、E18、E25、E27 | 建议 4/4 | 安全 / 隐私 / 导入导出 PR |
 | **Contract** | E03、E04、E05、E26 | 建议 4/4 | Schema / API / 字段 PR |
 | **Business Extension** | E32–E40 | 建议 9/9 | 成熟后台新增业务页 / CRUD / 树表主子表 PR |
-| **Full** | E01–E40 | P0 8/8；P1 ≥29/32 | **发版**、规则包升级 |
+| **Platform Extension** | E41–E43 | 建议 3/3 | i18n / WebSocket·SSE / 富文本·编辑器 PR |
+| **Full** | E01–E43 | P0 8/8；P1 ≥32/35 | **发版**、规则包升级 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Exx` 计数；校验见 `scripts/validate-rules-package.py`）。
+
+**Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 `prompts.md` / `rubric.md` 后运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-front/rules`。
 
 ### 核心 P1（= Smoke 中的 12 条）
 
 E09、E13、E15、E16、E17、E18、E22、E24、E27、E28、E29、E30。
 
-发版前仍须跑 **Full**（E01–E40）。
+发版前仍须跑 **Full**（E01–E43）。
 
 ### 与后端 Business Extension 对照（联调 / 双端 PR）
 
@@ -54,7 +57,9 @@ E09、E13、E15、E16、E17、E18、E22、E24、E27、E28、E29、E30。
 | B62 | E39 | 主子表失败态与回滚一致 |
 | B63 | E40 | 禁止改 generator 全局 Vue 模板 |
 
-- 不允许把 20/23 四舍五入为通过。
+**E41–E43** 为管理端 i18n / 实时通信 / 富文本专项，无后端 B 对称项；涉及相关 PR 时跑 **Platform Extension** 套件。
+
+- 不允许把 32/35 四舍五入为通过。
 - 任一条 Fail 若输出可合并代码，须在真实仓库跑 `pnpm lint` / `type-check` 二次确认。
 
 ## 与落地清单关系

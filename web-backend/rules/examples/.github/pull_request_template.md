@@ -61,8 +61,16 @@
 ### 治理
 
 - [ ] 公共抽象 / 新依赖 / breaking API：已确认 Owner；需 ADR 时已补（`30`）
-- [ ] 已请求 CODEOWNERS 对应 Reviewer（契约 / DB / security / CI / rules）
+- [ ] 已请求 CODEOWNERS 对应 Reviewer（契约 / DB / security / CI / rules）；矩阵见 monorepo `docs/codeowners-matrix.md`
 - [ ] 规则包变更（若改 `rules/**`）：见 `rules/docs/contributing-rules-package.md`
+
+### 企业 DoD（monorepo，合并 / 发版前）
+
+- [ ] 代码 / 契约 / 安全 Required CI 全绿（`docs/definition-of-done.md`）
+- [ ] 新依赖 / 锁文件：供应链门禁已跑（`docs/supply-chain-baseline.md`、`examples/ci/supply-chain-required.yml`）
+- [ ] 新 PII / 敏感字段：已对照 `docs/data-classification-matrix.md`
+- [ ] 跳过 Required 门禁：已填豁免单（`docs/rule-exception-process.md`，含有效期与风险接受人）
+- [ ] 监管 / 等保相关：已更新证据留痕（`docs/compliance-evidence-log.md`）
 
 ### 新增业务模块（成熟后台 / RuoYi 系，若适用）
 

@@ -100,6 +100,8 @@
 
 ## 推广建议
 
+采纳 Level 与 DoD 六道门禁对照见 monorepo [`docs/dod-maturity-mapping.md`](../../../../docs/dod-maturity-mapping.md)。金融 / 政务须配合 [`docs/compliance-evidence-log.md`](../../../../docs/compliance-evidence-log.md)。
+
 1. 新项目在 `onboarding-new-project.md` 中声明目标 Level 与计划完成迭代。
 2. `adoption-checklist.md` 按 Level 勾选，不必一次勾满。
 3. **基于成熟后台平台**（RuoYi / Jeecg 等）的团队：Level 1 起纳入 `43` + playbook；Level 2 前须跑通 **Business Extension** evals。

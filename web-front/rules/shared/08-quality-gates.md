@@ -51,6 +51,17 @@ pnpm api:check
 4. UI 组件、Token、主题变更建议做视觉回归。
 5. 测试分层与 a11y 自动化见 `15-testing.md`。
 
+## 规则回归（evals）
+
+发版或大改 `shared/` 时，在测试仓库按场景跑 evals（见 `evals/README.md`、`evals/smoke-prompts.md`）：
+
+| 场景 | 套件 |
+|---|---|
+| 日常 PR | Smoke（P0 8/8；核心 P1 ≥10/12） |
+| 成熟后台业务页 | Business Extension E32–E40（建议 9/9） |
+| i18n / 实时 / 富文本 | Platform Extension E41–E43（建议 3/3） |
+| 发版 / 规则大改 | Full E01–E43（P1 ≥32/35） |
+
 ## 监控
 
 1. 错误上报须符合 `shared/18-logging-observability.md` 字段契约。

@@ -59,6 +59,7 @@ your-miniapp/
 - App/网络/环境 PR：**Security Extension** M30–M34（建议 5/5）
 - 错误恢复/UGC/可观测 PR：**Resilience Extension** M35–M38（建议 4/4）
 - PR 模板：复制 `examples/.github/` → 仓库根 `.github/`
+- 企业级 DoD / 豁免 / 接入验收：monorepo `docs/definition-of-done.md`、`docs/enterprise-governance.md`、`scripts/check-project-adoption.py`
 
 ## 7. 成熟度（可选）
 

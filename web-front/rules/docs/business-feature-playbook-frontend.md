@@ -64,6 +64,8 @@
 
 成熟后台业务 PR 建议：后端 **B55–B63（9/9）** + 前端 **E32–E40（9/9）**。
 
+涉及 i18n、WebSocket/SSE、富文本或编辑器 PR 时，另跑前端 **Platform Extension E41–E43（建议 3/3）**（无后端 B 对称项）。
+
 ## 7. PR 自检
 
 - [ ] 已 `schema:sync` + `api:gen` + `api:check`；未手改 `generated`
@@ -73,6 +75,7 @@
 - [ ] 导入 / 导出 / 下载有权限、脱敏、操作记录刷新
 - [ ] 树表 / 主子表（若有）已对照 §5；建议跑 **E38–E39**（与后端 B61–B62）
 - [ ] 成熟后台业务 PR 已跑 **Business Extension** E32–E40（建议 9/9）
+- [ ] i18n / 实时 / 富文本 PR 已跑 **Platform Extension** E41–E43（建议 3/3）
 - [ ] 已跑 `pnpm lint`、`type-check`（或项目等价命令）
 - [ ] 全栈字段对齐见 `web-backend/rules/docs/fullstack-contract.md` §新增业务功能
 

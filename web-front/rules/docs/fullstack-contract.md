@@ -33,6 +33,13 @@ contracts/openapi.yaml
 - 导入导出需要模板下载、任务状态、错误明细、下载鉴权、审计记录刷新闭环。
 - 树表 / 主子表需处理非法父节点禁选、子表错误明细和失败态；后端事务与归属校验仍是安全边界。
 
+## i18n / 实时 / 富文本
+
+- 用户可见文案与枚举走 i18n 或字典；金额、日期、时区用统一 formatter（`shared/23-i18n-locale.md`）。
+- WebSocket / SSE：鉴权不走 URL query 长期 Token；卸载须取消订阅（`shared/24-realtime-rich-content.md`）。
+- 富文本展示须 sanitizer；禁止裸 `v-html`；重型编辑器按需加载。
+- 相关 PR 建议跑 evals **Platform Extension E41–E43**（3/3）；细则见 monorepo `web-backend/rules/docs/fullstack-contract.md` §管理端 Platform Extension。
+
 ## 何时读取完整版
 
-涉及审计字段映射、OpenAPI breaking change、跨端业务扩展、租户数据权限或小程序联调时，读取 monorepo `web-backend/rules/docs/fullstack-contract.md` 对应章节。
+涉及审计字段映射、OpenAPI breaking change、跨端业务扩展、租户数据权限、i18n/实时/富文本或小程序联调时，读取 monorepo `web-backend/rules/docs/fullstack-contract.md` 对应章节（含 §管理端 Platform Extension）。

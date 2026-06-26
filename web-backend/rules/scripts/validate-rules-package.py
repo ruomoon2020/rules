@@ -16,6 +16,7 @@ import re
 import sys
 from pathlib import Path
 
+ID_PREFIX = "B"
 PROMPT_HEADING = re.compile(r"^###\s+(B\d+)\s+—", re.MULTILINE)
 RUBRIC_ROW = re.compile(r"^\|\s+(B\d+)\s+\|", re.MULTILINE)
 RESULTS_ROW = re.compile(r"^\|\s+(B\d+)\s+\|", re.MULTILINE)
@@ -26,7 +27,7 @@ VERSION_HEAD = re.compile(r"^##\s+(\d+\.\d+\.\d+)\s+—", re.MULTILINE)
 README_PATH = re.compile(r"`((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml))`")
 AGENTS_PATH = re.compile(r"`rules/((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml))`")
 SHARED_REF = re.compile(r"shared/(\d{2}-[\w-]+\.md)")
-BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)")
+BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)(?!\w)")
 CORE_P1_LINE = re.compile(r"^(B\d+(?:、B\d+)*)\.?\s*$")
 
 # High-risk evals whose rubric must repeat the prompt topic verbatim.  Keep this
@@ -205,6 +206,41 @@ def check_cursor_shared_refs(root: Path, errors: list[str]) -> None:
                 )
 
 
+def check_readme_shared_inventory(root: Path, errors: list[str]) -> None:
+    readme = read(root / "README.md")
+    shared_dir = root / "shared"
+    if not shared_dir.is_dir():
+        return
+    for path in sorted(shared_dir.glob("*.md")):
+        rel = f"shared/{path.name}"
+        if rel not in readme:
+            errors.append(f"README.md file inventory missing {rel}")
+
+
+def monorepo_scripts_dir(rules_root: Path) -> Path | None:
+    resolved = rules_root.resolve()
+    if resolved.name == "rules" and resolved.parent.name in ("web-front", "web-backend", "miniapp"):
+        return resolved.parent.parent / "scripts"
+    return None
+
+
+def check_eval_topic_manifest(root: Path, errors: list[str]) -> None:
+    scripts_dir = monorepo_scripts_dir(root)
+    if scripts_dir is None or not scripts_dir.is_dir():
+        return
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    try:
+        import eval_topic_manifest as etm
+    except ImportError:
+        errors.append("cannot import eval_topic_manifest (pip install pyyaml)")
+        return
+    try:
+        etm.check_manifest(root, ID_PREFIX, errors)
+    except RuntimeError as exc:
+        errors.append(str(exc))
+
+
 def check_eval_topic_guards(prompts: str, rubric: str, errors: list[str]) -> None:
     """Ensure selected high-risk eval IDs cannot be silently repurposed."""
     prompt_topics = {
@@ -333,6 +369,8 @@ def main() -> int:
         )
 
     check_readme_paths(root, errors)
+    check_readme_shared_inventory(root, errors)
+    check_eval_topic_manifest(root, errors)
     check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)
     check_cross_package_front_refs(root, errors)

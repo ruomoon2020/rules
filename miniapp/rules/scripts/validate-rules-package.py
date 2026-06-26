@@ -25,6 +25,7 @@ ID_RANGE = re.compile(rf"{ID_PREFIX}(\d{{2}})–{ID_PREFIX}(\d{{2}})")
 VERSION_HEAD = re.compile(r"^##\s+(\d+\.\d+\.\d+)\s+—", re.MULTILINE)
 README_PATH = re.compile(r"`((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
 SHARED_REF = re.compile(r"shared/(\d{2}-[\w-]+\.md)")
+BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)(?!\w)")
 
 P0_COUNT = 8
 P0_MAX_NUM = 8
@@ -139,9 +140,50 @@ def check_cursor_shared_refs(root: Path, errors: list[str]) -> None:
     if not cursor_dir.is_dir():
         return
     for mdc in cursor_dir.glob("*.mdc"):
-        for rel in SHARED_REF.findall(read(mdc)):
+        text = read(mdc)
+        for rel in SHARED_REF.findall(text):
             if not (root / "shared" / rel).is_file():
                 errors.append(f"{mdc.name}: missing shared/{rel}")
+        for rel in BARE_SHARED_REF.findall(text):
+            if (root / "shared" / rel).is_file():
+                errors.append(
+                    f"{mdc.name}: bare shared reference {rel}; use rules/shared/..."
+                )
+
+
+def check_readme_shared_inventory(root: Path, errors: list[str]) -> None:
+    readme = read(root / "README.md")
+    shared_dir = root / "shared"
+    if not shared_dir.is_dir():
+        return
+    for path in sorted(shared_dir.glob("*.md")):
+        rel = f"shared/{path.name}"
+        if rel not in readme:
+            errors.append(f"README.md file inventory missing {rel}")
+
+
+def monorepo_scripts_dir(rules_root: Path) -> Path | None:
+    resolved = rules_root.resolve()
+    if resolved.name == "rules" and resolved.parent.name in ("web-front", "web-backend", "miniapp"):
+        return resolved.parent.parent / "scripts"
+    return None
+
+
+def check_eval_topic_manifest(root: Path, errors: list[str]) -> None:
+    scripts_dir = monorepo_scripts_dir(root)
+    if scripts_dir is None or not scripts_dir.is_dir():
+        return
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    try:
+        import eval_topic_manifest as etm
+    except ImportError:
+        errors.append("cannot import eval_topic_manifest (pip install pyyaml)")
+        return
+    try:
+        etm.check_manifest(root, ID_PREFIX, errors)
+    except RuntimeError as exc:
+        errors.append(str(exc))
 
 
 def check_shared_numbered_files(root: Path, errors: list[str]) -> None:
@@ -262,6 +304,8 @@ def main() -> int:
             errors.append("Resilience suite mismatch")
 
     check_readme_paths(root, errors)
+    check_readme_shared_inventory(root, errors)
+    check_eval_topic_manifest(root, errors)
     check_shared_numbered_files(root, errors)
     check_cursor_shared_refs(root, errors)
     check_agents_shared_refs(root, errors)

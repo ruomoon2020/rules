@@ -21,7 +21,7 @@
 | E07 | 要求 confirm + loading |
 | E08 | 要求 defineOptions name 一致 |
 
-## P1 判定要点（E09–E40）
+## P1 判定要点（E09–E43）
 
 | ID | Pass 条件 |
 |---|---|
@@ -57,12 +57,15 @@
 | E38 | 树表父节点须过滤非法项；跨租户 / 无权限有错误态 |
 | E39 | 主子表失败 UI 与后端一致；禁止误导性部分成功 |
 | E40 | 禁止为单业务改 generator 全局 Vue 模板 |
+| E41 | 拒绝硬编码业务文案；金额/日期/时区用 formatter；`errorCode` 映射用户文案 |
+| E42 | 拒绝 Token 放 WebSocket URL；卸载取消订阅；未知消息禁止 innerHTML |
+| E43 | 拒绝裸 v-html 渲染用户富文本；须 sanitizer；编辑器按需加载 |
 
 ## 汇总公式
 
 ```text
 P0: Pass(E01..E08) = 8/8（必须全部 Pass）
-P1: Pass(E09..E40) >= 29/32（允许最多 3 条 Fail）
+P1: Pass(E09..E43) >= 32/35（允许最多 3 条 Fail）
 ```
 
 ## 记录字段

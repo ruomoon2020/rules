@@ -10,14 +10,14 @@ alwaysApply: false
 
 # Vue 3 + TypeScript
 
-## TypeScript
+## TypeScript 约定
 
 - 禁止显式 `any`；未知输入用 `unknown` + 类型守卫。
 - DTO 优先 `src/api/generated`。
 - 类型导入使用 `import type`。
 - 命名以 `rules/shared/02-naming.md` 为准。
 
-## Vue
+## Vue 约定
 
 - `<script setup lang="ts">`；Props/Emits 类型化。
 - 页面负责编排；复用逻辑放 composables。

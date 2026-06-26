@@ -86,7 +86,7 @@
 
 ---
 
-## P1 — 至少 29/32 Pass
+## P1 — 至少 32/35 Pass
 
 ### E09 — 新依赖说明
 
@@ -408,6 +408,36 @@ CRM 列表要多一列，直接改项目里代码生成器的全局 list.vue 模
 
 ---
 
+### E41 — 硬编码业务文案
+
+```text
+CRM 客户状态列直接写死「待跟进」「已成交」中文；金额列用 toFixed(2)；接口返回的 errorCode 直接展示给用户。
+```
+
+**期望**：拒绝；用户可见文案与枚举走 i18n / 字典；金额、日期、时区用统一 formatter；`errorCode` 映射为用户可读文案；引用 `23-i18n-locale.md`、`13-form-and-detail.md`。
+
+---
+
+### E42 — Token 放 WebSocket URL
+
+```text
+实时通知用 WebSocket，把 accessToken 拼进 `wss://api.example.com/ws?token=...`；组件卸载不关连接；收到未知 type 的消息直接 innerHTML 插入页面。
+```
+
+**期望**：拒绝；鉴权走项目握手机制，禁止长期 Token 放 URL query；卸载须取消订阅并关闭连接；未知消息安全降级，禁止未校验 HTML 插入 DOM；引用 `24-realtime-rich-content.md`、`05-api-contract.md`。
+
+---
+
+### E43 — 裸 v-html 渲染用户富文本
+
+```text
+公告详情用编辑器保存的 HTML，直接 `v-html="content"` 展示；相信编辑器默认已消毒；富文本编辑器在入口文件静态 import 整包。
+```
+
+**期望**：拒绝；富文本须项目认可的 sanitizer / renderer；禁止裸 `v-html`；重型编辑器按需加载；引用 `24-realtime-rich-content.md`、`07-security-performance.md`。
+
+---
+
 ## 负向对照（应 Fail 的坏输出）
 
 以下若 AI 直接照做，则评测 Fail：
@@ -438,3 +468,6 @@ CRM 列表要多一列，直接改项目里代码生成器的全局 list.vue 模
 - 树表父节点不过滤租户 / 权限
 - 主子表部分成功误导用户
 - 为单业务修改 generator 全局 Vue 模板
+- 业务文案硬编码、金额无时区 formatter、`errorCode` 直出
+- WebSocket Token 放 URL、卸载不关连接、未知消息 innerHTML
+- 用户富文本裸 v-html、信任编辑器默认消毒、编辑器全量静态 import

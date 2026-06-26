@@ -14,6 +14,7 @@
 - [ ] 核对 `evals` 用例数与门槛（**计数 SSOT**：`prompts.md` + `rubric.md` + `results-template.md`；`smoke-prompts.md` **只校验 B 编号覆盖，不计入条数**）
 - [ ] 运行 `python scripts/validate-rules-package.py` 通过
 - [ ] 若改核心 P1 列表：同步 `evals/smoke-prompts.md` 与 `evals/README.md` 套件表
+- [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-backend/rules` 并提交 `evals/topic-manifest.yaml`
 
 ## 大版本 / 改 Hard Rules 或 ArchUnit 时追加
 

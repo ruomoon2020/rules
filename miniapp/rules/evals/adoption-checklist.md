@@ -16,7 +16,14 @@
 - [ ] 跑 Smoke evals（M01–M08 + 核心 P1 ≥10/12）
 - [ ] 隐私 / 支付 / 分享 PR 跑 Security + Contract 套件
 - [ ] 新业务分包 PR 跑 Business Extension M21–M29
+- [ ] UGC / 富文本 / 弱网恢复 PR 跑 Resilience Extension M35–M38（建议 4/4）
+- [ ] 管理端 evals **E41–E43** 不适用小程序（见 `docs/fullstack-contract.md` §与管理端 Platform Extension 的边界）
 - [ ] 与后端 `web-backend/rules/docs/fullstack-contract.md` §小程序 对齐 traceId / errorCode / 分页
 - [ ] 已复制 `examples/.github/pull_request_template.md`；可选 `examples/ci/rules-package-validate.yml`
 - [ ] 声明采纳 Level（`docs/rule-maturity-model.md`）写入 `99-project-local.mdc`
 - [ ] 已配置 `pnpm audit`（`25`）；错误恢复与 UGC 按 `22`/`23` 落地
+
+## 企业治理（monorepo）
+
+- [ ] 已阅读 `docs/enterprise-governance.md`；SLO 见 monorepo `docs/slo-alerting-template.md`
+- [ ] 已运行 `scripts/check-project-adoption.py --stack miniapp`

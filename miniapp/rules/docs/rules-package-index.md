@@ -29,6 +29,6 @@
 | 24 | `24-design-system-mobile.md` | 设计 Token / Base |
 | 25 | `25-dependency-supply-chain.md` | 依赖与 audit |
 
-文档：`docs/observability-metrics.md`、`docs/owasp-miniapp-mapping.md`。
+文档：`docs/observability-metrics.md`、`docs/owasp-miniapp-mapping.md`、`docs/fullstack-contract.md`（含与管理端 E41–E43 边界说明）、`docs/enterprise-governance.md`（DoD / 豁免 / 接入验收）。
 
 Codex：`codex/AGENTS.md`。Cursor：`cursor/*.mdc`。

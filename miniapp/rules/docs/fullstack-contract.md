@@ -79,3 +79,15 @@ contracts/openapi.yaml
 | 审计 | 写库 | 操作记录 UI | 不伪造成功；敏感字段脱敏展示 |
 
 细则：后端 `shared/43` + playbook；管理端 `web-front/rules/shared/22`；小程序 `shared/18` + `docs/business-feature-playbook-miniapp.md`。
+
+## 与管理端 Platform Extension 的边界
+
+管理端 **E41–E43**（`web-front/rules/evals`）仅适用于 Vue 管理端 i18n / WebSocket·SSE / 富文本编辑器场景，**小程序不适用该 eval 套件**。
+
+| 主题 | 管理端 | 小程序 |
+|---|---|---|
+| i18n / 区域格式 | `web-front/rules/shared/23-i18n-locale.md` | 文案与 `errorCode` 映射走项目 i18n；禁止硬编码与后端码不一致 |
+| 实时通道 | `web-front/rules/shared/24-realtime-rich-content.md` | 长连接按 `21`；鉴权禁止 Token 放 URL query |
+| 富文本 / UGC | `24` + sanitizer | `shared/23-content-safety.md`：消毒或白名单；禁止不可信 HTML |
+
+小程序 evals 仍以 **M01–M38** 为准；富文本/UGC 相关见 Security / Resilience 套件（`evals/README.md`）。

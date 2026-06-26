@@ -1,5 +1,78 @@
 # Changelog
 
+## 1.5.2 — 2026-06-27
+
+### Added
+
+- monorepo `docs/dod-maturity-mapping.md`、`docs/compliance-evidence-log.md`。
+
+### Changed
+
+- `shared/23-i18n-locale.md` 加厚（SSOT、formatter、fallback、验证清单）。
+- `cursor/22-i18n-locale.mdc`：语言切换与 E41 提示。
+
+## 1.5.1 — 2026-06-27
+
+### Changed
+
+- PR 模板：企业 DoD / 数据分级 / 豁免 / CODEOWNERS 自检项。
+- `evals/topic-manifest.yaml`：套件仅保留 smoke 扩展段，并与 smoke 双向校验。
+
+## 1.5.0 — 2026-06-27
+
+### Added
+
+- 对接 monorepo 企业治理：`docs/definition-of-done.md`、`rule-exception-process`、`codeowners-matrix`、`supply-chain-baseline`、`data-classification-matrix`、`slo-alerting-template`。
+- `evals/topic-manifest.yaml` + 校验器全量 topic drift 检测。
+
+### Changed
+
+- `evals/README.md`：topic manifest 维护说明。
+
+## 1.4.9 — 2026-06-27
+
+### Changed
+
+- `shared/08-quality-gates.md`：补充 evals 套件表（Smoke / Business / Platform / Full）。
+- `cursor/02-vue3-typescript.mdc`：小节标题中文化。
+- `RELEASE.md`：硬变更清单注明 Platform Extension E41–E43。
+
+## 1.4.8 — 2026-06-27
+
+### Added
+
+- 校验器 `check_readme_shared_inventory`：README 文件清单须覆盖全部 `shared/*.md`。
+
+### Changed
+
+- `codex/05-verification.md`：补充 evals 套件表（Smoke / Business / Platform / Full）。
+
+## 1.4.7 — 2026-06-27
+
+### Added
+
+- `web-backend/rules/docs/fullstack-contract.md`：§管理端 Platform Extension（i18n / 实时 / 富文本）。
+- 校验器 `THRESHOLD_FILES` 纳入 `contributing-rules-package.md`、`scripts/README.md`。
+
+### Changed
+
+- `docs/fullstack-contract.md`（管理端摘要）、`rule-maturity-model.md`、后端 PR 模板、`cursor/07-review-checklist.mdc`、`codex/AGENTS.md` 路径触发：补齐 23/24 与 E41–E43 引用。
+
+## 1.4.6 — 2026-06-27
+
+### Added
+
+- `evals`：**E41–E43**（i18n / WebSocket·SSE / 富文本）；**Platform Extension** 套件建议 3/3。
+- 校验器：`EVAL_TOPIC_GUARDS`、`BARE_SHARED_REF`、`PLATFORM_EXTENSION_SUITE` 与单测。
+
+### Changed
+
+- P1 门槛：**E09–E43 共 35 条，至少 32/35**（Full 发版）。
+- 同步 `evals/README`、`smoke-prompts`、`adoption-checklist`、`cursor/00`、`docs/rules-package-index`。
+- `codex/01`–`04` 中文化；`shared/22` 路由节编号修正。
+- 根 README 与后端 `evals/README` 补充跨包 / E41–E43 说明。
+- 补全 `contributing-rules-package`、`scripts/README`、`prompts` P1 标题、`fullstack-contract`、`monorepo-layout`、playbook、PR 模板与 `10-verification-checklist` 对 E41–E43 / 23–24 的引用。
+
 ## 1.4.5 — 2026-06-27
 
 ### Added

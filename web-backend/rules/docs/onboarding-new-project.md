@@ -57,3 +57,4 @@ your-backend/
 - 成熟后台新增业务：优先跑 **Business Extension** B55–B63（建议 9/9）
 - 业务仓 PR：复制 `rules/examples/.github/` → 仓库根 `.github/`
 - 契约 baseline：首次稳定后生成 `contracts/openapi.baseline.yaml` 供 CI diff（见 `examples/README.md`）
+- 企业级 DoD / 豁免 / 接入验收：monorepo `docs/definition-of-done.md`、`docs/enterprise-governance.md`、`scripts/check-project-adoption.py`

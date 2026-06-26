@@ -1,6 +1,6 @@
 # CODEOWNERS 指引（模板）
 
-> GitHub/GitLab 的 CODEOWNERS 由业务仓维护；本文件说明**建议**必须 Owner Review 的路径。
+> GitHub/GitLab 的 CODEOWNERS 由业务仓维护。按**变更类型**的强制 Review 矩阵见 monorepo 根 [`docs/codeowners-matrix.md`](../../../../docs/codeowners-matrix.md)。
 
 ## 建议强制 Review 路径
 

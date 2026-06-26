@@ -14,11 +14,12 @@
 - [ ] 核对 `cursor/*.mdc` 中的 `rules/shared/...` 引用均存在，且 frontmatter `globs` 能覆盖目标场景
 - [ ] 核对 `evals` 用例数与门槛（**计数 SSOT**：`prompts.md` + `rubric.md` + `results-template.md`；`smoke-prompts.md` **只校验 E 编号覆盖**）
 - [ ] 运行 `python scripts/validate-rules-package.py` 通过
-- [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`
+- [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`（含 **Platform Extension** E41–E43）
+- [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-front/rules` 并提交 `evals/topic-manifest.yaml`
 
 ## 大版本 / 改 ci-scan 或 Hard Rules 时追加
 
-- [ ] 在测试业务仓跑 `evals/prompts.md` **E01–E40**，P0 **8/8**、P1 **至少 29/32**；成熟后台业务 PR 加 **Business Extension** E32–E40
+- [ ] 在测试业务仓跑 `evals/prompts.md` **E01–E43**，P0 **8/8**、P1 **至少 32/35**；成熟后台业务 PR 加 **Business Extension** E32–E40；i18n/实时/富文本 PR 加 **Platform Extension** E41–E43
 - [ ] 通知业务仓同步 `rules/` 或升级 submodule 版本
 
 ## 不要做

@@ -49,6 +49,7 @@
 | `rule-maturity-model.md` | 采纳分层 Level 0–3 |
 | `pull-request-template.md` | 业务仓 PR 模板（可复制） |
 | `contributing-rules-package.md` | 规则包维护者变更治理 |
+| `enterprise-governance.md` | 企业级 DoD / 豁免 / 接入验收（链 monorepo `docs/`） |
 | `../scripts/validate-rules-package.py` | 规则包一致性校验 |
 | `../scripts/README.md` | 校验脚本说明 |
 | `../examples/ci/rules-package-validate.yml` | 业务仓 rules/ 校验 workflow |

@@ -61,8 +61,16 @@
 ### 治理
 
 - [ ] 公共抽象 / 新依赖 / breaking API：已确认 Owner；需 ADR 时已补（`30`）
-- [ ] 已请求 CODEOWNERS 对应 Reviewer（契约 / DB / security / CI / rules）
+- [ ] 已请求 CODEOWNERS 对应 Reviewer（契约 / DB / security / CI / rules）；矩阵见 monorepo `docs/codeowners-matrix.md`
 - [ ] 规则包变更（若改 `rules/**`）：见 `docs/contributing-rules-package.md`
+
+### 企业 DoD（monorepo，合并 / 发版前）
+
+- [ ] 代码 / 契约 / 安全 Required CI 全绿（`docs/definition-of-done.md`）
+- [ ] 新依赖 / 锁文件：供应链门禁已跑（`docs/supply-chain-baseline.md`）
+- [ ] 新 PII / 敏感字段：已对照 `docs/data-classification-matrix.md`
+- [ ] 跳过 Required 门禁：已填豁免单（`docs/rule-exception-process.md`）
+- [ ] 监管 / 等保相关：已更新证据留痕（`docs/compliance-evidence-log.md`）
 
 ### 新增业务模块（成熟后台 / RuoYi 系，若适用）
 
@@ -82,6 +90,7 @@
 - [ ] 路由 `name`、菜单、按钮权限码与后端一致；禁止仅隐藏 UI（`06-state-route-permission`）
 - [ ] 树表 / 主子表（若有）：非法父节点禁选、主子表错误明细、失败态与后端一致（`22` §树表/主子表）
 - [ ] 列表四态、删除末条回退页码、导入导出 UI 与 `web-front/rules/shared/22-business-module-extension.md`、`web-front/rules/docs/business-feature-playbook-frontend.md` 一致
+- [ ] i18n / 实时 / 富文本（若有）：对照 `web-front/rules/shared/23`、`24`；建议跑 **Platform Extension** E41–E43
 - [ ] 已跑 `pnpm lint` / `type-check`（或项目等价命令）
 
 ---

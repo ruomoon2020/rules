@@ -38,6 +38,8 @@
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Mxx` 计数；校验见 `scripts/validate-rules-package.py`）。
 
+**Topic manifest**：`topic-manifest.yaml`；改 evals 后运行 `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules`。
+
 ### 核心 P1（= Smoke 中的 10 条）
 
 M09、M11、M13、M14、M15、M16、M17、M18、M19、M20。

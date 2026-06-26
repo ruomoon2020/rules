@@ -11,6 +11,7 @@
 - [ ] `evals/prompts.md`、`evals/rubric.md`、`evals/results-template.md` **仅此三文件**按 `### Mxx` 计数
 - [ ] `evals/smoke-prompts.md`：**只校验 M 编号覆盖**，禁止 `### Mxx` 标题
 - [ ] `evals/README.md` 回归套件表与 smoke 一致（含 **Business Extension** M21–M29）
+- [ ] 改 eval 主题后：更新 `evals/topic-manifest.yaml`（monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules`）
 - [ ] `RELEASE.md`
 - [ ] `docs/rules-package-index.md` 与 `shared/00–25` 一致
 - [ ] `examples/README.md` 与新增样板同步

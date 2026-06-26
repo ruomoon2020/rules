@@ -43,3 +43,9 @@
 
 - [ ] **Smoke**：B01–B08 + 核心 P1（≥17/20）；发版前 **Full** B01–B63（P0 8/8，P1 ≥49/55）
 - [ ] 成熟后台新增业务时，跑 **Business Extension**：后端 B55–B63、前端 E32–E40（均建议 9/9）
+
+## 企业治理（monorepo）
+
+- [ ] 已阅读 `docs/enterprise-governance.md`；DoD / 豁免 / 供应链见 monorepo `docs/`
+- [ ] 已运行 `scripts/check-project-adoption.py --stack backend`（`--strict` 推荐）
+- [ ] `docs/release-checklist.md` 与 DoD 发布门禁对齐

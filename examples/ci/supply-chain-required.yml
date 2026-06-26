@@ -1,0 +1,93 @@
+# 供应链 Required 门禁 — 复制到业务仓 `.github/workflows/supply-chain-required.yml`
+# 见 monorepo `docs/supply-chain-baseline.md`；金融 / 政务建议 Required，其余至少 Conditional。
+
+name: supply-chain-required
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "package-lock.json"
+      - "yarn.lock"
+      - "pom.xml"
+      - "build.gradle*"
+      - "gradle.lockfile"
+      - ".github/workflows/supply-chain-required.yml"
+  workflow_dispatch:
+
+jobs:
+  npm-audit:
+    if: ${{ hashFiles('package.json') != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: ${{ hashFiles('pnpm-lock.yaml') != '' && 'pnpm' || 'npm' }}
+
+      - name: Install (pnpm)
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm audit (high+)
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        run: pnpm audit --audit-level=high
+
+      - name: npm audit (high+)
+        if: ${{ hashFiles('pnpm-lock.yaml') == '' && hashFiles('package-lock.json') != '' }}
+        run: npm audit --audit-level=high
+
+  maven-dependency-check:
+    if: ${{ hashFiles('pom.xml') != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: OWASP Dependency-Check
+        run: mvn -B -DskipTests org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+
+  license-scan-node:
+    if: ${{ hashFiles('package.json') != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies (pnpm)
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies (npm)
+        if: ${{ hashFiles('pnpm-lock.yaml') == '' && hashFiles('package-lock.json') != '' }}
+        run: npm ci
+
+      - name: license-checker (production)
+        run: |
+          npx --yes license-checker@25 --production --summary \
+            --onlyAllow 'MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;Unlicense' \
+            || (echo "::error::License not in allowlist. Update per legal or docs/supply-chain-baseline.md" && exit 1)

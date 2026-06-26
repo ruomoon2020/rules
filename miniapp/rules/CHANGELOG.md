@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.6.2 — 2026-06-27
+
+### Changed
+
+- `docs/rule-maturity-model.md`、`docs/enterprise-governance.md`：链到 DoD 对照与合规证据模板。
+
+## 0.6.1 — 2026-06-27
+
+### Changed
+
+- PR 模板：企业 DoD 自检项。
+
+## 0.6.0 — 2026-06-27
+
+### Added
+
+- `evals/topic-manifest.yaml`；校验器接入全量 eval topic manifest。
+- 链到 monorepo 企业治理文档。
+
+## 0.5.2 — 2026-06-27
+
+### Added
+
+- 校验器 `BARE_SHARED_REF`、`check_readme_shared_inventory`；`scripts/tests/` 单测 3 项。
+- CI：`validate-miniapp-rules` job 增加单测步骤。
+
+### Changed
+
+- 校验器 `BARE_SHARED_REF`：忽略 `.mdc` 文件名中的 `.md` 子串误报。
+- `docs/business-feature-playbook-miniapp.md`：§6 补充 Resilience Extension M35–M38 与 E41–E43 不适用说明。
+- `evals/adoption-checklist.md`：M35–M38 与 Platform Extension 边界。
+
+## 0.5.1 — 2026-06-27
+
+### Changed
+
+- `docs/fullstack-contract.md`：§与管理端 Platform Extension 边界（E41–E43 不适用；富文本见 `23-content-safety`）。
+- `docs/rules-package-index.md`：链到全栈契约摘要。
+
 ## 0.5.0 — 2026-05-26
 
 ### Added
