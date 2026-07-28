@@ -14,8 +14,12 @@
 | [`data-classification-matrix.md`](data-classification-matrix.md) | 数据分类分级跨端表 |
 | [`slo-alerting-template.md`](slo-alerting-template.md) | 管理端 / 小程序 SLO 与告警 |
 | [`dod-maturity-mapping.md`](dod-maturity-mapping.md) | DoD × 采纳 Level 0–3 对照 |
+| [`adoption-scorecard.md`](adoption-scorecard.md) | 成熟度评分卡：Required Evidence / Owner / 到期复查 |
 | [`compliance-evidence-log.md`](compliance-evidence-log.md) | 合规证据留痕模板（金融 / 政务） |
+| [`branch-protection.md`](branch-protection.md) | 分支保护与 Required Checks 实施指南（含豁免链路） |
 | [`monorepo-layout.md`](monorepo-layout.md) | 全栈 monorepo 推荐布局 |
+| [`adr/0001-rules-governance-baseline.md`](adr/0001-rules-governance-baseline.md) | 根级治理原则基线（ADR） |
+| [`../SECURITY.md`](../SECURITY.md) | 安全策略与漏洞报告入口（含 SLA / secret 泄露处置） |
 
 ## 脚本
 

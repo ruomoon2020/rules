@@ -8,4 +8,13 @@
 /web-front/rules/shared/00-must-follow.md    @architecture-team @security-team
 /web-backend/rules/evals/              @architecture-team @backend-leads
 /web-front/rules/evals/                @architecture-team @frontend-leads
+/miniapp/rules/                        @architecture-team @miniapp-leads
+/miniapp/rules/shared/00-must-follow.md @architecture-team @security-team
+/miniapp/rules/evals/                  @architecture-team @miniapp-leads
+/docs/                                @architecture-team @rules-governance-team
+/docs/adr/                            @architecture-team @rules-governance-team
+/SECURITY.md                          @security-team @architecture-team
+/CODEOWNERS                           @architecture-team @devops-team
+/.github/pull_request_template.md     @devops-team @architecture-team
+/.github/ISSUE_TEMPLATE/              @devops-team @architecture-team
 /.github/workflows/                   @devops-team

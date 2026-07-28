@@ -13,6 +13,10 @@ on:
       - "scripts/**"
       - "docs/**"
       - "examples/**"
+      - "CODEOWNERS"
+      - "SECURITY.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
       - ".github/workflows/validate-rules-packages.yml"
   push:
     branches: [main, master]
@@ -21,6 +25,13 @@ on:
       - "web-front/rules/**"
       - "miniapp/rules/**"
       - "scripts/**"
+      - "docs/**"
+      - "examples/**"
+      - "CODEOWNERS"
+      - "SECURITY.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
+      - ".github/workflows/validate-rules-packages.yml"
 
 jobs:
   validate-backend-rules:
@@ -85,4 +96,4 @@ jobs:
       - name: Governance script unit tests
         run: python -m unittest discover -s scripts/tests -v
       - name: Adoption fixture check
-        run: python scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend
+        run: python scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend --strict

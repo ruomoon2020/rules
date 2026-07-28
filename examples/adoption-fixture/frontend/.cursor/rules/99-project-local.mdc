@@ -1,0 +1,14 @@
+---
+description: Adoption fixture local project settings
+globs:
+  - "**/*"
+alwaysApply: false
+---
+
+# Project Local Overrides
+
+- Stack: frontend
+- Rules path: `rules/`
+- Source path: `src/`
+- Contract path: optional for this fixture
+- Adoption level: strict fixture baseline

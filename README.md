@@ -198,7 +198,11 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | [`docs/data-classification-matrix.md`](docs/data-classification-matrix.md) | 数据分类分级跨端表 |
 | [`docs/slo-alerting-template.md`](docs/slo-alerting-template.md) | 管理端 / 小程序 SLO 与告警 Owner |
 | [`docs/dod-maturity-mapping.md`](docs/dod-maturity-mapping.md) | DoD × 采纳 Level 0–3 对照 |
+| [`docs/adoption-scorecard.md`](docs/adoption-scorecard.md) | 成熟度评分卡：Required Evidence / Owner / 到期复查 |
 | [`docs/compliance-evidence-log.md`](docs/compliance-evidence-log.md) | 合规证据留痕（金融 / 政务） |
+| [`docs/branch-protection.md`](docs/branch-protection.md) | 分支保护与 Required Checks 实施指南（含豁免链路） |
+| [`docs/adr/0001-rules-governance-baseline.md`](docs/adr/0001-rules-governance-baseline.md) | 根级治理原则基线（ADR） |
+| [`SECURITY.md`](SECURITY.md) | 安全策略与漏洞报告入口（含 SLA / secret 泄露处置） |
 | [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) | **业务仓**接入验收（AGENTS、rules、cursor、契约） |
 | [`scripts/generate-eval-topic-manifest.py`](scripts/generate-eval-topic-manifest.py) | Eval 全量 topic manifest（防 prompts/rubric drift） |
 

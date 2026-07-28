@@ -1,0 +1,7 @@
+# Example CODEOWNERS for strict adoption checks.
+# Replace sample teams with real GitHub/GitLab groups in business repositories.
+
+* @frontend-leads
+/rules/ @frontend-leads @architecture-team
+/.cursor/rules/ @frontend-leads @architecture-team
+/package.json @frontend-leads
