@@ -19,10 +19,16 @@ your-backend/
 
 ## 2. 推荐技术选型
 
-- Java 17+、Spring Boot 3.x
+- Java 17+、Spring Boot 3.x（默认基线）；Spring Boot 4.x 仅在依赖、插件、CI、运行环境完成迁移评估后采用
 - MyBatis-Plus 3.x + Flyway
 - 数据库：MySQL 8、PostgreSQL 15（按环境启用）
 - MapStruct、Springdoc/OpenAPI、ArchUnit、Testcontainers
+
+版本策略：
+
+1. Spring Boot 版本由 Boot BOM / Gradle plugin 统一管理，禁止在业务模块散落覆盖 Spring 管理的依赖版本。
+2. 从 3.x 升到 4.x 前，先跑 `spring-boot-properties-migrator` 或等价配置迁移检查；迁移完成后移除迁移依赖。
+3. 升级 PR 必须说明 Jakarta EE / Servlet / Validation / Persistence 相关兼容性，以及 MyBatis-Plus、Springdoc、测试插件是否支持目标版本。
 
 ## 3. 最小包结构
 
@@ -54,7 +60,7 @@ your-backend/
 ## 7. 验证
 
 - `evals/adoption-checklist.md` 按目标 Level 勾选
-- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B63（P0 8/8，P1 ≥49/55）
+- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B64（P0 8/8，P1 ≥50/56）
 - 成熟后台新增业务：优先跑 **Business Extension** B55–B63（建议 9/9）
 - 业务仓 PR：复制 `rules/examples/.github/` → 仓库根 `.github/`
 - 契约 baseline：首次稳定后生成 `contracts/openapi.baseline.yaml` 供 CI diff（见 `examples/README.md`）

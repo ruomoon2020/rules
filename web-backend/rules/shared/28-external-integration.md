@@ -4,8 +4,9 @@
 
 ## 分层
 
-1. **禁止**在 Controller 直接调用第三方 SDK 或 `RestTemplate` / `WebClient`。
+1. **禁止**在 Controller 直接调用第三方 SDK 或 `RestClient` / `RestTemplate` / `WebClient`。
 2. 外部调用封装在 `infrastructure` 或 `integration` 包；application 层只调端口接口（Port/Adapter 按项目约定）。
+3. 新增同步 HTTP 调用优先使用 Spring `RestClient`；异步、流式或响应式场景使用 `WebClient`；已有 `RestTemplate` 可迁移但必须保留统一超时、拦截器、错误映射与观测配置。
 
 ## 超时与重试
 

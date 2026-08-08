@@ -7,12 +7,13 @@
 
 ## 集成测试
 
-1. `@SpringBootTest` + MockMvc 测 Controller 契约。
+1. Controller 契约优先使用 `@WebMvcTest` / MockMvc 切片测试；跨层流程使用 `@SpringBootTest` + MockMvc 或 `TestRestTemplate`。
 2. **Testcontainers**：至少 MySQL 或 PostgreSQL 之一与生产一致；多库项目 **两种库均须**跑迁移 + 核心 SQL 用例（CI matrix）。
 3. 测试数据使用 **fixture / builder / `@Sql`**，禁止依赖共享环境脏数据或执行顺序。
 4. **禁止**测试用例依赖 `@Order` 或隐式执行顺序（JUnit 5 默认并行友好）。
 5. **禁止**集成测试连接生产或预发数据库；`application-test.yml` 仅指向容器或本地 Testcontainers。
 6. 敏感接口须包含越权测试：未登录、无权限、跨租户、普通用户访问管理员资源（见 `06-security-authz.md`）。
+7. Spring Boot 4.x / Spring Framework 6.2+ 项目可优先使用 `MockMvcTester`、`@MockitoBean` 等新测试 API；Boot 3.x 项目保持与当前 Spring Test / Mockito API 兼容。
 
 ## 契约
 

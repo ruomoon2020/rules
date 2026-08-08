@@ -1,6 +1,6 @@
-# Gradle 样板（Spring Boot 3 + ArchUnit + OWASP + Flyway）
+# Gradle 样板（Spring Boot 3.x + ArchUnit + OWASP + Flyway）
 
-> **非可运行模块**：复制到业务仓根目录后改 `rootProject.name`、包名与依赖版本。Maven 等价物见 `../pom-dependencies.sample.xml`、`../scaffold/`。
+> **非可运行模块**：复制到业务仓根目录后改 `rootProject.name`、包名与依赖版本。Maven 等价物见 `../pom-dependencies.sample.xml`、`../scaffold/`。Spring Boot 4.x 项目须先按 `../../shared/20-dependency-governance.md` 完成迁移评估。
 
 ## 复制清单
 

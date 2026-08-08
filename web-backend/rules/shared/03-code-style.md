@@ -1,6 +1,6 @@
 # Code Style Rules（Java）
 
-适用于 Spring Boot 3 + Java 17+。
+适用于 Spring Boot 3.x + Java 17+；Spring Boot 4.x 项目须先按依赖治理规则完成迁移评估。
 
 ## Java
 
@@ -21,6 +21,7 @@
 1. 构造器注入优先，避免字段 `@Autowired`。
 2. `@Transactional` 仅放在 application/service 层 public 方法。
 3. Controller 使用 `@Valid` + `@RequestBody` / `@ParameterObject`。
+4. HTTP API 类显式使用 `@RestController`、`@GetMapping` / `@PostMapping` 等组合注解；复杂内容协商须声明 `produces` / `consumes` 并在 OpenAPI 中同步。
 
 ## 注释
 

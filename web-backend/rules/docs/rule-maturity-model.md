@@ -92,7 +92,7 @@
 | Security | 见 `evals/README.md` | 建议全 Pass | 鉴权/安全/隐私 PR |
 | Contract | 见 `evals/README.md` | 建议全 Pass | OpenAPI / 事件契约 PR |
 | Business Extension | B55–B63 | 建议 9/9 | 成熟后台新增业务 / CRUD / 树表主子表 PR |
-| Full | B01–B63 | P0 8/8；P1 ≥49/55 | 发版、规则包升级、大版本 |
+| Full | B01–B64 | P0 8/8；P1 ≥50/56 | 发版、规则包升级、大版本 |
 
 索引提示词：`evals/smoke-prompts.md`（仅索引，正文在 `prompts.md`）。
 

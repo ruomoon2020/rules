@@ -23,3 +23,22 @@ CREATE INDEX IF NOT EXISTS idx_audit_occurred ON sys_audit_log (occurred_at DESC
 CREATE INDEX IF NOT EXISTS idx_audit_operator ON sys_audit_log (operator_id, occurred_at DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_action ON sys_audit_log (action, occurred_at DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_resource ON sys_audit_log (resource_type, resource_id);
+
+COMMENT ON TABLE sys_audit_log IS '系统审计日志表';
+COMMENT ON COLUMN sys_audit_log.id IS '雪花 ID';
+COMMENT ON COLUMN sys_audit_log.tenant_id IS '租户 ID；单租户项目可为空';
+COMMENT ON COLUMN sys_audit_log.operator_id IS '操作者用户 ID 或系统主体 ID';
+COMMENT ON COLUMN sys_audit_log.action IS '操作动作编码';
+COMMENT ON COLUMN sys_audit_log.resource_type IS '资源类型编码';
+COMMENT ON COLUMN sys_audit_log.resource_id IS '资源 ID';
+COMMENT ON COLUMN sys_audit_log.request_summary IS '请求摘要；禁止记录敏感明文';
+COMMENT ON COLUMN sys_audit_log.file_name IS '文件名；导入导出场景使用';
+COMMENT ON COLUMN sys_audit_log.before_summary IS '变更前摘要；禁止记录敏感明文';
+COMMENT ON COLUMN sys_audit_log.after_summary IS '变更后摘要；禁止记录敏感明文';
+COMMENT ON COLUMN sys_audit_log.result IS '操作结果：SUCCESS/FAIL';
+COMMENT ON COLUMN sys_audit_log.error_code IS '失败错误码';
+COMMENT ON COLUMN sys_audit_log.trace_id IS '链路追踪 ID';
+COMMENT ON COLUMN sys_audit_log.ip IS '客户端 IP';
+COMMENT ON COLUMN sys_audit_log.user_agent IS '客户端 User-Agent';
+COMMENT ON COLUMN sys_audit_log.occurred_at IS '业务发生时间';
+COMMENT ON COLUMN sys_audit_log.created_at IS '记录创建时间';

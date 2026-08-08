@@ -3,6 +3,7 @@ description: 外部 HTTP / 第三方集成
 globs:
   - "**/integration/**"
   - "**/infrastructure/**/*Client*.java"
+  - "**/*RestClient*"
   - "**/*RestTemplate*"
   - "**/*WebClient*"
 alwaysApply: false

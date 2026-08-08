@@ -59,4 +59,4 @@
 
 ## Evals
 
-B01–B08 P0；B09–B63 P1（≥49/55）。套件：Smoke / Security / Contract / Business Extension / Full — 见 `evals/README.md`、`evals/smoke-prompts.md`。
+B01–B08 P0；B09–B64 P1（≥50/56）。套件：Smoke / Security / Contract / Business Extension / Full — 见 `evals/README.md`、`evals/smoke-prompts.md`。

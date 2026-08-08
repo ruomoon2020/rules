@@ -192,6 +192,9 @@ entries:
   B63:
     prompt_topic: 单业务改 generator 全局模板
     rubric_pass: 禁止为单业务改 generator 全局模板；须 Owner、ADR、兼容与生成场景回归
+  B64:
+    prompt_topic: 库表命名与约束漂移
+    rubric_pass: 库表 DDL 须符合数据库命名规范、表字段注释和状态/枚举取值约束
 suites:
   Security:
   - B06

@@ -5,12 +5,12 @@ alwaysApply: true
 
 # 后端项目概览
 
-Spring Boot 3 + Java 17+ + MyBatis-Plus + MySQL/PostgreSQL。规则版本见 `rules/VERSION`。
+Spring Boot 3.x + Java 17+ + MyBatis-Plus + MySQL/PostgreSQL。Spring Boot 4.x 项目须先按 `shared/20-dependency-governance.md` 完成迁移评估。规则版本见 `rules/VERSION`。
 
 - 硬规则：`rules/shared/00-must-follow.md`（当前 49 条）
 - Codex：`rules/codex/AGENTS.md` → 根 `AGENTS.md`
 - 全栈契约：`rules/docs/fullstack-contract.md`
-- Evals：P0 8/8，P1 ≥49/55（B09–B63）；日常 Smoke、发版 Full（见 `evals/README.md`）
+- Evals：P0 8/8，P1 ≥50/56（B09–B64）；日常 Smoke、发版 Full（见 `evals/README.md`）
 - 采纳分层：`rules/docs/rule-maturity-model.md`
 - Cursor 路由：改业务模块看 `35-business-module-extension.mdc`；改 `common/system/generator` 看 `36-platform-boundary.mdc`；测试/性能/运维/AI 生成见 `codex/AGENTS.md` 任务表（`shared/15`、`16`、`22`、`26`），无独立 cursor 触发时按 AGENTS 追加阅读。
 

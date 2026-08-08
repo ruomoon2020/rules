@@ -7,6 +7,7 @@
 3. Spring Boot BOM 对齐；禁止随意升级 major 无回归。
 4. MyBatis-Plus、驱动（mysql、postgresql）版本在父 POM 统一管理。
 5. 公共 Starter / 拦截器类依赖变更须确认 Owner，必要时 ADR（见 `30-ownership-adr.md`）。
+6. Spring Boot major 升级须单独评审：确认 Java 运行版本、Jakarta EE API、Servlet 容器、MyBatis-Plus、Springdoc/OpenAPI、Flyway、测试插件与 CI 均支持目标版本；迁移辅助依赖仅可临时加入，迁移完成后移除。
 
 ## 许可证
 

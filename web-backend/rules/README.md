@@ -2,7 +2,7 @@
 
 版本见 `VERSION`，变更见 `CHANGELOG.md`，发版见 `RELEASE.md`。
 
-企业级 **Spring Boot 3 + Java 17+ + MyBatis-Plus** 规则包，支持 **MySQL、PostgreSQL** 等多数据库（方言 SQL 与迁移分治）。
+企业级 **Spring Boot 3.x + Java 17+ + MyBatis-Plus** 规则包，支持 **MySQL、PostgreSQL** 等多数据库（方言 SQL 与迁移分治）。Spring Boot 4.x 项目可复用本包的架构、安全、契约与治理规则，但须先完成依赖兼容性、Jakarta EE 版本与迁移评估；不得在未验证 MyBatis-Plus、Springdoc、插件与 CI 的情况下直接把 3.x 基线改为 4.x。
 
 - **Codex**：`codex/AGENTS.md` → 复制到后端仓库根目录 `AGENTS.md`
 - **Cursor**：`cursor/*.mdc` → 复制到 `.cursor/rules/`
@@ -244,7 +244,7 @@ AI 行为回归：
 | `shared/42-cost-governance.md` | 成本治理 |
 | `shared/43-business-module-extension.md` | 成熟后台业务模块扩展 |
 | `docs/backup-restore-runbook.md` | 备份恢复 Runbook 模板 |
-| `evals/*` | AI 行为回归 B01–B63 |
+| `evals/*` | AI 行为回归 B01–B64 |
 | `docs/owasp-api-top10-mapping.md` | OWASP API Top 10 映射 |
 | `docs/compliance-cn-mapping.md` | 国内合规对照 |
 | `docs/release-checklist.md` | 发版检查清单 |
@@ -273,7 +273,7 @@ AI 行为回归：
 
 ## Evals
 
-**P0 8/8**，**P1 至少 49/55**（B09–B63）。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+**P0 8/8**，**P1 至少 50/56**（B09–B64）。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
 
 ## 采纳与 PR
 

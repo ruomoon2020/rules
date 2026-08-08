@@ -5,10 +5,14 @@
 ### Added
 
 - 链到 monorepo `docs/dod-maturity-mapping.md`、`docs/compliance-evidence-log.md`。
+- `shared/02-naming.md`、`shared/07-persistence-mybatis.md`：补充库表命名、DDL 注释、建表设计基线与多数据库注释一致性。
+- `evals/prompts.md`：新增 B64 库表命名与约束漂移用例；Full 门槛更新为 P1 ≥50/56。
 
 ### Changed
 
 - `docs/compliance-cn-mapping.md`：证据留痕要求；PR 模板监管项。
+- `cursor/06-persistence-mybatis.mdc`：SQL migration 触发持久化规则，覆盖 Flyway 建表脚本。
+- MySQL / PostgreSQL 建表示例同步表注释与字段注释。
 
 ## 1.12.1 — 2026-06-27
 
