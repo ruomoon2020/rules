@@ -1,6 +1,6 @@
 # 全栈契约（小程序端）
 
-> 维护者 / 架构文档。Codex 日常以 `shared/05-api-contract-request.md` 为准。  
+> 维护者 / 架构文档。Codex 日常以 `shared/05-api-contract-request.md` 为准。
 > 与后端、管理端对齐的完整版见 monorepo `web-backend/rules/docs/fullstack-contract.md`。
 
 ## 单一来源
@@ -60,10 +60,10 @@ contracts/openapi.yaml
 
 ## 发布顺序
 
-1. OpenAPI PR + openapi-diff  
-2. 后端兼容发布  
-3. 管理端 `api:gen`（若涉及）  
-4. 小程序 `api:gen` + `api:check` + 联调  
+1. OpenAPI PR + openapi-diff
+2. 后端兼容发布
+3. 管理端 `api:gen`（若涉及）
+4. 小程序 `api:gen` + `api:check` + 联调
 
 ## 新业务功能（三端）
 
@@ -90,4 +90,4 @@ contracts/openapi.yaml
 | 实时通道 | `web-front/rules/shared/24-realtime-rich-content.md` | 长连接按 `21`；鉴权禁止 Token 放 URL query |
 | 富文本 / UGC | `24` + sanitizer | `shared/23-content-safety.md`：消毒或白名单；禁止不可信 HTML |
 
-小程序 evals 仍以 **M01–M38** 为准；富文本/UGC 相关见 Security / Resilience 套件（`evals/README.md`）。
+小程序 evals 仍以 **M01–M44** 为准；富文本/UGC 相关见 Security / Resilience 套件，安全加固/多平台/实验相关见 Enterprise Hardening 套件（`evals/README.md`）。

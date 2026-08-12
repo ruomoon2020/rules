@@ -117,6 +117,24 @@ entries:
   M38:
     prompt_topic: 无崩溃指标
     rubric_pass: 要求上报与关键漏斗
+  M39:
+    prompt_topic: 生产 source map 公开
+    rubric_pass: 拒绝公开生产 source map / 调试资源
+  M40:
+    prompt_topic: 第三方 SDK 未登记数据流
+    rubric_pass: 要求第三方 SDK 数据流登记
+  M41:
+    prompt_topic: 大字号布局重叠
+    rubric_pass: 要求大字号/适老化不重叠截断
+  M42:
+    prompt_topic: 多平台能力绕过 adapter
+    rubric_pass: 要求多平台能力走 adapter 矩阵
+  M43:
+    prompt_topic: 实验开关无回滚
+    rubric_pass: 要求实验开关 Owner/回滚/清理
+  M44:
+    prompt_topic: 高风险操作只靠前端判断
+    rubric_pass: 高风险操作以后端状态和风控为准
 suites:
   Security:
   - M06
@@ -148,3 +166,10 @@ suites:
   - M36
   - M37
   - M38
+  Enterprise Hardening:
+  - M39
+  - M40
+  - M41
+  - M42
+  - M43
+  - M44

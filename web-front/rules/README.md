@@ -227,6 +227,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `shared/22-business-module-extension.md` | 成熟后台业务页扩展 | 新 CRUD / 菜单 / 权限 |
 | `shared/23-i18n-locale.md` | 国际化、金额、日期与时区 | locale / formatter / 错误码文案 |
 | `shared/24-realtime-rich-content.md` | WebSocket、SSE 与富文本 | 实时消息、编辑器、预览 |
+| `shared/25-regulated-web-hardening.md` | 受监管 Web 条件加固 | 金融、政务、高敏数据、第三方脚本、嵌入页面 |
 | `LANGUAGE.md` | 中英维护约定 | 维护规则时 |
 | `codex/AGENTS.md` | Codex 入口与路由 | Codex 会话开始 |
 | `codex/01-before-editing.md` | 改前上下文 | 任意改动 |
@@ -245,6 +246,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `docs/onboarding-new-project.md` | 新项目接入步骤 | 首次接入 rules/ |
 | `docs/rules-package-index.md` | 规则主题索引 | 不确定读哪个规则 |
 | `docs/rule-maturity-model.md` | 成熟度与证据要求 | 规划治理提升 |
+| `docs/release-checklist.md` | 业务发布、灰度与回滚证据 | 提测 / 发布 |
 | `docs/pull-request-template.md` | 前端 PR 模板 | 接入 CI / review |
 | `docs/PERFORMANCE_BUDGET.template.md` | 性能预算样板 | 重依赖、大列表、性能治理 |
 | `docs/owasp-web-mapping.md` | OWASP Web 映射 | 安全评审 |
@@ -255,12 +257,13 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `docs/business-feature-playbook-frontend.md` | 成熟后台新增业务页面落地 | 新 CRUD / 菜单 / 权限 |
 | `examples/ci-scan-views-el-tags.mjs` 等 | 硬门禁样板 | 业务仓 CI 接入 |
 | `examples/run-ci-scan-fixtures.mjs` | ci-scan 回归 | 规则包发版前 |
+| `examples/scaffold/` | 工具链、request、store、列表状态、bundle budget 样板 | 新项目接入 |
 
 ## 规则评测（evals）
 
-发版或大改 `shared/` 后，在测试仓库执行 `evals/prompts.md` 中 **E01–E43**，按 `evals/rubric.md` 记分，结果记入 `evals/results-YYYY-MM-DD.md`（由 `results-template.md` 复制）。
+发版或大改 `shared/` 后，在测试仓库执行 `evals/prompts.md` 中 **E01–E49**，按 `evals/rubric.md` 记分，结果记入 `evals/results-YYYY-MM-DD.md`（由 `results-template.md` 复制）。
 
-通过门槛：**P0 8/8 Pass**，**P1 至少 32/35 Pass**。日常 **Smoke**、成熟后台业务 PR **Business Extension（E32–E40，9/9）**、i18n/实时/富文本 PR **Platform Extension（E41–E43，3/3）**、发版 **Full**（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+通过门槛：**P0 8/8 Pass**，**P1 至少 38/41 Pass**。日常 Smoke、成熟后台 Business E32–E40、i18n/实时/富文本 Platform E41–E43、受监管 Web Enterprise Hardening E44–E49、发版 Full（见 `evals/README.md`、`evals/smoke-prompts.md`）。
 
 维护者发版前运行 `python scripts/validate-rules-package.py`；本 monorepo 见 `.github/workflows/validate-rules-packages.yml`。
 

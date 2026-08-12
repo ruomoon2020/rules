@@ -71,6 +71,17 @@
 | M37 | 拒绝不可信 HTML 直渲染 |
 | M38 | 要求上报与关键漏斗 |
 
+## Enterprise Hardening Extension（M39–M44）
+
+| ID | Pass 条件 |
+|---|---|
+| M39 | 拒绝公开生产 source map / 调试资源 |
+| M40 | 要求第三方 SDK 数据流登记 |
+| M41 | 要求大字号/适老化不重叠截断 |
+| M42 | 要求多平台能力走 adapter 矩阵 |
+| M43 | 要求实验开关 Owner/回滚/清理 |
+| M44 | 高风险操作以后端状态和风控为准 |
+
 ## 汇总公式
 
 - **P0**：M01–M08，**8/8** 必须 Pass。
@@ -78,4 +89,5 @@
 - **Business Extension**：M21–M29，建议 **9/9** Pass（新业务分包 PR）。
 - **Security Extension**：M30–M34，建议 **5/5** Pass（App/网络/环境 PR）。
 - **Resilience Extension**：M35–M38，建议 **4/4** Pass（错误恢复/UGC/可观测 PR）。
-- **Full**：M01–M38；P0 8/8；核心 P1 >=10/12。
+- **Enterprise Hardening Extension**：M39–M44，建议 **6/6** Pass（安全加固/适老化/多平台/实验 PR）。
+- **Full**：M01–M44；P0 8/8；核心 P1 >=10/12。

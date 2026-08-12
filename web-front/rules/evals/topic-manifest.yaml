@@ -132,6 +132,24 @@ entries:
   E43:
     prompt_topic: 裸 v-html 渲染用户富文本
     rubric_pass: 拒绝裸 v-html 渲染用户富文本；须 sanitizer；编辑器按需加载
+  E44:
+    prompt_topic: 第三方脚本未登记数据流
+    rubric_pass: 拒绝未登记第三方脚本；要求来源、版本、数据流、Owner 与退出清理
+  E45:
+    prompt_topic: 跨窗口消息通配放行
+    rubric_pass: 跨窗口消息须校验来源域、来源窗口和结构；高风险结果回接口复核
+  E46:
+    prompt_topic: 生产响应头未验证
+    rubric_pass: 要求验证生产实际响应和页面嵌入策略；仅写 meta 不算完成
+  E47:
+    prompt_topic: 远程配置失败默认放开
+    rubric_pass: 高风险远程配置失败须走安全默认值，并有 Owner、回滚和清理日期
+  E48:
+    prompt_topic: 高风险操作只信前端
+    rubric_pass: 高风险操作以后端权限与状态为准；权限收回后清理缓存并复核
+  E49:
+    prompt_topic: 生产调试资源公开
+    rubric_pass: 拒绝公开生产调试资源；要求检查实际发布产物和受控诊断渠道
 suites:
   Security:
   - E12

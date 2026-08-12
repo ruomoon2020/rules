@@ -83,6 +83,19 @@
 
 **Resilience Extension 合计**：__/4 Pass
 
+## Enterprise Hardening Extension（M39–M44）— 建议 6/6
+
+| ID | 结果 | 备注 |
+|---|---|---|
+| M39 | | |
+| M40 | | |
+| M41 | | |
+| M42 | | |
+| M43 | | |
+| M44 | | |
+
+**Enterprise Hardening Extension 合计**：__/6 Pass
+
 ## 结论
 
 - [ ] P0 8/8
@@ -90,4 +103,5 @@
 - [ ] Business Extension >= 9/9（若适用）
 - [ ] Security Extension >= 5/5（若适用）
 - [ ] Resilience Extension >= 4/4（若适用）
+- [ ] Enterprise Hardening Extension >= 6/6（若适用）
 - [ ] Fail 项已回流 `shared/` / `cursor/` / `CHANGELOG.md`

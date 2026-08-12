@@ -1,6 +1,6 @@
 # Examples
 
-可复制的工程门禁样板。`00-must-follow.md` 第 40 条要求 views 拦截 **import**、**`<el-*>`** 与 **Element Plus PascalCase（denylist）**。
+可复制的工程门禁样板。`00-must-follow.md` §33 要求 views 拦截 **import**、**`<el-*>`** 与 **Element Plus PascalCase（denylist）**。
 
 | 文件 | 说明 |
 |---|---|
@@ -10,6 +10,7 @@
 | `run-ci-scan-fixtures.mjs` | 脚本回归测试 |
 | `package-scripts.sample.json` | 业务仓 scripts 示例 |
 | `ci/rules-package-validate.yml` | 嵌入 `rules/` 时 PR 校验规则包一致性（复制到 `.github/workflows/`） |
+| `scaffold/` | ESLint / Prettier / Stylelint、request、store 清理、列表状态与 bundle budget 工程样板 |
 
 ## 规则包一致性（维护者 / 嵌入 rules/ 的业务仓）
 

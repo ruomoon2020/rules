@@ -1,6 +1,6 @@
 # 规则成熟度模型（采纳分层）
 
-> **与包内架构层级区分**：`shared/00` 为 L0 硬规则；`shared/01–43` 为 L1 细则；`codex/`、`cursor/` 为 L2 入口。本文 **Level 0–3** 指企业**分阶段采纳**节奏，避免新项目被 43 个 shared 一次性压垮。
+> **与文件编号区分**：`shared/00` 只保存 Level 0 不变量；`shared/01–43` 是按场景读取的正文，不代表全部属于 Level 1；`codex/`、`cursor/` 是索引与触发入口。本文 **Level 0–3** 指企业分阶段采纳节奏，避免新项目被 43 个 shared 一次性压垮。
 
 ## 总览
 
@@ -33,6 +33,8 @@
 | 契约 | 仓库根 `contracts/openapi.yaml` |
 | CI 最低 | `mvn verify` / `./gradlew check`、ArchUnit、`examples/archunit` |
 | Evals | **P0** B01–B08（8/8） |
+
+`00` 文末的条件触发路由只负责“命中场景时应读什么”，不会把 Level 2/3 能力变成所有 Level 0 项目的默认门禁。
 
 ---
 

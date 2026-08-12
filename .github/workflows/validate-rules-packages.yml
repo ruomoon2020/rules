@@ -8,8 +8,12 @@ on:
       - "web-backend/rules/**"
       - "web-front/rules/**"
       - "miniapp/rules/**"
+      - "common-governance/**"
       - "contracts/openapi.yaml"
       - "contracts/openapi.baseline.yaml"
+      - "README.md"
+      - "AGENTS.md"
+      - "建议.md"
       - "scripts/**"
       - "docs/**"
       - "examples/**"
@@ -24,6 +28,12 @@ on:
       - "web-backend/rules/**"
       - "web-front/rules/**"
       - "miniapp/rules/**"
+      - "common-governance/**"
+      - "contracts/openapi.yaml"
+      - "contracts/openapi.baseline.yaml"
+      - "README.md"
+      - "AGENTS.md"
+      - "建议.md"
       - "scripts/**"
       - "docs/**"
       - "examples/**"
@@ -57,8 +67,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install validator dependencies
-        run: pip install pyyaml
+        run: |
+          pip install pyyaml
+          npm install --global typescript@5.8.2
       - name: Run frontend validator unit tests
         run: python -m unittest discover -s web-front/rules/scripts/tests -v
       - name: Validate frontend rules package
@@ -81,19 +96,41 @@ jobs:
 
   validate-governance-scripts:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
       - name: Install validator dependencies
         run: pip install pyyaml
+      - name: Validate repository links, YAML, and whitespace
+        run: python scripts/validate-repository.py
+      - name: Validate GitHub Actions semantics
+        run: >-
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+          .github/workflows/*.yml
+          examples/ci/*.yml
+          common-governance/examples/ci/*.yml
+          web-backend/rules/examples/ci/*.yml
+          web-front/rules/examples/ci/*.yml
+          miniapp/rules/examples/ci/*.yml
       - name: Regenerate eval manifests (consistency check)
         run: python scripts/generate-eval-topic-manifest.py --all
       - name: Ensure eval manifests are committed
         run: git diff --exit-code -- web-backend/rules/evals/topic-manifest.yaml web-front/rules/evals/topic-manifest.yaml miniapp/rules/evals/topic-manifest.yaml
       - name: Governance script unit tests
         run: python -m unittest discover -s scripts/tests -v
+      - name: Strict governance adoption fixture
+        run: |
+          cp -R common-governance examples/adoption-fixture/frontend/common-governance
+          python common-governance/scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend --strict --require-governance
+      - name: Check common governance SSOT drift
+        run: python scripts/sync-common-governance.py
+      - name: Validate distributed common governance package
+        run: python common-governance/scripts/validate-package.py
       - name: Adoption fixture check
         run: python scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend --strict

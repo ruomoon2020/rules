@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.7.0 — 2026-08-12
+
+### Added
+
+- `shared/25-regulated-web-hardening.md` 与 Cursor 条件路由：覆盖受监管 Web、第三方脚本、嵌入页面、跨窗口通信和高风险操作。
+- Enterprise Hardening E44–E49 专项评测套件。
+
+### Changed
+
+- `shared/00-must-follow.md` 从 51 条收敛为 34 条 Level 0 不变量；列表、登录清理、导入导出、AI、错误恢复、发布和成熟后台能力改为条件触发路由。
+- validator 增加 L0 数量、路由边界、条件主题和非 L0 引用防回流检查。
+- Full eval 扩展为 E01–E49，P1 门槛调整为至少 38/41，继续只允许最多 3 条 Fail。
+
+### Migration
+
+- 业务仓升级后同步 `cursor/00-project-overview.mdc`；原 35–51 的场景约束没有删除，改由 `00` 条件路由和对应 shared 文件按任务触发。
+- Full 回归结果模板与门槛改为 E01–E49 / P1 ≥38/41；受监管 Web 项目追加 E44–E49 6/6。
+
+## 1.6.0 — 2026-08-11
+
+### Added
+
+- `docs/release-checklist.md`：业务前端发布、灰度、观察与回滚证据模板。
+- `examples/scaffold/`：工程配置、request 边界、store 清理和包体积检查样板。
+
+### Changed
+
+- `docs/rule-maturity-model.md` 扩展为 Level 0–3 的文件、CI、eval 与证据映射。
+- `docs/onboarding-new-project.md` 补齐工具链、契约、CI 顺序、Level 验收和严格接入流程。
+- 安全规则补齐列表 / 详情 / 剪贴板 / 下载 / 打印 / 缓存等客户端数据通道；平台边界补充组件生命周期与 ADR。
+- 企业治理接入改为可版本化的 `common-governance/` 发布包。
+- scaffold 校验器增加 Node 语法、TypeScript strict 编译和 bundle 预算正反 smoke；列表状态补齐错误、无权限与页码回退，bundle 预算拆分 total / initial / chunk。
+
 ## 1.5.2 — 2026-06-27
 
 ### Added

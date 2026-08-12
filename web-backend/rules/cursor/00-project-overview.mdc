@@ -7,7 +7,7 @@ alwaysApply: true
 
 Spring Boot 3.x + Java 17+ + MyBatis-Plus + MySQL/PostgreSQL。Spring Boot 4.x 项目须先按 `shared/20-dependency-governance.md` 完成迁移评估。规则版本见 `rules/VERSION`。
 
-- 硬规则：`rules/shared/00-must-follow.md`（当前 49 条）
+- Level 0 硬规则：`rules/shared/00-must-follow.md`（当前 27 条）；高阶主题按条件路由和项目采纳 Level 触发
 - Codex：`rules/codex/AGENTS.md` → 根 `AGENTS.md`
 - 全栈契约：`rules/docs/fullstack-contract.md`
 - Evals：P0 8/8，P1 ≥50/56（B09–B64）；日常 Smoke、发版 Full（见 `evals/README.md`）

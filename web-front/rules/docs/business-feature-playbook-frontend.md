@@ -1,6 +1,6 @@
 # Business Feature Playbook（前端）
 
-> **AI 执行 SSOT**：`shared/22-business-module-extension.md`。  
+> **AI 执行 SSOT**：`shared/22-business-module-extension.md`。
 > 与后端 `web-backend/rules/docs/business-feature-playbook.md`、`web-backend/rules/docs/fullstack-contract.md` §新增业务功能 对齐。
 
 ## 1. 先确认后端已就绪

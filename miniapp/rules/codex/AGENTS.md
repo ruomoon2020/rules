@@ -42,6 +42,7 @@
 | 富文本 / UGC / 内容安全 | `rules/shared/23-content-safety.md`、`rules/codex/09-content-safety.md` |
 | 设计系统 / Base 组件 | `rules/shared/24-design-system-mobile.md` |
 | 依赖 / 供应链 | `rules/shared/25-dependency-supply-chain.md` |
+| 安全加固 / 风控 / 远程配置 / 多平台矩阵 | `rules/shared/26-security-hardening-risk.md`、`rules/shared/19-release-ops.md`、`rules/shared/21-network-security.md` |
 | 日志 / 埋点 / 监控 | `rules/shared/15-logging-observability.md`、`rules/docs/observability-metrics.md` |
 | 测试 / CI / 发布 | `rules/shared/16-testing-quality-gates.md`、`rules/shared/19-release-ops.md`、`rules/codex/05-verification.md` |
 | 新业务分包 / 二开 | `rules/shared/18-business-module-extension.md`、`rules/docs/business-feature-playbook-miniapp.md`（修 bug/样式可不读 18，见 `99-project-local`） |
@@ -57,9 +58,11 @@
 - 编辑 `src/auth/**` → 追加读取 `06` + `09`。
 - 编辑 `src/privacy/**` → 追加读取 `09`。
 - 编辑 `src/platform/**` → 追加读取 `11`，若涉及支付 / 分享 / 订阅消息则追加 `14`。
+- 编辑 `src/platform/**` 中多平台能力矩阵、风控信号或敏感能力 adapter → 追加读取 `26`。
 - 编辑 `src/stores/**` → 追加读取 `08`。
 - 编辑 `src/subpackages/**`（新业务域 / CRUD / 支付链路）→ 追加读取 `18` + `07` + `10`。
-- 编辑 `package.json`、`.github/**` → 追加读取 `16` + `19`。
+- 编辑 `package.json`、`.github/**` → 追加读取 `16` + `19`，若涉及第三方 SDK 或供应链风险则追加 `25` + `26`。
+- 编辑远程配置、灰度、实验、审核临时开关、source map 或生产构建脚本 → 追加读取 `26` + `19`。
 
 ## 冲突优先级
 
@@ -77,6 +80,7 @@
 - 禁止非白名单域名与向 H5 透传 token；体验/审核版不得连生产支付。
 - App 级错误与 onPageNotFound 须有统一兜底与上报。
 - 弱网/401 须统一 recovery；富文本/UGC 须消毒；关键链路须指标上报。
+- 生产构建禁止公开 source map、调试资源和高风险开关；第三方 SDK 与实验配置须有数据流、Owner、回滚和清理计划。
 
 ## 完成前
 

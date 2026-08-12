@@ -20,6 +20,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      openapi: ${{ steps.build.outputs.openapi }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,6 +36,7 @@ jobs:
             echo "Expected pom.xml or Gradle wrapper (gradlew + build.gradle*)." >&2
             exit 1
           fi
+          if [ -f contracts/openapi.yaml ]; then echo "openapi=true" >> "$GITHUB_OUTPUT"; else echo "openapi=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-java@v4
         with:
@@ -52,8 +55,9 @@ jobs:
           ./gradlew check --no-daemon
 
   openapi-diff:
+    needs: verify
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('contracts/openapi.yaml') != '' }}
+    if: needs.verify.outputs.openapi == 'true'
     steps:
       - uses: actions/checkout@v4
 

@@ -16,9 +16,9 @@ python rules/scripts/validate-rules-package.py --rules-dir rules
 | VERSION ↔ CHANGELOG | 最新版本一致 |
 | evals 计数 | 仅 `prompts.md` 的 `### Exx` 计条数 |
 | smoke-prompts | **索引**：禁止 `### Exx`；E 编号须存在于 prompts |
-| 套件 | Smoke 核心 P1、Security、Contract、**Business Extension**（E32–E40）、**Platform Extension**（E41–E43）与 `evals/README.md` 一致 |
-| 门槛 | 多文件 `32/35`（随 rubric 动态）一致 |
-| 硬规则 | `00` 条数与 `cursor/00`（若标注）一致 |
+| 套件 | Smoke 核心 P1、Security、Contract、Business、Platform、**Enterprise Hardening**（E44–E49）与 `evals/README.md` 一致 |
+| 门槛 | 多文件 `38/41`（随 rubric 动态）一致 |
+| 硬规则 | `00` 固定 34 条、条件路由边界、主题防回流，并与 `cursor/00` 一致 |
 | README / cursor | 清单路径与 shared 引用；**README 须列出全部 `shared/*.md`** |
 | 跨包 / Codex | `web-backend/rules/` 引用存在；`codex/AGENTS.md` 的 `rules/...` 路径存在 |
 

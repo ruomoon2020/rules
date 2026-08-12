@@ -13,7 +13,7 @@
 - [ ] `evals/README.md` 回归套件表与 smoke 一致（含 **Business Extension** M21–M29）
 - [ ] 改 eval 主题后：更新 `evals/topic-manifest.yaml`（monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules`）
 - [ ] `RELEASE.md`
-- [ ] `docs/rules-package-index.md` 与 `shared/00–25` 一致
+- [ ] `docs/rules-package-index.md` 与 `shared/00–26` 一致
 - [ ] `examples/README.md` 与新增样板同步
 - [ ] `python scripts/validate-rules-package.py` 通过
 
@@ -28,4 +28,4 @@
 
 ## 发版
 
-见 `RELEASE.md`；大版本须跑 **Full** evals M01–M38（P0 8/8，核心 P1 >=10/12，Extension 套件建议满配）。
+见 `RELEASE.md`；大版本须跑 **Full** evals M01–M44（P0 8/8，核心 P1 >=10/12，Extension 套件建议满配）。

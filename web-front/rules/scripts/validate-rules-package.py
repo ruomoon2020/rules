@@ -12,8 +12,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ID_PREFIX = "E"
@@ -33,6 +38,7 @@ CROSS_BACKEND_REF = re.compile(
 
 P0_COUNT = 8
 P0_MAX_NUM = 8
+L0_HARD_RULE_COUNT = 34
 SMOKE_CORE_P1_COUNT = 12
 SECURITY_SUITE = ["E12", "E18", "E25", "E27"]
 CONTRACT_SUITE = ["E03", "E04", "E05", "E26"]
@@ -40,6 +46,26 @@ BUSINESS_EXTENSION_SUITE = [
     "E32", "E33", "E34", "E35", "E36", "E37", "E38", "E39", "E40",
 ]
 PLATFORM_EXTENSION_SUITE = ["E41", "E42", "E43"]
+ENTERPRISE_HARDENING_SUITE = ["E44", "E45", "E46", "E47", "E48", "E49"]
+L0_ALLOWED_SHARED_REFS: set[str] = set()
+HIGH_LEVEL_TOPIC_MARKERS = (
+    "Feature Flag",
+    "keepAlive",
+    "resetAllStores",
+    "路由 chunk",
+    "成熟后台",
+    "受监管 Web",
+)
+SCAFFOLD_REQUIRED = (
+    "README.md",
+    "eslint.config.mjs.sample",
+    "prettier.config.mjs.sample",
+    "stylelint.config.mjs.sample",
+    "src/api/request-boundary.ts.sample",
+    "src/stores/reset-all-stores.ts.sample",
+    "src/views/list-page-state.ts.sample",
+    "scripts/check-bundle-budget.mjs.sample",
+)
 EVAL_TOPIC_GUARDS = {
     "E41": "硬编码业务文案",
     "E42": "Token 放 WebSocket URL",
@@ -157,6 +183,150 @@ def check_readme_shared_inventory(root: Path, errors: list[str]) -> None:
         rel = f"shared/{path.name}"
         if rel not in readme:
             errors.append(f"README.md file inventory missing {rel}")
+
+
+def check_scaffold_assets(root: Path, errors: list[str]) -> None:
+    scaffold = root / "examples" / "scaffold"
+    for rel in SCAFFOLD_REQUIRED:
+        if not (scaffold / rel).is_file():
+            errors.append(f"examples/scaffold missing {rel}")
+
+    scripts_sample = root / "examples" / "package-scripts.sample.json"
+    if scripts_sample.is_file():
+        try:
+            package_sample = json.loads(read(scripts_sample))
+        except json.JSONDecodeError as exc:
+            errors.append(f"package-scripts.sample.json invalid JSON: {exc.msg}")
+            return
+        scripts = package_sample.get("scripts") or {}
+        for name in ("lint", "type-check", "test", "build", "api:check", "size:check"):
+            if name not in scripts:
+                errors.append(f"package-scripts.sample.json missing script: {name}")
+
+
+def check_l0_hard_rule_scope(root: Path, errors: list[str]) -> None:
+    text = read(root / "shared" / "00-must-follow.md")
+    boundary = "## 条件触发路由（不计入 Level 0 硬规则）"
+    if boundary not in text:
+        errors.append("00-must-follow.md missing conditional routing boundary")
+    numbered = "\n".join(line for line in text.splitlines() if re.match(r"^\d+\.\s", line))
+    count = len(numbered.splitlines()) if numbered else 0
+    if count != L0_HARD_RULE_COUNT:
+        errors.append(
+            f"00-must-follow.md L0 hard rule count {count}, expected {L0_HARD_RULE_COUNT}"
+        )
+    numbered_refs = set(BARE_SHARED_REF.findall(numbered))
+    for ref in sorted(numbered_refs - L0_ALLOWED_SHARED_REFS):
+        errors.append(f"00-must-follow.md: conditional shared rule numbered as L0: {ref}")
+    for marker in HIGH_LEVEL_TOPIC_MARKERS:
+        if marker in numbered:
+            errors.append(f"00-must-follow.md: conditional topic numbered as L0: {marker}")
+
+
+def run_scaffold_command(
+    command: list[str],
+    cwd: Path,
+    errors: list[str],
+    label: str,
+    env: dict[str, str] | None = None,
+    expected_exit: int = 0,
+) -> None:
+    result = subprocess.run(
+        command,
+        cwd=cwd,
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if result.returncode != expected_exit:
+        detail = (result.stderr or result.stdout).strip()
+        errors.append(f"scaffold {label} failed (exit {result.returncode}): {detail}")
+
+
+def check_scaffold_runtime(root: Path, errors: list[str]) -> None:
+    scaffold = root / "examples" / "scaffold"
+    if any(not (scaffold / rel).is_file() for rel in SCAFFOLD_REQUIRED):
+        return
+
+    node = shutil.which("node")
+    tsc = shutil.which("tsc")
+    if node is None:
+        errors.append("scaffold runtime validation requires node")
+        return
+    if tsc is None:
+        errors.append("scaffold runtime validation requires tsc")
+        return
+
+    with tempfile.TemporaryDirectory() as directory:
+        temp = Path(directory)
+        for rel in (
+            "eslint.config.mjs.sample",
+            "prettier.config.mjs.sample",
+            "stylelint.config.mjs.sample",
+            "scripts/check-bundle-budget.mjs.sample",
+        ):
+            source = scaffold / rel
+            target = temp / rel.removesuffix(".sample")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+            run_scaffold_command([node, "--check", str(target)], temp, errors, f"syntax {rel}")
+
+        ts_files: list[str] = []
+        for rel in (
+            "src/api/request-boundary.ts.sample",
+            "src/stores/reset-all-stores.ts.sample",
+            "src/views/list-page-state.ts.sample",
+        ):
+            target = temp / Path(rel).name.removesuffix(".sample")
+            shutil.copyfile(scaffold / rel, target)
+            ts_files.append(str(target))
+        run_scaffold_command(
+            [
+                tsc,
+                "--noEmit",
+                "--strict",
+                "--target",
+                "ES2022",
+                "--module",
+                "ESNext",
+                "--moduleResolution",
+                "Bundler",
+                "--lib",
+                "ES2022,DOM",
+                *ts_files,
+            ],
+            temp,
+            errors,
+            "TypeScript strict compile",
+        )
+
+        asset = temp / "dist" / "assets" / "entry.js"
+        asset.parent.mkdir(parents=True)
+        asset.write_text("console.log('bundle budget smoke');\n", encoding="utf-8")
+        manifest = temp / "dist" / ".vite" / "manifest.json"
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(
+            json.dumps({"src/main.ts": {"file": "assets/entry.js", "isEntry": True}}),
+            encoding="utf-8",
+        )
+        budget_script = temp / "scripts" / "check-bundle-budget.mjs"
+        pass_env = os.environ.copy()
+        pass_env["BUNDLE_TOTAL_BUDGET_KB"] = "100"
+        pass_env["BUNDLE_INITIAL_BUDGET_KB"] = "100"
+        pass_env["BUNDLE_CHUNK_BUDGET_KB"] = "100"
+        run_scaffold_command([node, str(budget_script)], temp, errors, "bundle pass smoke", pass_env)
+        fail_env = os.environ.copy()
+        fail_env["BUNDLE_TOTAL_BUDGET_KB"] = "0.001"
+        run_scaffold_command(
+            [node, str(budget_script)],
+            temp,
+            errors,
+            "bundle reject smoke",
+            fail_env,
+            expected_exit=1,
+        )
 
 
 def check_agents_paths(root: Path, errors: list[str]) -> None:
@@ -354,10 +524,24 @@ def main() -> int:
                 f"expected={PLATFORM_EXTENSION_SUITE}"
             )
 
+        hardening_smoke = parse_suite_line(smoke, "## Enterprise Hardening")
+        hardening_readme = parse_evals_table_suite(evals_readme, "Enterprise Hardening")
+        if sorted(hardening_smoke) != sorted(ENTERPRISE_HARDENING_SUITE) or sorted(
+            hardening_readme
+        ) != sorted(ENTERPRISE_HARDENING_SUITE):
+            errors.append(
+                "Enterprise Hardening suite mismatch: "
+                f"smoke={hardening_smoke} readme={hardening_readme} "
+                f"expected={ENTERPRISE_HARDENING_SUITE}"
+            )
+
     check_eval_topic_guards(prompts, rubric, errors)
     check_eval_topic_manifest(root, errors)
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
+    check_l0_hard_rule_scope(root, errors)
+    check_scaffold_assets(root, errors)
+    check_scaffold_runtime(root, errors)
     check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)
     check_cross_package_backend_refs(root, errors)

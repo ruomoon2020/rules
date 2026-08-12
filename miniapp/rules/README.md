@@ -23,8 +23,8 @@ Vue 3 + TypeScript + uni-app + Vite
 ## 规则层级
 
 ```text
-L0  shared/00-must-follow.md       — 可拒 PR 的硬规则（41 条）
-L1  shared/01–25                  — 场景规则
+L0  shared/00-must-follow.md       — 可拒 PR 的硬规则（45 条）
+L1  shared/01–26                  — 场景规则
 L2  codex/*.md、cursor/*.mdc       — 任务入口与触发摘要
 ```
 
@@ -34,7 +34,7 @@ L2  codex/*.md、cursor/*.mdc       — 任务入口与触发摘要
 Cursor alwaysApply 概览
   → Cursor globs / Codex 任务表
   → 按需读取 shared 全文
-  → pnpm lint / type-check / build:mp-weixin / api:check / evals
+  → pnpm lint / type-check / build:mp-weixin / api:check / size:check / evals
 ```
 
 ## 部署到业务仓
@@ -123,6 +123,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | 内容安全 / UGC | `23-content-safety.mdc` |
 | 设计系统 / Base | `24-design-system.mdc` |
 | 依赖 / 供应链 | `25-dependency-supply-chain.mdc` |
+| 安全加固 / 风控 | `26-security-hardening-risk.mdc` |
 | 新业务分包 | `18-business-module-extension.mdc`（仅新业务扩展；见 `99-project-local`） |
 
 ## 真实业务开发流程
@@ -132,7 +133,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 3. 页面读取 generated 类型和 API 方法，不手写字段。
 4. 涉及登录、手机号、位置、相册、相机、订阅消息、支付时先读对应 shared。
 5. 支付结果以后端订单状态为准；分享参数、scene、二维码参数必须白名单校验。
-6. 完成前运行项目实际存在的 lint、type-check、build、api:check、size:check。
+6. 完成前运行项目实际存在的 lint、type-check、build、api:check、size:check、audit（若配置）。
 
 新业务分包逐步清单：`docs/business-feature-playbook-miniapp.md`。
 
@@ -168,6 +169,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | `shared/23-content-safety.md` | 富文本、UGC 安全 |
 | `shared/24-design-system-mobile.md` | 设计 Token、Base 组件 |
 | `shared/25-dependency-supply-chain.md` | 依赖 audit、供应链 |
+| `shared/26-security-hardening-risk.md` | 安全加固、风控、实验、多平台矩阵 |
 | `docs/observability-metrics.md` | 推荐指标与 SLO |
 | `docs/owasp-miniapp-mapping.md` | OWASP 裁剪对照 |
 
@@ -176,18 +178,18 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | 路径 | 职责 |
 |---|---|
 | `codex/AGENTS.md` | Codex 任务表与路径触发 |
-| `codex/01`–`05` | 改代码前、页面、登录、平台、验证 |
+| `codex/01`–`09` | 改代码前、页面、登录、平台、验证、运行时、网络、恢复、内容安全 |
 | `cursor/*.mdc` | Cursor 触发摘要 |
 | `docs/fullstack-contract.md` | 与后端/管理端契约对齐 |
 | `docs/business-feature-playbook-miniapp.md` | 新业务分包步骤 |
 | `docs/compliance-wechat-checklist.md` | 微信合规与审核 |
 | `docs/contributing-rules-package.md` | 维护者变更清单 |
 | `docs/onboarding-new-project.md` | 新建小程序项目落地 |
-| `docs/rules-package-index.md` | shared 00–25 索引 |
+| `docs/rules-package-index.md` | shared 00–26 索引 |
 | `docs/rule-maturity-model.md` | 采纳 Level 0/1/2 |
 | `examples/README.md` | 脚本、CI、脚手架说明 |
-| `evals/prompts.md` | 回归提示词 M01–M38 |
-| `evals/rubric.md` | P0 8/8；核心 P1 >=10/12；Security 5/5；Resilience 4/4 |
+| `evals/prompts.md` | 回归提示词 M01–M44 |
+| `evals/rubric.md` | P0 8/8；核心 P1 >=10/12；Security 5/5；Resilience 4/4；Enterprise Hardening 6/6 |
 | `evals/smoke-prompts.md` | 套件索引 |
 | `evals/adoption-checklist.md` | 业务仓落地清单 |
 | `scripts/validate-rules-package.py` | 规则包一致性校验 |
@@ -203,6 +205,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | Business Extension | M21–M29 | 建议 9/9 |
 | Security Extension | M30–M34 | 建议 5/5 |
 | Resilience Extension | M35–M38 | 建议 4/4 |
+| Enterprise Hardening Extension | M39–M44 | 建议 6/6 |
 
 详见 `evals/README.md`。
 

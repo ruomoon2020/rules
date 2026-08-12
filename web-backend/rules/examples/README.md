@@ -37,10 +37,10 @@ mvn test -Dtest=LayeredArchitectureTest
 | 级别 | 建议 job / 工具 |
 |---|---|
 | **Required** | `mvn verify` / `./gradlew check`（CI 自动识别）、OpenAPI diff、secret scan（gitleaks） |
-| **Conditional** | Flyway validate（Maven / Gradle 样板）、OWASP dependency-check（Maven 样板；Gradle 见根 `examples/ci/supply-chain-required.yml`） |
+| **Conditional** | Flyway validate（Maven / Gradle 样板）、OWASP dependency-check（Maven 样板；Gradle 见 `common-governance/examples/ci/supply-chain-required.yml`） |
 | **Optional** | SBOM、container scan、Pact、license report、perf smoke — 本仓库样板未包含，按项目另加 workflow |
 
-**跨端供应链 Required**：monorepo 根 [`examples/ci/supply-chain-required.yml`](../../../examples/ci/supply-chain-required.yml)（npm/pnpm audit + Maven/Gradle OWASP + license-checker）。
+**跨端供应链 Required**：治理包 `common-governance/examples/ci/supply-chain-required.yml`（npm/pnpm audit + Maven/Gradle OWASP + license-checker）。
 
 **未配置的门禁不得在 PR 中声称已通过**（见 `shared/23-quality-gates.md`）。
 

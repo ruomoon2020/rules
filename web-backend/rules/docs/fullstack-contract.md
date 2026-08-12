@@ -37,9 +37,9 @@ contracts/openapi.yaml
 
 ## 发布顺序
 
-1. OpenAPI PR + openapi-diff  
-2. 后端发布（兼容旧前端）  
-3. 前端 `api:gen` + 联调  
+1. OpenAPI PR + openapi-diff
+2. 后端发布（兼容旧前端）
+3. 前端 `api:gen` + 联调
 
 ## 参考实现
 
@@ -123,18 +123,18 @@ contracts/openapi.yaml
 | `GET /api/v1/system/audit-logs` | `systemAuditLogPage` | 分页；筛选 `action`、`resourceType`、`operatorId`、`result`、时间范围 |
 | `GET /api/v1/system/audit-logs/{id}` | `systemAuditLogDetail` | 详情（含 `beforeSummary`、`afterSummary`、`ip`、`userAgent`） |
 
-Schema：`AuditLogSummaryResponse`（列表）、`AuditLogResponse`（详情）、`AuditResult`（`SUCCESS` / `FAIL`）。  
-可选展示字段 `operatorName`、`fileName` 已标为 optional，新增字段须向后兼容。  
+Schema：`AuditLogSummaryResponse`（列表）、`AuditLogResponse`（详情）、`AuditResult`（`SUCCESS` / `FAIL`）。
+可选展示字段 `operatorName`、`fileName` 已标为 optional，新增字段须向后兼容。
 Java 样板 DTO / Controller 见 `examples/scaffold/java/modules/system/api/` 下 `AuditLog*`。
 
 ### 必审操作（全栈一致）
 
 以下操作后端**必须**写审计；前端若有对应按钮，须在 PR 中确认不会跳过二次确认 / 权限校验：
 
-- 登录成功/失败、权限与角色变更、用户启停  
-- 单条/批量删除、批量更新、强制状态变更  
-- 导入、导出、敏感报表下载  
-- 系统配置、Feature Flag（不记密钥明文）  
+- 登录成功/失败、权限与角色变更、用户启停
+- 单条/批量删除、批量更新、强制状态变更
+- 导入、导出、敏感报表下载
+- 系统配置、Feature Flag（不记密钥明文）
 - 跨租户操作（另见 `24-data-access-cache`）
 
 ### 审计失败策略（联调须知）

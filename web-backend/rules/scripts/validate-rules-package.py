@@ -34,6 +34,24 @@ CORE_P1_LINE = re.compile(r"^(B\d+(?:、B\d+)*)\.?\s*$")
 # deliberately small and explicit: the goal is to prevent semantic reassignment
 # of a scored ID, not to force every pass criterion to duplicate its prompt.
 EVAL_TOPIC_GUARDS = {"B19": "高风险导入无确认"}
+L0_ALLOWED_SHARED_REFS = {
+    "05-openapi-contract.md",
+    "07-persistence-mybatis.md",
+    "08-exception-errorcodes.md",
+    "10-verification-checklist.md",
+    "19-pagination-query.md",
+}
+HIGH_LEVEL_TOPIC_MARKERS = (
+    "威胁建模",
+    "冷热分层",
+    "成本治理",
+    "服务间认证",
+    "云原生",
+    "Kubernetes",
+    "GraphQL",
+    "gRPC",
+    "mTLS",
+)
 
 # Expected smoke core P1 count (Smoke suite)
 SMOKE_CORE_P1_COUNT = 20
@@ -258,6 +276,21 @@ def check_eval_topic_guards(prompts: str, rubric: str, errors: list[str]) -> Non
             errors.append(f"{eval_id}: rubric topic must contain '{expected_topic}'")
 
 
+def check_l0_hard_rule_scope(root: Path, errors: list[str]) -> None:
+    text = read(root / "shared" / "00-must-follow.md")
+    if "## 条件触发路由（不计入 Level 0 硬规则）" not in text:
+        errors.append("00-must-follow.md missing conditional routing boundary")
+    numbered = "\n".join(
+        line for line in text.splitlines() if re.match(r"^\d+\.\s", line)
+    )
+    numbered_refs = set(BARE_SHARED_REF.findall(numbered))
+    for ref in sorted(numbered_refs - L0_ALLOWED_SHARED_REFS):
+        errors.append(f"00-must-follow.md: non-L0 shared rule numbered as L0: {ref}")
+    for marker in HIGH_LEVEL_TOPIC_MARKERS:
+        if marker in numbered:
+            errors.append(f"00-must-follow.md: high-level topic numbered as L0: {marker}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate rules package consistency")
     parser.add_argument(
@@ -370,6 +403,7 @@ def main() -> int:
 
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
+    check_l0_hard_rule_scope(root, errors)
     check_eval_topic_manifest(root, errors)
     check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)

@@ -6,6 +6,15 @@
 
 按 `docs/rule-maturity-model.md` 声明目标 **Level**（建议：首个迭代 Level 0，核心域上线前 Level 1–2）。不必一次接入全部 43 个 shared 文件。
 
+同时声明项目画像，二选一：
+
+| 画像 | 默认读取 | 不默认启用 |
+|---|---|---|
+| 绿场 / 普通 Spring API | Level 0 + 实际命中场景规则 | `43`、CodeGen、RuoYi / Jeecg 菜单与系统模块约定 |
+| 成熟后台二开 | Level 0–1 + `43` + business playbook | 重复实现平台已有的用户、权限、字典和日志能力 |
+
+本包技术边界是 Spring Boot + MyBatis-Plus。JPA / jOOQ、NestJS、Go 项目只能复用通用治理资产，不应直接套用本包的持久化和分层实现细则。
+
 ## 1. 复制规则包
 
 ```text

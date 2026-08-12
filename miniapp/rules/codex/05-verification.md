@@ -13,6 +13,8 @@
 9. 体验/审核版是否未连接生产 API 与支付（`19`）。
 10. 是否清理生产 mock、console、调试入口。
 11. 弱网/401 是否走统一 recovery（`22`）；富文本/UGC 是否消毒（`23`）。
+12. 生产构建是否未公开 source map、调试资源、测试资源和高风险临时开关（`26`）。
+13. 第三方 SDK、远程配置、实验、多平台能力矩阵是否有 Owner、数据流、回滚和清理计划（`26`）。
 
 按项目实际存在的脚本运行：
 
@@ -22,6 +24,8 @@ pnpm type-check
 pnpm test
 pnpm build:mp-weixin
 pnpm api:check
+pnpm size:check
+pnpm audit
 ```
 
 缺少脚本时说明“项目未配置”，不得伪造通过结果。

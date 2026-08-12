@@ -9,6 +9,7 @@
     "build": "vite build",
     "schema:sync": "node scripts/sync-schema.mjs",
     "api:gen": "node scripts/api-gen.mjs",
-    "api:check": "node scripts/api-check.mjs"
+    "api:check": "node scripts/api-check.mjs",
+    "size:check": "node scripts/check-bundle-budget.mjs"
   }
 }

@@ -36,6 +36,7 @@
 | AI 生成复杂前端代码 | `rules/shared/09-ai-generation.md` |
 | i18n / 金额 / 日期 / 时区展示 | `rules/shared/23-i18n-locale.md`、`rules/shared/13-form-and-detail.md` |
 | WebSocket / SSE / 富文本 / 编辑器 | `rules/shared/24-realtime-rich-content.md`、`rules/shared/07-security-performance.md` |
+| 金融 / 政务 / 高敏数据 / 第三方脚本 / 嵌入页面 / 跨窗口通信 | `rules/shared/25-regulated-web-hardening.md`、`rules/shared/07-security-performance.md` |
 | 架构 / 新模块 | `rules/shared/01-project-structure.md` |
 | 收尾 / Review | `rules/shared/10-verification-checklist.md`、`rules/codex/05-verification.md` |
 
@@ -51,6 +52,7 @@
 - 编辑 `src/layouts/**`、全局壳层 → 追加 `17-shell-navigation.md`。
 - 编辑 `src/**/*i18n*`、locale、formatter → 追加 `23-i18n-locale.md`。
 - 编辑 WebSocket、SSE、富文本、编辑器相关代码 → 追加 `24-realtime-rich-content.md`。
+- 编辑第三方脚本、嵌入页面、跨窗口通信、远程高风险开关，或项目声明为受监管场景 → 追加 `25-regulated-web-hardening.md`。
 
 Codex 优先读 `rules/shared/*.md` 与 `rules/codex/*.md`。
 
@@ -65,12 +67,11 @@ Codex 优先读 `rules/shared/*.md` 与 `rules/codex/*.md`。
 - 禁止虚构 Base 组件 props / events / slots、schema 字段、权限码、路由名。
 - 禁止在 Vue 组件内直接 `axios` / `fetch`。
 - 禁止显式 `any`；未知类型用 `unknown` 并收窄。
-- 禁止无说明引入新依赖；禁止为通过检查而 `as any`。
-- 新增或升级依赖前必须遵守 `rules/shared/20-dependency-governance.md`。
+- 禁止无说明引入新依赖；禁止为通过检查而 `as any`。新增或升级依赖时按任务路由读取 `rules/shared/20-dependency-governance.md`。
 - 禁止修改公共组件 API 而不同步所有调用方。
 - 禁止把 mock、密钥、调试日志、不安全 `v-html` 带入生产代码。
-- 禁止导入 / 导出 schema 外字段、未授权字段或未脱敏敏感字段；文件导入导出须遵守 `rules/shared/14-upload-import-export.md`。
-- 单文件不超过 400 行；不得在单文件模板内堆叠 API、权限、表格、表单、弹窗全部逻辑。
+- 涉及文件导入导出时，禁止 schema 外字段、未授权字段或未脱敏敏感字段，并按任务路由读取 `rules/shared/14-upload-import-export.md`。
+- 不得在单文件模板内堆叠 API、权限、表格、表单、弹窗全部逻辑；行数阈值按项目和 `rules/shared/03-code-style.md` 执行。
 
 ## Schema 固定指令
 

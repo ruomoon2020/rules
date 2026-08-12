@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.13.1 — 2026-08-13
+
+- 修复 CI 样板在 job 级使用不可用 `hashFiles()` 上下文的问题，改为 checkout 后输出检测结果并通过 `needs` 路由。
+- Maven Dependency-Check 样板固定到 `12.2.2`，避免插件版本漂移。
+
+## 1.13.0 — 2026-08-11
+
+### Changed
+
+- `shared/00-must-follow.md` 收敛为 27 条 Level 0 不变量；Level 1–3 主题改为条件触发路由，消除“高阶能力既可裁剪又违反即拒 PR”的冲突。
+- 审计、完整数据生命周期与依赖治理正文从编号 L0 规则移入条件路由；校验器使用 L0 引用允许清单和高阶主题标记防止回流。
+- `docs/rule-maturity-model.md` 明确 shared 编号不等于采纳 Level。
+- `docs/onboarding-new-project.md` 增加绿场 Spring API / 成熟后台二开画像，并写明 Spring Boot + MyBatis-Plus 技术边界。
+- 企业治理接入改为可版本化的 `common-governance/` 发布包。
+
+### Migration
+
+- 业务仓升级后需同步 `cursor/00-project-overview.mdc`；原高阶条款仍在对应 shared 文件中，按项目画像与命中场景启用。
+
 ## 1.12.2 — 2026-06-27
 
 ### Added

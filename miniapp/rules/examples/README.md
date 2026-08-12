@@ -5,7 +5,7 @@
 | 路径 | 说明 |
 |---|---|
 | `package-scripts.sample.json` | `lint`、`build:mp-weixin`、`api:check`、`size:check` |
-| `99-project-local.mdc.sample` | Cursor 本地路径、环境、白名单、18 适用边界 |
+| `99-project-local.mdc.sample` | Cursor 本地路径、环境、白名单、18 适用边界、26 安全加固登记项 |
 | `ci/rules-package-validate.yml` | 嵌入 `rules/` 时 PR 校验规则包 |
 | `scripts/check-miniapp-size.mjs.sample` | 主包体积门禁 |
 | `scripts/api-check.stub.mjs.sample` | 契约检查占位（替换为项目实现） |

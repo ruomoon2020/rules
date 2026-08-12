@@ -1,4 +1,6 @@
-# 企业级前端项目规范模板
+# 企业级前端项目规范模板（历史归档）
+
+> **非执行 SSOT**：本文件只用于历史追溯和迁移对照。AI 与业务开发不得把它作为当前规则读取；当前执行规则以 `web-front/rules/shared/`、业务仓根 `AGENTS.md` 和项目本地覆盖层为准。规范变更只修改规则包、evals、版本与变更记录。
 
 > 适用场景：Vue 3 + TypeScript + Vite + Element Plus 后台管理系统 / 企业级业务系统。  
 > 用途：作为团队前端开发规范、Code Review 依据、Codex / Cursor AI 编码规则基础文档。  

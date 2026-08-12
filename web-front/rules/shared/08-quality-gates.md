@@ -36,7 +36,7 @@ pnpm api:check
 
 ## views 硬门禁（若已接入）
 
-须**组合** ESLint import 禁令与模板扫描（见 `00-must-follow` 第 40 条、`rules/examples/README.md`）：
+须**组合** ESLint import 禁令与模板扫描（见 `00-must-follow` §33、`rules/examples/README.md`）：
 
 - `eslint-views-ban-el.mjs`：`element-plus` / `element-plus/*` import
 - `ci-scan-views-el-tags.mjs`：`<el-*>`、动态 `is`、`element-plus-pascal-denylist.mjs` 内 PascalCase
@@ -60,7 +60,8 @@ pnpm api:check
 | 日常 PR | Smoke（P0 8/8；核心 P1 ≥10/12） |
 | 成熟后台业务页 | Business Extension E32–E40（建议 9/9） |
 | i18n / 实时 / 富文本 | Platform Extension E41–E43（建议 3/3） |
-| 发版 / 规则大改 | Full E01–E43（P1 ≥32/35） |
+| 受监管 Web | Enterprise Hardening E44–E49（建议 6/6） |
+| 发版 / 规则大改 | Full E01–E49（P1 ≥38/41） |
 
 ## 监控
 

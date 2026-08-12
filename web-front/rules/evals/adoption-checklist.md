@@ -36,6 +36,7 @@
 - [x] AI 生成 → `21-ai-generation.mdc` + `shared/09-ai-generation.md`
 - [x] i18n / 区域格式 → `22-i18n-locale.mdc` + `shared/23-i18n-locale.md`
 - [x] 实时 / 富文本 → `23-realtime-rich-content.mdc` + `shared/24-realtime-rich-content.md`
+- [x] 受监管 Web 条件加固 → `24-regulated-web-hardening.mdc` + `shared/25-regulated-web-hardening.md`
 
 ## 硬门禁（业务项目侧，非 rules 包内）
 
@@ -55,10 +56,11 @@
 
 ## 评测
 
-- [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E43
-- [ ] P0 **8/8**；P1 **至少 32/35**（Full）；Smoke 核心 P1 **≥10/12**
+- [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E49
+- [ ] P0 **8/8**；P1 **至少 38/41**（Full）；Smoke 核心 P1 **≥10/12**
 - [ ] 成熟后台新增业务页时，跑 **Business Extension** E32–E40（建议 9/9）
 - [ ] i18n / 实时 / 富文本相关 PR 时，跑 **Platform Extension** E41–E43（建议 3/3）
+- [ ] 金融 / 政务 / 高敏 Web 相关 PR 时，跑 **Enterprise Hardening** E44–E49（建议 6/6）
 - [ ] 已跑 `python rules/scripts/validate-rules-package.py`（嵌入 rules/ 时）
 
 ## 企业治理（monorepo）

@@ -24,6 +24,7 @@
 | **Business Extension** | M21–M29（共 9 条） | 建议 **9/9** Pass |
 | **Security Extension** | M30–M34（共 5 条） | 建议 **5/5** Pass |
 | **Resilience Extension** | M35–M38（共 4 条） | 建议 **4/4** Pass |
+| **Enterprise Hardening Extension** | M39–M44（共 6 条） | 建议 **6/6** Pass |
 
 ## 回归套件（企业分层）
 
@@ -34,7 +35,8 @@
 | **Contract** | M03、M05、M08、M15 | 建议 4/4 | OpenAPI / generated / 支付 PR |
 | **Business Extension** | M21–M29 | 建议 9/9 | 新业务分包 PR |
 | **Resilience** | M35–M38 | 建议 4/4 | 错误恢复 / UGC / 可观测 PR |
-| **Full** | M01–M38 | P0 8/8；核心 P1 >=10/12 | **发版**、规则包升级 |
+| **Enterprise Hardening** | M39–M44 | 建议 6/6 | 安全加固 / 无障碍 / 多平台 / 实验 PR |
+| **Full** | M01–M44 | P0 8/8；核心 P1 >=10/12 | **发版**、规则包升级 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Mxx` 计数；校验见 `scripts/validate-rules-package.py`）。
 
@@ -44,7 +46,7 @@
 
 M09、M11、M13、M14、M15、M16、M17、M18、M19、M20。
 
-发版前仍须跑 **Full**（M01–M38）。
+发版前仍须跑 **Full**（M01–M44）。
 
 ### 与全栈对照（联调 PR）
 

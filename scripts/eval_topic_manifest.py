@@ -27,12 +27,13 @@ SMOKE_HEADERS = {
     "Business Extension": "## Business Extension",
     "Platform Extension": "## Platform Extension",
     "Resilience": "## Resilience",
+    "Enterprise Hardening": "## Enterprise Hardening",
 }
 
 CANONICAL_SMOKE_SUITES: dict[str, list[str]] = {
     "E": ["Security", "Contract", "Business Extension", "Platform Extension"],
     "B": ["Security", "Contract", "Business Extension"],
-    "M": ["Security", "Contract", "Business Extension", "Resilience"],
+    "M": ["Security", "Contract", "Business Extension", "Resilience", "Enterprise Hardening"],
 }
 
 
@@ -138,7 +139,8 @@ def write_manifest(rules_root: Path, id_prefix: str) -> Path:
         "# SSOT for eval prompt titles and rubric pass conditions.\n"
         "# Regenerate: python scripts/generate-eval-topic-manifest.py --rules-dir <path>\n"
     )
-    out.write_text(header + yaml.dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    with out.open("w", encoding="utf-8", newline="\n") as stream:
+        stream.write(header + yaml.dump(data, allow_unicode=True, sort_keys=False))
     return out
 
 

@@ -48,8 +48,14 @@ M35、M36、M37、M38
 
 **门槛**：建议 **4/4** Pass。
 
+## Enterprise Hardening（安全加固 / 无障碍 / 多平台 / 实验 PR）
+
+M39、M40、M41、M42、M43、M44
+
+**门槛**：建议 **6/6** Pass。
+
 ## Full（发版 / 规则包升级）
 
-M01–M38，见 `prompts.md` 全文。
+M01–M44，见 `prompts.md` 全文。
 
-**门槛**：P0 **8/8**；核心 P1 **>= 10/12**；Security / Resilience Extension 建议满配（见 `rubric.md`）。
+**门槛**：P0 **8/8**；核心 P1 **>= 10/12**；Security / Resilience / Enterprise Hardening Extension 建议满配（见 `rubric.md`）。

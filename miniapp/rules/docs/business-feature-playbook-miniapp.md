@@ -37,6 +37,7 @@
 - [ ] `pnpm lint`、`type-check`、`build:mp-weixin`、`api:check`
 - [ ] 新业务分包 PR 跑 evals **Business Extension** M21–M29（建议 9/9）
 - [ ] UGC / 富文本 / 错误恢复 / 可观测相关 PR 跑 **Resilience Extension** M35–M38（建议 4/4）
+- [ ] 安全加固 / 无障碍 / 多平台 / 实验相关 PR 跑 **Enterprise Hardening Extension** M39–M44（建议 6/6）
 - [ ] 管理端 **E41–E43**（Platform Extension）**不适用**小程序；见 `docs/fullstack-contract.md` §与管理端 Platform Extension 的边界
 
 ## 7. 联调

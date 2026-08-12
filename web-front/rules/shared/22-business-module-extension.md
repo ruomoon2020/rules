@@ -16,6 +16,8 @@
 
 1. 单一业务默认只修改业务域 views、composables、配置与 API 使用层；不得修改 `layouts`、全局 router 守卫、权限 store、Base 组件、generator 模板。
 2. 确需改变平台能力时，须由 Owner 审核，并在 PR 说明兼容范围、回滚方案与既有页面回归；触发摘要见 `cursor/19-platform-boundary.mdc`。
+3. Base 组件、Token、request wrapper 等公共能力须标记生命周期：`experimental`、`stable` 或 `deprecated`；废弃项必须给出替代方案、迁移期限和删除版本。
+4. 修改 stable 公共 API、全局交互语义或跨应用契约时，须有 ADR 或等价设计记录，并覆盖消费方兼容测试。
 3. 模块名、路由名、权限码、字典 type、导入导出任务标识和后端错误码应使用同一业务前缀或存在可追溯映射；禁止前端另造一套稳定码。
 
 ## 契约与 API

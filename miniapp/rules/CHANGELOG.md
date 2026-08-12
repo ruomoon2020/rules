@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.0 — 2026-08-11
+
+### Added
+
+- `shared/26-security-hardening-risk.md`：生产调试产物、第三方 SDK 数据流、远程配置/实验、多平台安全矩阵与高风险操作前后端边界。
+- `cursor/26-security-hardening-risk.mdc` 与 `codex/AGENTS.md` 路由，覆盖第三方 SDK、远程配置、实验、风控和多平台 adapter。
+- Evals M39–M44（Enterprise Hardening Extension）；smoke **Enterprise Hardening** 套件。
+
+### Changed
+
+- `00` 硬规则 +4（共 45 条）：生产调试资源、后端状态/风控、第三方 SDK 数据流、实验开关回滚。
+- `validate-rules-package.py`：shared/00–26、prompts 共 44 条；topic manifest 生成器支持 Enterprise Hardening 套件。
+- README、规则索引、onboarding、adoption checklist、release checklist、OWASP 对照与项目本地样板同步 M39–M44。
+- 企业治理接入改为可版本化的 `common-governance/` 发布包。
+
 ## 0.6.2 — 2026-06-27
 
 ### Changed

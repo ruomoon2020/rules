@@ -25,7 +25,7 @@ gradle wrapper --gradle-version 8.10
 ./gradlew flywayValidate           # DB migration CI（须已应用 Flyway 插件）
 ```
 
-CI 自动识别见 `../ci/backend-ci-required.yml`；供应链见 monorepo `examples/ci/supply-chain-required.yml` 的 `gradle-dependency-check` job；Gradle Flyway 条件门禁见 `../ci/backend-ci-optional-gradle.yml`。
+CI 自动识别见 `../ci/backend-ci-required.yml`；供应链见 `common-governance/examples/ci/supply-chain-required.yml` 的 `gradle-dependency-check` job；Gradle Flyway 条件门禁见 `../ci/backend-ci-optional-gradle.yml`。
 
 ## 与 Maven 样板对照
 

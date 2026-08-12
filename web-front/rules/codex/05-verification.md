@@ -23,7 +23,8 @@ pnpm api:check
 | 日常 PR | Smoke（见 `evals/smoke-prompts.md`） |
 | 成熟后台业务页 | Business Extension E32–E40 |
 | i18n / 实时 / 富文本 | Platform Extension E41–E43 |
-| 发版 / 规则大改 | Full E01–E43（P0 8/8；P1 ≥32/35） |
+| 受监管 Web | Enterprise Hardening E44–E49 |
+| 发版 / 规则大改 | Full E01–E49（P0 8/8；P1 ≥38/41） |
 
 ## 最终回复
 

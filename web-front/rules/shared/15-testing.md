@@ -4,6 +4,7 @@
 
 1. 覆盖 `utils`、复杂 `composable`、带逻辑的 business 组件。
 2. 不测试样式快照替代业务逻辑（除非项目有视觉回归约定）。
+3. Base 组件、Token、主题等平台资产达到 Level 3 时，应维护 Storybook 或等价组件目录，并对核心状态做视觉回归；普通业务页不因规则包存在而强制引入 Storybook。
 3. API 层 mock 使用 fixture，不依赖生产数据。
 4. composable 测行为和边界，不测试内部实现细节。
 5. request wrapper / API 层须测错误归一化、traceId、重试与取消逻辑。

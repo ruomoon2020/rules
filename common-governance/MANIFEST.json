@@ -1,0 +1,28 @@
+{
+  "version": "1.2.0",
+  "source": "code-rules/docs",
+  "files": {
+    "docs/definition-of-done.md": "afc9bebac86440653c1719029d7d76d62747825bbfd7e1a337b05f496eefd032",
+    "docs/rule-exception-process.md": "f9dee93af455d2b4cdaeb597766c52e6d59665c8ce0bc9bf6069f96e393af58e",
+    "docs/codeowners-matrix.md": "218fd89f039f90a33dcfdb24fab0ce70f74445a7ef07e2c2818ff6197f2c8ac8",
+    "docs/supply-chain-baseline.md": "0862fe0c444823ecc03efb2579f551bd8c50642f2d91b2ae1429e03c80e50023",
+    "docs/data-classification-matrix.md": "e8401e9c7320e050d2cc71a219c3e13970f532ef632f27174d1ea4ccc38a30ee",
+    "docs/slo-alerting-template.md": "48458fa6194ad9d4f85da09a797afb9c7fbb06198d5ef36120634195e08b7f19",
+    "docs/dod-maturity-mapping.md": "4447c4e6d73a3eaf94941f28942a108958238a1d7302ab7beeb5258e0cf4892b",
+    "docs/adoption-scorecard.md": "08300fc2e29fb80060aa1918beb45dd587d55d3d761f742d85440e4df2b97e8d",
+    "docs/compliance-evidence-log.md": "624d1c547e0e5e4f0c514e684957dd5b66e5cd4d2a46983f4080e219e0b1e704",
+    "docs/branch-protection.md": "3749f6da3a8d2243e8da21979f295f1b1646003a8c622eeb5639f03669a50f61",
+    "docs/git-pr-governance.md": "9a01f0823ded2e8b05a58421bfec23275ccee400ce8efb63c5c287c5056d3247",
+    "README.md": "dee9e013639a730117c98a028e35173f95f3db713ae989faa793c0a244d740e8",
+    "CHANGELOG.md": "e400a52c669d6617380fefe89cc7a2cac60ca780c1a24417a8c79c609fe6fb6a",
+    "VERSION": "1e5b51cde515396a9fa762909cf8ca6584ccc564b325d2eebeea76175fe95c4d",
+    "examples/commitlint.config.cjs.sample": "f1a8fa354951a714be8f2f5d867c0daab4be05be9c483601c01a5c2d87d512c7",
+    "examples/pull_request_template.md": "81c1aaab804c4b135017f50a24f89e8d11c9f3fa64da6b1ce0d274d63bb8d48c",
+    "examples/SECURITY.md.sample": "606786ff30c4b1127c2054cca4c6c9ef62e72fa664109fcfd4c2d2f08791c063",
+    "examples/adr-template.md": "08d0affe3ee53525ed1fd91945c31564638f4a6e470d176c69a1fac7ef82f753",
+    "examples/ci/credential-scan-required.yml": "64f2c158559987ed8145b934d69aa95a809370304c776bd3ae18ac6805297322",
+    "scripts/validate-package.py": "0f8ca0110638d29fb4e5670befb3904c6d3365f0157001d41448953ea7690198",
+    "scripts/check-project-adoption.py": "05d3414f5b45dc8678cb551aeef32f45a8393e9cbc4550d10d88f77fa717067b",
+    "examples/ci/supply-chain-required.yml": "092f03cfc20d3de428f640f58480076b1236bfa870bc26c7039e4e96a380f42a"
+  }
+}

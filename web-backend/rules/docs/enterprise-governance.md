@@ -1,10 +1,10 @@
 # 企业级治理（业务仓落地）
 
-> 本目录 `rules/` 侧重 **AI 编码规则**。组织级 DoD、豁免、Owner 矩阵、供应链与数据分级在 **code-rules monorepo 根**。
+> 本目录 `rules/` 侧重 **AI 编码规则**。组织级 DoD、豁免、Owner、供应链与数据分级由 `common-governance/` 独立分发；code-rules 根 `docs/` 是其维护 SSOT。
 
 ## 仅 submodule 本规则包时
 
-从上游仓库复制 `docs/*.md`（治理 6 件套）与 `scripts/check-project-adoption.py` 到业务仓。详见 monorepo `docs/README.md`。
+从上游仓库整包引入 `common-governance/`，并提供 `scripts/check-project-adoption.py`。不要手工维护治理文档副本。
 
 ## 文档清单
 
@@ -24,5 +24,5 @@
 ## 验收
 
 ```bash
-python scripts/check-project-adoption.py --repo /path/to/backend --stack backend --strict
+python common-governance/scripts/check-project-adoption.py --repo /path/to/backend --stack backend --strict --require-governance
 ```

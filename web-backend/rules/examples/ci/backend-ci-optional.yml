@@ -1,5 +1,5 @@
 # Optional / Conditional 门禁 — Level 1–2 按需复制到 .github/workflows/backend-ci-optional.yml
-# dependency-scan、flyway-validate 当前为 Maven 样板；Gradle Flyway 见 backend-ci-optional-gradle.yml，Gradle OWASP 见根 examples/ci/supply-chain-required.yml
+# dependency-scan、flyway-validate 当前为 Maven 样板；Gradle Flyway 见 backend-ci-optional-gradle.yml，Gradle OWASP 见 common-governance/examples/ci/supply-chain-required.yml
 # 另可按项目自增：SBOM、container scan、Pact、perf smoke（本文件未包含）
 
 name: backend-ci-optional
@@ -14,9 +14,28 @@ on:
       - ".github/workflows/backend-ci-optional.yml"
 
 jobs:
-  dependency-scan:
+  detect-project:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('pom.xml') != '' }}
+    outputs:
+      maven: ${{ steps.detect.outputs.maven }}
+      migrations: ${{ steps.detect.outputs.migrations }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect Maven and migrations
+        id: detect
+        shell: bash
+        run: |
+          if [ -f pom.xml ]; then echo "maven=true" >> "$GITHUB_OUTPUT"; else echo "maven=false" >> "$GITHUB_OUTPUT"; fi
+          if find src/main/resources/db/migration -type f -print -quit 2>/dev/null | grep -q .; then
+            echo "migrations=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "migrations=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  dependency-scan:
+    needs: detect-project
+    runs-on: ubuntu-latest
+    if: needs.detect-project.outputs.maven == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -27,11 +46,12 @@ jobs:
           cache: maven
 
       - name: OWASP dependency check
-        run: mvn -B org.owasp:dependency-check-maven:check
+        run: mvn -B org.owasp:dependency-check-maven:12.2.2:check
 
   flyway-validate:
+    needs: detect-project
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' && hashFiles('pom.xml') != '' }}
+    if: needs.detect-project.outputs.maven == 'true' && needs.detect-project.outputs.migrations == 'true'
     services:
       mysql:
         image: mysql:8

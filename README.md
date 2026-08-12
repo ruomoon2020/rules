@@ -1,12 +1,13 @@
 # Code Rules（全栈 AI 规则）
 
-本仓库包含 Web 前端、后端与小程序 AI 编码规则包，可独立或组合落地到业务项目。各规则包 **VERSION 独立演进**（不必同号），以各目录下 `rules/VERSION` 为准。
+本仓库包含 Web 前端、后端与小程序 AI 编码规则包，以及技术栈无关的 common governance 发布包，可独立或组合落地到业务项目。各规则包 **VERSION 独立演进**（不必同号），以各目录下 `rules/VERSION` 或治理包 `VERSION` 为准。
 
 | 目录 | 技术栈 | 说明 |
 |---|---|---|
 | [web-front/rules/](web-front/rules/README.md) | Vue 3 + TypeScript + Element Plus | 前端规则包 |
 | [web-backend/rules/](web-backend/rules/README.md) | Spring Boot 3 + MyBatis-Plus + 多数据库 | 后端规则包 |
 | [miniapp/rules/](miniapp/rules/README.md) | Vue 3 + TypeScript + uni-app + Vite | 小程序规则包 |
+| [common-governance/](common-governance/README.md) | 技术栈无关 | DoD、豁免、Owner、供应链、数据分级、Git / PR 治理发布包 |
 
 ## 这些 README 怎么看
 
@@ -29,6 +30,7 @@
 
 ```text
 your-monorepo/
+├─ common-governance/          # 业务仓使用的可分发治理包
 ├─ contracts/
 │  ├─ openapi.yaml
 │  └─ openapi.baseline.yaml
@@ -42,7 +44,12 @@ your-monorepo/
 │  ├─ rules/
 │  ├─ .cursor/rules/
 │  └─ src/main/java/
-└─ docs/
+├─ miniapp/
+│  ├─ AGENTS.md
+│  ├─ rules/
+│  ├─ .cursor/rules/
+│  └─ src/
+└─ docs/                       # 维护 SSOT，生成 common-governance
 ```
 
 前后端字段、权限码、分页、审计、导入导出、业务模块扩展对齐见：
@@ -77,6 +84,16 @@ backend-repo/
 4. 发版前至少跑后端 Contract / Business Extension 与前端 schema / build 检查。
 
 ## 部署步骤
+
+### 通用治理包
+
+1. 企业项目将 `common-governance/` 整包复制、发布或作为独立 submodule 放到业务仓根。
+2. 各端最小安全硬规则仍保留在对应 `rules/shared/00-must-follow.md`，不依赖通用包加载。
+3. 业务仓 CI 运行 `python common-governance/scripts/validate-package.py`，并使用包内 `scripts/check-project-adoption.py --require-governance` 验收规则与治理接入。
+4. 严格接入运行 `check-project-adoption.py --require-governance`。
+5. 从包内 `examples/ci/` 复制凭据扫描和供应链 Required workflows；Node 供应链样板要求恰好一个 pnpm/npm 锁文件。
+
+根 `docs/` 是维护 SSOT；`common-governance/docs/` 由同步脚本生成，禁止手工双写。
 
 ### 后端规则包
 
@@ -201,6 +218,7 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | [`docs/adoption-scorecard.md`](docs/adoption-scorecard.md) | 成熟度评分卡：Required Evidence / Owner / 到期复查 |
 | [`docs/compliance-evidence-log.md`](docs/compliance-evidence-log.md) | 合规证据留痕（金融 / 政务） |
 | [`docs/branch-protection.md`](docs/branch-protection.md) | 分支保护与 Required Checks 实施指南（含豁免链路） |
+| [`docs/git-pr-governance.md`](docs/git-pr-governance.md) | Conventional Commits、PR 证据、本地 hook 与 CI 边界 |
 | [`docs/adr/0001-rules-governance-baseline.md`](docs/adr/0001-rules-governance-baseline.md) | 根级治理原则基线（ADR） |
 | [`SECURITY.md`](SECURITY.md) | 安全策略与漏洞报告入口（含 SLA / secret 泄露处置） |
 | [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) | **业务仓**接入验收（AGENTS、rules、cursor、契约） |
@@ -219,14 +237,18 @@ python scripts/check-project-adoption.py --repo /path/to/your-app --stack fronte
 | 后端规则包 | `python web-backend/rules/scripts/validate-rules-package.py` |
 | 前端规则包 | `python web-front/rules/scripts/validate-rules-package.py` |
 | 小程序规则包 | `python miniapp/rules/scripts/validate-rules-package.py` |
+| 通用治理 SSOT 漂移 | `python scripts/sync-common-governance.py` |
+| 通用治理发布包 | `python common-governance/scripts/validate-package.py`（一致性） |
 | 后端业务仓 | `mvn verify` 或 `./gradlew check` |
 | 前端业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build` |
-| 小程序业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`、`pnpm api:check` |
+| 小程序业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`、`pnpm api:check`、`pnpm size:check`、`pnpm audit`（若配置） |
 | 后端成熟业务扩展 | Business Extension B55–B63（建议 9/9） |
 | 前端成熟业务扩展 | Business Extension E32–E40（建议 9/9） |
 | 前端 i18n / 实时 / 富文本 | Platform Extension E41–E43（建议 3/3） |
+| 前端金融 / 政务 / 高敏 Web | Enterprise Hardening E44–E49（建议 6/6） |
 | 小程序 UGC / 富文本 / 恢复 | Resilience Extension M35–M38（建议 4/4） |
-| 前端发版 / 大改规则 | Smoke / Full evals（E01–E43，P1 ≥32/35） |
+| 小程序安全加固 / 无障碍 / 多平台 / 实验 | Enterprise Hardening Extension M39–M44（建议 6/6） |
+| 前端发版 / 大改规则 | Smoke / Full evals（E01–E49，P1 ≥38/41） |
 | 全栈契约 | OpenAPI diff + 前端 api:gen / api:check |
 
 本仓库 CI：PR 改任一端 `rules/**` 时运行对应 `validate-rules-package.py`（含 miniapp），见 `.github/workflows/validate-rules-packages.yml`。
@@ -243,13 +265,16 @@ python scripts/check-project-adoption.py --repo /path/to/your-app --stack fronte
 - [ ] 根 `AGENTS.md` 中的路径能解析到 `rules/shared/...`、`rules/codex/...`。
 - [ ] Cursor 只保留概览类规则 `alwaysApply: true`；不要把所有 `.mdc` 都设为 alwaysApply。
 - [ ] 已补业务仓本地覆盖层：真实包名、业务模块路径、Base 组件路径、OpenAPI / schema 路径、采纳 Level。
+- [ ] 企业项目已引入 `common-governance/` 并通过 `--require-governance` 验收。
 - [ ] OpenAPI / schema 的 SSOT 已写清楚，前后端不各维护一份字段定义。
 - [ ] 后端接入 `mvn verify` / `./gradlew check`，前端接入 `pnpm lint`、`type-check`、`build`。
 - [ ] 小程序接入 `pnpm lint`、`type-check`、`build:mp-weixin`、api check 和包体积检查。
 - [ ] 业务 PR 模板已复制或等价接入，能覆盖契约、权限、数据权限、审计、导入导出和回滚。
 - [ ] 成熟后台新增业务时，后端跑 Business Extension B55–B63、前端跑 E32–E40（均建议 9/9）。
 - [ ] 前端 i18n / 实时 / 富文本相关 PR 跑 Platform Extension E41–E43（建议 3/3）。
+- [ ] 前端金融 / 政务 / 高敏 Web 相关 PR 跑 Enterprise Hardening E44–E49（建议 6/6）。
 - [ ] 小程序 UGC / 富文本 / 错误恢复相关 PR 跑 Resilience Extension M35–M38（建议 4/4）。
+- [ ] 小程序安全加固 / 无障碍 / 多平台 / 实验相关 PR 跑 Enterprise Hardening Extension M39–M44（建议 6/6）。
 
 ### 推荐
 
@@ -282,6 +307,7 @@ python scripts/check-project-adoption.py --repo /path/to/your-app --stack fronte
 | 共享 API 契约 | `contracts/openapi.yaml` + `openapi.baseline.yaml`（CI diff） |
 | 全栈 monorepo 布局 | `docs/monorepo-layout.md` |
 | 企业治理文档索引 | `docs/README.md` |
+| 通用治理发布包 | `common-governance/README.md` |
 | 跨包 shared 编号对照 | `web-backend/rules/docs/fullstack-contract.md` §跨包编号说明 |
 | 规则包自动校验 | PR 改任一侧 `rules/**` 时运行 `validate-rules-package.py`（见 `.github/workflows/validate-rules-packages.yml`） |
 | 企业级 DoD / 豁免 / Owner | [`docs/definition-of-done.md`](docs/definition-of-done.md)、[`docs/rule-exception-process.md`](docs/rule-exception-process.md)、[`docs/codeowners-matrix.md`](docs/codeowners-matrix.md) |

@@ -54,10 +54,11 @@ your-miniapp/
 
 - 落地清单：`evals/adoption-checklist.md`
 - 日常 PR：**Smoke**（`evals/smoke-prompts.md`）
-- 发版：**Full** M01–M38（P0 8/8，核心 P1 >=10/12）
+- 发版：**Full** M01–M44（P0 8/8，核心 P1 >=10/12）
 - 新业务分包：**Business Extension** M21–M29（建议 9/9）
 - App/网络/环境 PR：**Security Extension** M30–M34（建议 5/5）
 - 错误恢复/UGC/可观测 PR：**Resilience Extension** M35–M38（建议 4/4）
+- 安全加固/无障碍/多平台/实验 PR：**Enterprise Hardening Extension** M39–M44（建议 6/6）
 - PR 模板：复制 `examples/.github/` → 仓库根 `.github/`
 - 企业级 DoD / 豁免 / 接入验收：monorepo `docs/definition-of-done.md`、`docs/enterprise-governance.md`、`scripts/check-project-adoption.py`
 

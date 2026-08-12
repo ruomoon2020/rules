@@ -27,6 +27,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      openapi: ${{ steps.build.outputs.openapi }}
+      maven: ${{ steps.build.outputs.maven }}
+      migrations: ${{ steps.build.outputs.migrations }}
     steps:
       - uses: actions/checkout@v4
 
@@ -35,12 +39,16 @@ jobs:
         run: |
           if [ -f gradlew ] && { [ -f build.gradle ] || [ -f build.gradle.kts ]; }; then
             echo "tool=gradle" >> "$GITHUB_OUTPUT"
+            echo "maven=false" >> "$GITHUB_OUTPUT"
           elif [ -f pom.xml ]; then
             echo "tool=maven" >> "$GITHUB_OUTPUT"
+            echo "maven=true" >> "$GITHUB_OUTPUT"
           else
             echo "Expected pom.xml or Gradle wrapper (gradlew + build.gradle*)." >&2
             exit 1
           fi
+          if [ -f contracts/openapi.yaml ]; then echo "openapi=true" >> "$GITHUB_OUTPUT"; else echo "openapi=false" >> "$GITHUB_OUTPUT"; fi
+          if find src/main/resources/db/migration -type f -print -quit 2>/dev/null | grep -q .; then echo "migrations=true" >> "$GITHUB_OUTPUT"; else echo "migrations=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-java@v4
         with:
@@ -60,8 +68,9 @@ jobs:
 
   # --- Required（有 contracts/openapi.yaml 时）---
   openapi-diff:
+    needs: verify
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('contracts/openapi.yaml') != '' }}
+    if: needs.verify.outputs.openapi == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -90,8 +99,9 @@ jobs:
 
   # --- Conditional：Maven + 合规策略；Gradle 请接 OWASP dependency-check Gradle 插件 ---
   dependency-scan:
+    needs: verify
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('pom.xml') != '' }}
+    if: needs.verify.outputs.maven == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -102,12 +112,13 @@ jobs:
           cache: maven
 
       - name: OWASP dependency check
-        run: mvn -B org.owasp:dependency-check-maven:check
+        run: mvn -B org.owasp:dependency-check-maven:12.2.2:check
 
   # --- Conditional：Maven + migration 变更；Gradle 使用 backend-ci-optional-gradle.yml ---
   flyway-validate:
+    needs: verify
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('src/main/resources/db/migration/**') != '' && hashFiles('pom.xml') != '' }}
+    if: needs.verify.outputs.maven == 'true' && needs.verify.outputs.migrations == 'true'
     services:
       mysql:
         image: mysql:8

@@ -2,7 +2,7 @@
 
 | 编号 | 文件 | 一句话 |
 |---|---|---|
-| 00 | `00-must-follow.md` | PR 硬规则（41 条） |
+| 00 | `00-must-follow.md` | PR 硬规则（45 条） |
 | 01 | `01-project-structure.md` | 目录与分层 |
 | 02 | `02-naming.md` | 命名 |
 | 03 | `03-vue3-typescript-uniapp.md` | Vue3 / TS 风格 |
@@ -28,6 +28,7 @@
 | 23 | `23-content-safety.md` | 富文本 / UGC 安全 |
 | 24 | `24-design-system-mobile.md` | 设计 Token / Base |
 | 25 | `25-dependency-supply-chain.md` | 依赖与 audit |
+| 26 | `26-security-hardening-risk.md` | 安全加固 / 风控 / 实验 |
 
 文档：`docs/observability-metrics.md`、`docs/owasp-miniapp-mapping.md`、`docs/fullstack-contract.md`（含与管理端 E41–E43 边界说明）、`docs/enterprise-governance.md`（DoD / 豁免 / 接入验收）。
 

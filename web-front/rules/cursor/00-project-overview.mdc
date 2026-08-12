@@ -9,8 +9,8 @@ alwaysApply: true
 
 ## 唯一入口
 
-- 硬规则：`rules/shared/00-must-follow.md`（当前 51 条）
-- Evals：P0 8/8，P1 ≥32/35（E01–E43）；成熟后台业务 PR 跑 **Business Extension** E32–E40；i18n/实时/富文本 PR 跑 **Platform Extension** E41–E43（见 `evals/README.md`）
+- Level 0 硬规则：`rules/shared/00-must-follow.md`（当前 34 条）；场景能力按文末条件路由和项目 Level 触发
+- Evals：P0 8/8，P1 ≥38/41（E01–E49）；成熟后台业务 PR 跑 Business E32–E40；i18n/实时/富文本跑 Platform E41–E43；受监管 Web 跑 Enterprise Hardening E44–E49
 - Codex：`rules/codex/AGENTS.md`（复制为仓库根 `AGENTS.md`）
 - Cursor：本目录 `.mdc` 文件（复制到业务仓 `.cursor/rules/`）
 
@@ -22,6 +22,7 @@ alwaysApply: true
 | 改 layout / router / store / base | `19-platform-boundary.mdc` |
 | 表单 / 详情 | `20-form-detail.mdc` |
 | AI 生成复杂代码 | `21-ai-generation.mdc` |
+| 金融 / 政务 / 高敏 Web | `24-regulated-web-hardening.mdc` |
 | i18n / 金额 / 时区 | `22-i18n-locale.mdc` |
 | WebSocket / 富文本 | `23-realtime-rich-content.mdc` |
 | 测试 / CI | `08-quality-testing.mdc` |

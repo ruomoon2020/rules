@@ -43,7 +43,7 @@ product/                          # 你的业务 monorepo 根
 │  ├─ openapi.yaml                # API 契约 SSOT
 │  └─ openapi.baseline.yaml       # CI diff 基线（稳定后生成）
 ├─ docs/
-│  └─ code-rules-governance/      # 可选：从 code-rules 根 docs/ 复制的治理文档
+│  └─ common-governance/          # 可版本化的通用治理发布包
 ├─ web-front/                     # 管理端工程
 │  ├─ AGENTS.md                   # ← web-front/rules/codex/AGENTS.md
 │  ├─ rules/                      # ← 整包 web-front/rules
@@ -121,7 +121,7 @@ git submodule add <backend-rules-repo-url> rules
 
 ### 1.5 monorepo CI 建议
 
-**后端构建工具**：规则包对 Maven / Gradle **等价**——门禁目标是「编译 + 单测 +（若配置）ArchUnit / Checkstyle」，对应命令为 `mvn verify` 或 `./gradlew check`（见 `web-backend/rules/shared/23-quality-gates.md`）。`examples/ci/backend-ci-required.yml` 的 verify job **自动识别** `pom.xml` 与 `gradlew` + `build.gradle*`。Gradle 样板见 `web-backend/rules/examples/gradle/`；供应链 `examples/ci/supply-chain-required.yml` 含 `gradle-dependency-check`（须 OWASP Gradle 插件）。Optional 的 Flyway 样板按构建工具拆分：Maven 用 `web-backend/rules/examples/ci/backend-ci-optional.yml`，Gradle 用 `web-backend/rules/examples/ci/backend-ci-optional-gradle.yml`（须 Flyway Gradle 插件）。
+**后端构建工具**：规则包对 Maven / Gradle **等价**——门禁目标是「编译 + 单测 +（若配置）ArchUnit / Checkstyle」，对应命令为 `mvn verify` 或 `./gradlew check`（见 `web-backend/rules/shared/23-quality-gates.md`）。`examples/ci/backend-ci-required.yml` 的 verify job **自动识别** `pom.xml` 与 `gradlew` + `build.gradle*`。Gradle 样板见 `web-backend/rules/examples/gradle/`；供应链 `common-governance/examples/ci/supply-chain-required.yml` 含 `gradle-dependency-check`（须 OWASP Gradle 插件）。Optional 的 Flyway 样板按构建工具拆分：Maven 用 `web-backend/rules/examples/ci/backend-ci-optional.yml`，Gradle 用 `web-backend/rules/examples/ci/backend-ci-optional-gradle.yml`（须 Flyway Gradle 插件）。
 
 | Workflow | 路径触发 | 内容 |
 |---|---|---|
@@ -130,7 +130,7 @@ git submodule add <backend-rules-repo-url> rules
 | `supply-chain-required.yml` | 根 / 各端 lockfile | npm/pnpm audit、Maven/Gradle OWASP、license-checker |
 | `rules-package-validate.yml` | `**/rules/**` | 各端 `validate-rules-package.py` |
 
-样板：`web-backend/rules/examples/ci/`、`web-front/rules/examples/ci/`、`examples/ci/supply-chain-required.yml`。
+样板：`web-backend/rules/examples/ci/`、`web-front/rules/examples/ci/`、`common-governance/examples/ci/supply-chain-required.yml`。
 
 ### 1.6 monorepo 验收命令
 
@@ -385,11 +385,11 @@ pnpm size:check           # 主包体积
 
 ---
 
-## 6. 企业治理文档（建议复制到业务仓）
+## 6. 通用治理发布包
 
-规则包内是**编码规则**；组织级 DoD、豁免、Owner 在 **code-rules 仓库根 `docs/`**。
+规则包内是**编码规则**；组织级 DoD、豁免、Owner 的维护 SSOT 在 code-rules 根 `docs/`，可分发副本位于 `common-governance/`。
 
-若业务仓只有 `rules/` 子目录，请额外复制到例如 `docs/code-rules-governance/`：
+业务仓应整包引入 `common-governance/`，不要手工挑选并维护第二份文档：
 
 | 文件 | 用途 |
 |---|---|
@@ -401,8 +401,13 @@ pnpm size:check           # 主包体积
 | `slo-alerting-template.md` | 管理端 / 小程序 SLO 与告警 |
 | `dod-maturity-mapping.md` | Level × DoD |
 | `compliance-evidence-log.md` | 等保 / 审计留痕 |
+| `git-pr-governance.md` | Commit、PR、本地 hook 与 CI 边界 |
+| `examples/SECURITY.md.sample` | 项目漏洞报告与凭据泄露处置入口模板 |
+| `examples/adr-template.md` | 项目架构决策记录模板 |
+| `examples/ci/credential-scan-required.yml` | 凭据泄露扫描 Required workflow |
+| `examples/ci/supply-chain-required.yml` | 锁文件、依赖漏洞与许可证 Required workflow |
 
-各端索引：`<端>/rules/docs/enterprise-governance.md`。
+维护者运行 `python scripts/sync-common-governance.py` 防止发布副本漂移；业务仓运行 `python common-governance/scripts/validate-package.py` 验证发布文件与 manifest 一致。企业项目使用包内 `scripts/check-project-adoption.py` 并追加 `--require-governance`，该选项会校验固定资产、版本和 checksum。
 
 ---
 
@@ -433,8 +438,9 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | 日常 PR | Smoke | Smoke | Smoke |
 | 成熟后台新业务 | E32–E40 | B55–B63 | M21–M29 |
 | i18n / 实时 / 富文本 | E41–E43 | — | — |
+| 金融 / 政务 / 高敏 Web | E44–E49 | — | M39–M44（小程序对应加固） |
 | UGC / 恢复 | — | — | M35–M38 |
-| 发版 / 规则升级 | Full E01–E43 | Full B01–B63 | Full M01–M38 |
+| 发版 / 规则升级 | Full E01–E49 | Full B01–B64 | Full M01–M44 |
 
 操作：向 AI 发送 `rules/evals/prompts.md` 中固定提示词，对照 `rubric.md` 打分。详见各端 `rules/evals/README.md`。
 
@@ -486,7 +492,7 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | 不写 `99-project-local` | 路径猜错 | 必填真实路径 |
 | 前后端各写字段 | 联调失败 | 契约 SSOT |
 | CodeGen 直接上线 | 缺权限/审计 | playbook 补齐 |
-| 只 submodule rules 不要治理 docs | DoD / 豁免无据 | 复制 `docs/code-rules-governance/` |
+| 只 submodule rules 不接治理包 | DoD / 豁免无据 | 引入并验证 `common-governance/` |
 | Gradle 仓只复制 Maven optional CI | Flyway / OWASP 门禁失效 | 用 `backend-ci-optional-gradle.yml` + `supply-chain-required.yml` |
 
 ---
@@ -498,6 +504,7 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | 本说明 | `docs/project-adoption-guide.md` |
 | Monorepo 布局 | `docs/monorepo-layout.md` |
 | 治理总索引 | `docs/README.md` |
+| 通用治理发布包 | `common-governance/README.md` |
 | 根 README | `README.md` |
 | 全栈契约 | `web-backend/rules/docs/fullstack-contract.md` |
 | 跨包 shared 编号 | 同上 §跨包编号说明 |
@@ -527,6 +534,6 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 
 **企业客户额外：**
 
-- [ ] 复制治理 docs 到 `docs/code-rules-governance/`
+- [ ] 引入 `common-governance/` 并运行包一致性校验
 - [ ] CODEOWNERS 按 [`codeowners-matrix.md`](codeowners-matrix.md)
-- [ ] 接入 `examples/ci/supply-chain-required.yml` 到 `.github/workflows/`
+- [ ] 接入 `common-governance/examples/ci/supply-chain-required.yml` 到 `.github/workflows/`

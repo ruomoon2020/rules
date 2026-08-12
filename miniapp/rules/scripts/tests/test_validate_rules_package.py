@@ -58,3 +58,16 @@ class ValidateRulesPackageTests(unittest.TestCase):
 
         self.assertEqual(sorted(smoke_ids), sorted(validator.RESILIENCE_EXTENSION_SUITE))
         self.assertEqual(sorted(readme_ids), sorted(validator.RESILIENCE_EXTENSION_SUITE))
+
+    def test_enterprise_hardening_suite_matches_smoke_index(self):
+        rules_root = Path(__file__).parents[2]
+        smoke = validator.read(rules_root / "evals" / "smoke-prompts.md")
+        evals_readme = validator.read(rules_root / "evals" / "README.md")
+
+        smoke_ids = validator.parse_suite_line(smoke, "## Enterprise Hardening")
+        readme_ids = validator.parse_evals_table_suite(
+            evals_readme, "Enterprise Hardening Extension"
+        )
+
+        self.assertEqual(sorted(smoke_ids), sorted(validator.ENTERPRISE_HARDENING_SUITE))
+        self.assertEqual(sorted(readme_ids), sorted(validator.ENTERPRISE_HARDENING_SUITE))

@@ -5,7 +5,7 @@ alwaysApply: true
 
 # 项目概览
 
-企业级 Vue 3 + TypeScript + uni-app + Vite 小程序规则包。Hard Rules 当前 **41** 条（`shared/00-must-follow.md`）。
+企业级 Vue 3 + TypeScript + uni-app + Vite 小程序规则包。Hard Rules 当前 **45** 条（`shared/00-must-follow.md`）。
 
 ## 冲突优先级
 
@@ -46,6 +46,7 @@ alwaysApply: true
 - 内容安全 / UGC：`23-content-safety.mdc`
 - 设计系统 / Base：`24-design-system.mdc`
 - 依赖 / 供应链：`25-dependency-supply-chain.mdc`
+- 安全加固 / 风控：`26-security-hardening-risk.mdc`
 - 新业务分包：`18-business-module-extension.mdc`（仅新业务扩展任务强制；见 `99-project-local`）
 
 项目真实路径、包体积预算和目标平台写入 `.cursor/rules/99-project-local.mdc`。核心 P1 evals 门槛 **>= 10/12**。

@@ -50,3 +50,39 @@ class ValidateRulesPackageTests(unittest.TestCase):
             validator.check_agents_paths(root, errors)
 
         self.assertEqual(errors, ["codex/AGENTS.md: missing rules/shared/missing.md"])
+
+    def test_l0_scope_rejects_numbered_high_level_rule(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "shared").mkdir()
+            (root / "shared" / "00-must-follow.md").write_text(
+                "## 条件触发路由（不计入 Level 0 硬规则）\n"
+                "1. 见 42-cost-governance.md\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+
+            validator.check_l0_hard_rule_scope(root, errors)
+
+        self.assertEqual(
+            errors,
+            ["00-must-follow.md: non-L0 shared rule numbered as L0: 42-cost-governance.md"],
+        )
+
+    def test_l0_scope_rejects_high_level_topic_without_file_reference(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "shared").mkdir()
+            (root / "shared" / "00-must-follow.md").write_text(
+                "1. 所有项目必须完成威胁建模。\n"
+                "## 条件触发路由（不计入 Level 0 硬规则）\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+
+            validator.check_l0_hard_rule_scope(root, errors)
+
+        self.assertEqual(
+            errors,
+            ["00-must-follow.md: high-level topic numbered as L0: 威胁建模"],
+        )

@@ -1,4 +1,5 @@
 import importlib.util
+import shutil
 import sys
 import tempfile
 import unittest
@@ -119,3 +120,67 @@ class ValidateRulesPackageTests(unittest.TestCase):
         errors: list[str] = []
         etm.check_manifest(rules_root, "E", errors)
         self.assertEqual(errors, [])
+
+    def test_scaffold_check_rejects_missing_assets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "examples" / "scaffold").mkdir(parents=True)
+            errors: list[str] = []
+
+            validator.check_scaffold_assets(root, errors)
+
+        self.assertTrue(any("examples/scaffold missing" in error for error in errors))
+
+    def test_scaffold_runtime_rejects_invalid_javascript(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(
+                rules_root / "examples" / "scaffold",
+                root / "examples" / "scaffold",
+            )
+            (root / "examples" / "scaffold" / "prettier.config.mjs.sample").write_text(
+                "export default {\n", encoding="utf-8"
+            )
+            errors: list[str] = []
+
+            validator.check_scaffold_runtime(root, errors)
+
+        self.assertTrue(any("syntax prettier.config.mjs.sample" in error for error in errors))
+
+    def test_l0_scope_rejects_conditional_topic_as_numbered_rule(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "shared").mkdir()
+            numbered = "\n".join(f"{index}. 基础规则" for index in range(1, 34))
+            (root / "shared" / "00-must-follow.md").write_text(
+                numbered
+                + "\n34. Feature Flag 必须始终启用。\n"
+                + "## 条件触发路由（不计入 Level 0 硬规则）\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+
+            validator.check_l0_hard_rule_scope(root, errors)
+
+        self.assertEqual(
+            errors,
+            ["00-must-follow.md: conditional topic numbered as L0: Feature Flag"],
+        )
+
+    def test_l0_scope_rejects_wrong_hard_rule_count(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "shared").mkdir()
+            (root / "shared" / "00-must-follow.md").write_text(
+                "1. 基础规则\n## 条件触发路由（不计入 Level 0 硬规则）\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+
+            validator.check_l0_hard_rule_scope(root, errors)
+
+        self.assertEqual(
+            errors,
+            ["00-must-follow.md L0 hard rule count 1, expected 34"],
+        )

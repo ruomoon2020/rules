@@ -16,9 +16,26 @@ on:
       - ".github/workflows/backend-ci-optional-gradle.yml"
 
 jobs:
-  flyway-validate-gradle:
+  detect-project:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('gradlew') != '' && (hashFiles('build.gradle') != '' || hashFiles('build.gradle.kts') != '') && hashFiles('src/main/resources/db/migration/**') != '' }}
+    outputs:
+      enabled: ${{ steps.detect.outputs.enabled }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect Gradle migrations
+        id: detect
+        shell: bash
+        run: |
+          if [ -f gradlew ] && { [ -f build.gradle ] || [ -f build.gradle.kts ]; } && find src/main/resources/db/migration -type f -print -quit 2>/dev/null | grep -q .; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  flyway-validate-gradle:
+    needs: detect-project
+    runs-on: ubuntu-latest
+    if: needs.detect-project.outputs.enabled == 'true'
     timeout-minutes: 20
     services:
       mysql:

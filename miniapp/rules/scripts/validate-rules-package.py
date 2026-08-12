@@ -39,8 +39,9 @@ BUSINESS_EXTENSION_SUITE = [
 ]
 SECURITY_EXTENSION_SUITE = ["M30", "M31", "M32", "M33", "M34"]
 RESILIENCE_EXTENSION_SUITE = ["M35", "M36", "M37", "M38"]
-TOTAL_PROMPTS = 38
-SHARED_MAX_NUM = 25
+ENTERPRISE_HARDENING_SUITE = ["M39", "M40", "M41", "M42", "M43", "M44"]
+TOTAL_PROMPTS = 44
+SHARED_MAX_NUM = 26
 
 THRESHOLD_FILES = [
     "README.md",
@@ -236,6 +237,7 @@ def main() -> int:
     biz_ids = [e for e in prompt_ids if 21 <= int(e[1:]) <= 29]
     sec_ext_ids = [e for e in prompt_ids if 30 <= int(e[1:]) <= 34]
     res_ext_ids = [e for e in prompt_ids if 35 <= int(e[1:]) <= 38]
+    hardening_ids = [e for e in prompt_ids if 39 <= int(e[1:]) <= 44]
     total = len(prompt_ids)
 
     if total != TOTAL_PROMPTS:
@@ -250,12 +252,14 @@ def main() -> int:
         errors.append(f"prompts.md Security Extension mismatch: {sec_ext_ids}")
     if sorted(res_ext_ids) != RESILIENCE_EXTENSION_SUITE:
         errors.append(f"prompts.md Resilience Extension mismatch: {res_ext_ids}")
+    if sorted(hardening_ids) != ENTERPRISE_HARDENING_SUITE:
+        errors.append(f"prompts.md Enterprise Hardening Extension mismatch: {hardening_ids}")
     if prompt_ids != sorted(prompt_ids, key=lambda x: int(x[1:])):
         errors.append("prompts.md M ids not in ascending order")
     if rubric_p0 != [f"{ID_PREFIX}{i:02d}" for i in range(1, P0_COUNT + 1)]:
         errors.append(f"rubric P0 ids mismatch: got {len(rubric_p0)}")
-    if rubric_p1 != p1_ids + biz_ids + sec_ext_ids + res_ext_ids:
-        errors.append("rubric P1+Biz+Sec+Res mismatch prompts")
+    if rubric_p1 != p1_ids + biz_ids + sec_ext_ids + res_ext_ids + hardening_ids:
+        errors.append("rubric P1+Biz+Sec+Res+Hardening mismatch prompts")
     if rubric_ids != prompt_ids:
         errors.append("rubric all ids mismatch prompts")
     if results_ids != prompt_ids:
@@ -303,6 +307,13 @@ def main() -> int:
         ):
             errors.append("Resilience suite mismatch")
 
+        hardening_smoke = parse_suite_line(smoke, "## Enterprise Hardening")
+        hardening_readme = parse_evals_table_suite(evals_readme, "Enterprise Hardening")
+        if sorted(hardening_smoke) != sorted(ENTERPRISE_HARDENING_SUITE) or sorted(
+            hardening_readme
+        ) != sorted(ENTERPRISE_HARDENING_SUITE):
+            errors.append("Enterprise Hardening suite mismatch")
+
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
     check_eval_topic_manifest(root, errors)
@@ -339,7 +350,8 @@ def main() -> int:
     print(f"VERSION: {version}")
     print(
         f"prompts: {total} (P0={len(p0_ids)}, P1={len(p1_ids)}, "
-        f"Biz={len(biz_ids)}, SecExt={len(sec_ext_ids)}, ResExt={len(res_ext_ids)})"
+        f"Biz={len(biz_ids)}, SecExt={len(sec_ext_ids)}, ResExt={len(res_ext_ids)}, "
+        f"Hardening={len(hardening_ids)})"
     )
     if threshold:
         print(f"P1 threshold: >={threshold[0]}/{threshold[1]}")
