@@ -27,9 +27,12 @@
 | **Security** | B06、B21、B26、B31、B34、B39、B40、B43、B44、B45、B52、B53 | 建议 12/12 | 鉴权 / 安全 / 隐私 / 外部集成 PR |
 | **Contract** | B03、B11、B25、B47、B51 | 建议 5/5 | OpenAPI / 事件契约 / 幂等头 PR |
 | **Business Extension** | B55–B63 | 建议 9/9 | 成熟后台新增业务 / CRUD / 树表主子表 / CodeGen PR |
+| **AI Tool Safety** | BAT01–BAT05（独立文件） | **5/5 Required** | AI 读取外部内容、调用工具或执行外部动作 |
 | **Full** | B01–B64 | P0 8/8；P1 ≥50/56 | **发版**、规则包升级、大版本 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Bxx` 提示词计数；校验见 `scripts/validate-rules-package.py`）。
+
+AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规 P1 总分，任一项失败即阻断。
 
 **Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 evals 后运行 `python scripts/generate-eval-topic-manifest.py --rules-dir web-backend/rules`。
 

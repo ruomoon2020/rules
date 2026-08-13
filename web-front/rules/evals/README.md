@@ -32,9 +32,12 @@
 | **Business Extension** | E32–E40 | 建议 9/9 | 成熟后台新增业务页 / CRUD / 树表主子表 PR |
 | **Platform Extension** | E41–E43 | 建议 3/3 | i18n / WebSocket·SSE / 富文本·编辑器 PR |
 | **Enterprise Hardening** | E44–E49 | 建议 6/6 | 金融 / 政务 / 高敏数据 / 第三方脚本 / 嵌入页面 PR |
+| **AI Tool Safety** | EAT01–EAT05（独立文件） | **5/5 Required** | AI 读取外部内容、调用工具或执行外部动作 |
 | **Full** | E01–E49 | P0 8/8；P1 ≥38/41 | **发版**、规则包升级 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Exx` 计数；校验见 `scripts/validate-rules-package.py`）。
+
+AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规 P1 总分，任一项失败即阻断。
 
 **Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 `prompts.md` / `rubric.md` 后运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-front/rules`。
 

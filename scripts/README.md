@@ -4,7 +4,8 @@
 |---|---|
 | [`generate-eval-topic-manifest.py`](generate-eval-topic-manifest.py) | 从 `evals/prompts.md` + `rubric.md` 生成 `topic-manifest.yaml` |
 | [`eval_topic_manifest.py`](eval_topic_manifest.py) | 共享库：manifest 生成与校验（被各端 validator 引用） |
-| [`check-project-adoption.py`](check-project-adoption.py) | **业务仓**接入验收：AGENTS、rules、cursor、契约；后端接受 `pom.xml` 或 `gradlew` + `build.gradle*` |
+| [`check-project-adoption.py`](check-project-adoption.py) | **业务仓**接入验收：入口、契约、构建、结构化 PR、治理包与 Level 2/3 真实控制证据 |
+| [`validate-release-evidence.py`](validate-release-evidence.py) | 校验 schema v2 发布证据、产物摘要、回滚、可观测、门禁与结构化豁免 |
 | [`sync-common-governance.py`](sync-common-governance.py) | 从根 `docs/` 生成 / 校验 `common-governance/` 发布包，防双 SSOT 漂移 |
 | [`validate-repository.py`](validate-repository.py) | 校验维护文件尾随空白、Markdown 本地链接和 YAML 语法 |
 
@@ -27,6 +28,12 @@ python scripts/check-project-adoption.py --repo /path/to/miniapp --stack miniapp
 
 # 企业项目：同时强制 common governance
 python common-governance/scripts/check-project-adoption.py --repo /path/to/frontend --stack frontend --strict --require-governance
+
+# Level 2 启用严格治理资产、完整治理包和 governance-adoption.yaml 真实控制证据
+python common-governance/scripts/check-project-adoption.py --repo /path/to/frontend --stack frontend --level 2
+
+# 生产发布证据
+python scripts/validate-release-evidence.py --file releases/1.8.0/release-evidence.yaml
 
 # 维护者：校验 common governance 与根 docs 一致
 python scripts/sync-common-governance.py

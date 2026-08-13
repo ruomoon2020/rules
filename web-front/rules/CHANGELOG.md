@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.8.0 — 2026-08-14
+
+### Added
+
+- 新增 AI Tool Safety EAT01–EAT05 独立评测套件，五类高风险场景必须 5/5。
+- Codex/Cursor 路由接入需求追踪、业务正确性、环境晋级、发布证据和事故响应。
+
+### Changed
+
+- package validator 锁定 AI Tool Safety 题号、主题、Pass 判据和门槛，并校验 common-governance 跨包引用。
+
+## 1.7.1 — 2026-08-14
+
+### Changed
+
+- `shared/09-ai-generation.md` 与 Cursor 路由新增不可信内容、提示注入、最小工具权限、外部写入授权和敏感数据出站约束。
+- E13 改为“外部指令诱导泄露与伪造验证”，validator 锁定该高风险主题，避免只检查是否口头提到 lint。
+- 验证清单新增 AI 工具调用与真实执行证据检查。
+
 ## 1.7.0 — 2026-08-12
 
 ### Added

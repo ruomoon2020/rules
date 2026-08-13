@@ -24,6 +24,7 @@
 | 任务 | 必读规则 |
 |---|---|
 | 任意前端改动 | `rules/codex/01-before-editing.md`、`rules/shared/00-must-follow.md` |
+| 需求分析 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
 | 写 `src/views/**` 页面（列表 / 查询 / 表格） | `rules/shared/04-ui-patterns.md`、`rules/shared/11-base-components-context.md`、`rules/shared/12-schema-ssot.md`、`rules/shared/19-list-pagination.md`、`rules/codex/02-page-generation.md` |
 | 表单 / 详情 / 弹窗 | `rules/shared/13-form-and-detail.md`、`rules/shared/12-schema-ssot.md`、`rules/codex/02-page-generation.md` |
 | 成熟后台二开 / CRUD / 菜单 / 树表 / 主子表 | `rules/shared/22-business-module-extension.md`、`rules/docs/business-feature-playbook-frontend.md`、`rules/shared/06-state-route-permission.md`、`rules/shared/12-schema-ssot.md`、`rules/shared/14-upload-import-export.md`、`rules/shared/17-shell-navigation.md` |
@@ -33,7 +34,9 @@
 | `src/components/**`、设计 Token | `rules/shared/02-naming.md`、`rules/shared/03-code-style.md`、`rules/shared/04-ui-patterns.md`、`rules/shared/16-design-tokens.md`、`rules/codex/03-component-generation.md` |
 | 安全 / 性能 / 错误恢复 | `rules/shared/07-security-performance.md`、`rules/shared/21-error-recovery.md` |
 | 测试 / CI / 依赖 / 发布 | `rules/shared/15-testing.md`、`rules/shared/08-quality-gates.md`、`rules/shared/20-dependency-governance.md` |
-| AI 生成复杂前端代码 | `rules/shared/09-ai-generation.md` |
+| 生产发布 / 灰度 / 回滚 | `common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md` |
+| 生产事故 / 安全事件 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
+| AI 生成复杂前端代码；读取网页 / Issue / 日志；调用外部工具 | `rules/shared/09-ai-generation.md` |
 | i18n / 金额 / 日期 / 时区展示 | `rules/shared/23-i18n-locale.md`、`rules/shared/13-form-and-detail.md` |
 | WebSocket / SSE / 富文本 / 编辑器 | `rules/shared/24-realtime-rich-content.md`、`rules/shared/07-security-performance.md` |
 | 金融 / 政务 / 高敏数据 / 第三方脚本 / 嵌入页面 / 跨窗口通信 | `rules/shared/25-regulated-web-hardening.md`、`rules/shared/07-security-performance.md` |

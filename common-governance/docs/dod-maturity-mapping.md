@@ -11,7 +11,9 @@
 | **3. 安全** | 鉴权 / 输入 / secret scan | + dependency audit；PII 脱敏（`29`） | + 威胁建模；越权测试；供应链 Required | + 密评映射；服务间认证 |
 | **4. 数据** | migration validate（若改库） | + 生产数据操作工单（`31`） | + 备份演练；归档策略 | + 冷热分层 / 大规模归档 |
 | **5. 可观测** | traceId；无敏感日志 | + 指标 / 错误率观察 | + SLO / 告警 Owner（[`slo-alerting-template.md`](slo-alerting-template.md)） | + 成本 / 容量治理 |
-| **6. 发布** | PR 说明 + 可回滚 | + release-checklist 核心项 | + 灰度；事故复盘模板 | + 多环境 / 云原生发版 |
+| **6. 发布** | PR 说明 + 可回滚 | + release-checklist 核心项 | + 结构化发布证据、灰度与事故响应 | + 不可变产物多环境晋级、演练与跨项目治理 |
+
+所有 Level 的业务变更都要求需求与验收条件可追溯；Level 2 起生产发布须归档通过校验的 `release-evidence.yaml` 并遵守 [`environment-promotion.md`](environment-promotion.md)；生产事故按 [`incident-response.md`](incident-response.md) 留痕和复盘。使用 AI 读取外部内容或调用工具时，各 Level 均须遵守 [`ai-tool-security.md`](ai-tool-security.md)，并通过各端 AI Tool Safety **5/5** 独立门禁。
 
 **金融 / 政务**：在 Level 1 基础上，Level 2 前须完成 `27`/`29`/`15` 越权与留存，并启用 [`compliance-evidence-log.md`](compliance-evidence-log.md) 留痕。
 
@@ -73,5 +75,8 @@ i18n / 实时 / 富文本 PR 另跑 **Platform Extension** E41–E43（Level 2 �
 ## 相关
 
 - [`definition-of-done.md`](definition-of-done.md)
+- [`requirements-traceability.md`](requirements-traceability.md)
+- [`business-correctness-review.md`](business-correctness-review.md)
+- [`release-evidence.md`](release-evidence.md)
 - [`rule-exception-process.md`](rule-exception-process.md)
 - `web-backend/rules/docs/compliance-cn-mapping.md`

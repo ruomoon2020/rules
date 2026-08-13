@@ -28,6 +28,7 @@ alwaysApply: true
 
 ## Cursor 路由
 
+- 需求 / 业务 PR / 缺陷修复：`common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md`
 - 页面 / 生命周期：`02-vue3-uniapp.mdc`
 - API / 登录态：`05-api-auth.mdc`
 - Store / 缓存：`08-state-storage.mdc`
@@ -40,6 +41,8 @@ alwaysApply: true
 - 支付 / 订阅 / 分享：`14-payment-subscribe-share.mdc`
 - 日志 / 埋点：`15-logging-observability.mdc`
 - CI / 发版：`16-quality-gates.mdc`
+- 生产发布 / 灰度 / 回滚：`common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md`
+- 生产事故 / 安全事件 / 复盘：`common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md`
 - App 运行时：`20-app-runtime.mdc`
 - 网络 / web-view：`21-network-security.mdc`
 - 错误恢复 / 弱网：`22-error-recovery.mdc`
@@ -47,6 +50,7 @@ alwaysApply: true
 - 设计系统 / Base：`24-design-system.mdc`
 - 依赖 / 供应链：`25-dependency-supply-chain.mdc`
 - 安全加固 / 风控：`26-security-hardening-risk.mdc`
+- AI 处理网页、Issue、日志或工具输出：追加读取 `rules/shared/17-ai-generation.md` 的不可信内容与工具安全要求
 - 新业务分包：`18-business-module-extension.mdc`（仅新业务扩展任务强制；见 `99-project-local`）
 
 项目真实路径、包体积预算和目标平台写入 `.cursor/rules/99-project-local.mdc`。核心 P1 evals 门槛 **>= 10/12**。

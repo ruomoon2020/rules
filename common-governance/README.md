@@ -22,6 +22,13 @@ your-project/
 | 入口 | 用途 |
 |---|---|
 | `docs/definition-of-done.md` | 合并与发布 DoD |
+| `docs/requirements-traceability.md` | 需求、验收条件、实现和证据追踪 |
+| `docs/business-correctness-review.md` | 人工业务正确性评审基线 |
+| `docs/ai-tool-security.md` | 不可信内容与 AI 工具调用边界 |
+| `docs/release-evidence.md` | 结构化发布证据规范 |
+| `docs/environment-promotion.md` | 环境晋级、产物不可变、配置漂移和回滚 |
+| `docs/incident-response.md` | 事故分级、响应、沟通和证据保全 |
+| `docs/incident-postmortem-template.md` | 无责复盘与行动项模板 |
 | `docs/rule-exception-process.md` | 门禁例外和到期复查 |
 | `docs/codeowners-matrix.md` | 强制 Review 路由 |
 | `docs/supply-chain-baseline.md` | 依赖、许可证、SBOM 和漏洞处置 |
@@ -34,8 +41,12 @@ your-project/
 | `docs/git-pr-governance.md` | Commit、PR 和本地 hook / CI 边界 |
 | `examples/` | PR、commitlint、SECURITY、ADR 与 Required CI 样板 |
 | `examples/ci/credential-scan-required.yml` | 凭据泄露扫描 Required Check |
+| `examples/ci/rules-adoption-required.yml` | 规则采纳 Level 2 Required Check |
 | `examples/ci/supply-chain-required.yml` | 锁文件、依赖漏洞与许可证 Required Check |
+| `examples/governance-adoption.yaml` | Level 2+ 真实控制证据清单样板 |
 | `scripts/check-project-adoption.py` | 业务仓规则与治理接入验收 |
+| `scripts/validate-release-evidence.py` | 发布证据 YAML 机器校验 |
+| `examples/release-evidence.yaml` | 生产发布证据样板 |
 
 `docs/` 是从 code-rules 根目录 SSOT 生成的发布副本。维护者不得直接修改包内副本，应修改根 `docs/` 后运行同步脚本。
 
@@ -62,3 +73,10 @@ python common-governance/scripts/check-project-adoption.py --repo . --stack fron
 ```
 
 `--require-governance` 会校验固定资产清单、版本和 SHA-256；只存在同名文件不算通过。SHA-256 用于发现复制或发布漂移，不替代来自可信发布渠道的签名或 release checksum。
+
+成熟度门禁也可直接使用 `--level 0..3`。Level 2 会自动启用严格评审资产、完整治理包检查，并核验 `governance-adoption.yaml` 中的规则采纳、凭据扫描、供应链和分支保护证据；Level 3 还要求至少三项已完成的平台治理证据：
+
+```bash
+python common-governance/scripts/check-project-adoption.py --repo . --stack frontend --level 2
+python common-governance/scripts/validate-release-evidence.py --file releases/1.8.0/release-evidence.yaml
+```

@@ -405,7 +405,9 @@ pnpm size:check           # 主包体积
 | `examples/SECURITY.md.sample` | 项目漏洞报告与凭据泄露处置入口模板 |
 | `examples/adr-template.md` | 项目架构决策记录模板 |
 | `examples/ci/credential-scan-required.yml` | 凭据泄露扫描 Required workflow |
+| `examples/ci/rules-adoption-required.yml` | 规则采纳 Level 2 Required workflow |
 | `examples/ci/supply-chain-required.yml` | 锁文件、依赖漏洞与许可证 Required workflow |
+| `examples/governance-adoption.yaml` | 规则采纳、扫描、分支保护和 Level 3 证据清单 |
 
 维护者运行 `python scripts/sync-common-governance.py` 防止发布副本漂移；业务仓运行 `python common-governance/scripts/validate-package.py` 验证发布文件与 manifest 一致。企业项目使用包内 `scripts/check-project-adoption.py` 并追加 `--require-governance`，该选项会校验固定资产、版本和 checksum。
 
@@ -423,9 +425,26 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack miniapp
 
 # 严格模式（要求 CODEOWNERS、PR 模板）
 python scripts/check-project-adoption.py --repo /path/to/project --stack frontend --strict
+
+# 按成熟度门禁验收
+python scripts/check-project-adoption.py --repo /path/to/project --stack frontend --level 1
+python common-governance/scripts/check-project-adoption.py --repo /path/to/project --stack frontend --level 2
 ```
 
 后端 `--stack backend` 接受 **`pom.xml`** 或 **`gradlew` + `build.gradle` / `build.gradle.kts`**，不再强制 Maven。
+
+| Level | 自动检查增量 |
+|---|---|
+| 0 | 规则入口、基础构建脚本；本地覆盖缺失仅警告 |
+| 1 | 强制 `99-project-local.mdc`；管理端支持 OpenAPI、JSON Schema 或明确声明的契约源并要求 `api:check`；小程序强制 OpenAPI、`api:check`、`size:check`；后端要求 CI 运行 Maven verify/test 或 Gradle check/test |
+| 2 | 自动启用严格 CODEOWNERS / 结构化 PR 模板、完整 `common-governance/`，并核验 `governance-adoption.yaml` 引用的规则采纳、凭据扫描、供应链和分支保护证据 |
+| 3 | 在 Level 2 基础上要求 Scorecard 及至少三项带 Owner、状态和证据引用的平台治理控制 |
+
+生产发布另运行：
+
+```bash
+python common-governance/scripts/validate-release-evidence.py --file releases/<version>/release-evidence.yaml
+```
 
 ### 7.2 人工清单
 
@@ -505,6 +524,10 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 | Monorepo 布局 | `docs/monorepo-layout.md` |
 | 治理总索引 | `docs/README.md` |
 | 通用治理发布包 | `common-governance/README.md` |
+| 需求追踪 | `docs/requirements-traceability.md` |
+| 业务正确性评审 | `docs/business-correctness-review.md` |
+| AI 工具安全 | `docs/ai-tool-security.md` |
+| 发布证据 | `docs/release-evidence.md` |
 | 根 README | `README.md` |
 | 全栈契约 | `web-backend/rules/docs/fullstack-contract.md` |
 | 跨包 shared 编号 | 同上 §跨包编号说明 |
@@ -531,9 +554,11 @@ python scripts/check-project-adoption.py --repo /path/to/project --stack fronten
 - [ ] `contracts/openapi.yaml` + baseline 策略
 - [ ] 双端（三端）`api:gen` / `api:check` 脚本可用
 - [ ] PR 模板含契约与权限自检
+- [ ] PR 模板含需求追踪矩阵与业务正确性复核
 
 **企业客户额外：**
 
 - [ ] 引入 `common-governance/` 并运行包一致性校验
 - [ ] CODEOWNERS 按 [`codeowners-matrix.md`](codeowners-matrix.md)
 - [ ] 接入 `common-governance/examples/ci/supply-chain-required.yml` 到 `.github/workflows/`
+- [ ] 生产发布归档并校验 `release-evidence.yaml`

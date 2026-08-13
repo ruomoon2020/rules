@@ -4,6 +4,7 @@
 
 - [ ] 页面 / 组件 / 契约 / 平台边界改动范围：
 - [ ] 是否涉及菜单、路由、权限、字典、导入导出或异步任务：
+- [ ] 需求 / Issue、逐条验收条件及测试证据已填写（`common-governance/docs/requirements-traceability.md`）
 
 ## 契约与安全
 
@@ -19,6 +20,12 @@
 - [ ] `pnpm build`
 - [ ] `pnpm api:check`（若适用）
 - [ ] Rules eval（Smoke / Business Extension / Platform Extension / Full）：
+- [ ] 业务工作流、数据、权限、API / UI 一致性和回归风险已人工复核
+
+## 风险与回滚
+
+- 主要风险、灰度 / Feature Flag：
+- 回滚步骤与 Owner：
 
 ## 企业 DoD（monorepo）
 

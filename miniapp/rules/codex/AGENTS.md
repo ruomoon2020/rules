@@ -26,6 +26,7 @@
 | 任务 | 必读规则 |
 |---|---|
 | 任意小程序改动 | `rules/codex/01-before-editing.md`、`rules/shared/00-must-follow.md` |
+| 需求分析 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
 | 写页面 / 组件 / 生命周期 | `rules/shared/03-vue3-typescript-uniapp.md`、`rules/shared/04-page-ui-lifecycle.md`、`rules/shared/12-list-form-pagination.md`、`rules/codex/02-page-generation.md` |
 | App.vue / 应用级生命周期 | `rules/shared/20-app-runtime.md`、`rules/codex/06-app-runtime.md`、`rules/shared/14-payment-subscribe-share.md`（若 scene/分享） |
 | API / 契约 / request | `rules/shared/05-api-contract-request.md`、`rules/shared/21-network-security.md`、`rules/shared/12-list-form-pagination.md` |
@@ -45,8 +46,10 @@
 | 安全加固 / 风控 / 远程配置 / 多平台矩阵 | `rules/shared/26-security-hardening-risk.md`、`rules/shared/19-release-ops.md`、`rules/shared/21-network-security.md` |
 | 日志 / 埋点 / 监控 | `rules/shared/15-logging-observability.md`、`rules/docs/observability-metrics.md` |
 | 测试 / CI / 发布 | `rules/shared/16-testing-quality-gates.md`、`rules/shared/19-release-ops.md`、`rules/codex/05-verification.md` |
+| 生产发布 / 灰度 / 回滚 | `common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md` |
+| 生产事故 / 安全事件 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
 | 新业务分包 / 二开 | `rules/shared/18-business-module-extension.md`、`rules/docs/business-feature-playbook-miniapp.md`（修 bug/样式可不读 18，见 `99-project-local`） |
-| AI 生成复杂小程序代码 | `rules/shared/17-ai-generation.md` |
+| AI 生成复杂小程序代码；读取网页 / Issue / 日志；调用外部工具 | `rules/shared/17-ai-generation.md` |
 
 ## 路径触发
 

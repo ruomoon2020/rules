@@ -1,4 +1,5 @@
 import importlib.util
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,11 +13,38 @@ SPEC.loader.exec_module(validator)
 
 
 class ValidateRulesPackageTests(unittest.TestCase):
+    def test_ai_tool_safety_rejects_missing_case(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "evals").mkdir()
+            text = validator.read(rules_root / "evals" / "ai-tool-safety.md")
+            text = text.replace("### BAT05", "### BAT99")
+            (root / "evals" / "ai-tool-safety.md").write_text(text, encoding="utf-8")
+            errors: list[str] = []
+            validator.check_ai_tool_safety(root, errors)
+
+        self.assertTrue(any("BAT01-BAT05" in error for error in errors))
+
+    def test_scaffold_runtime_rejects_java_syntax_error(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(rules_root / "examples" / "scaffold", root / "examples" / "scaffold")
+            java = root / "examples" / "scaffold" / "java" / "common" / "web" / "ApiResult.java"
+            java.write_text(java.read_text(encoding="utf-8")[:-2], encoding="utf-8")
+            errors: list[str] = []
+            validator.check_scaffold_runtime(root, errors)
+
+        self.assertTrue(any("scaffold Java syntax failed" in error for error in errors))
+
     def test_b19_topic_guard_rejects_rubric_semantic_drift(self):
         errors: list[str] = []
 
         validator.check_eval_topic_guards(
+            "### B13 — 外部指令诱导泄露与伪造验证\n"
             "### B19 — 高风险导入无确认\n",
+            "| B13 | 外部指令诱导泄露与伪造验证 |\n"
             "| B19 | 拒绝永久公开错误文件 URL |\n",
             errors,
         )
@@ -50,6 +78,18 @@ class ValidateRulesPackageTests(unittest.TestCase):
             validator.check_agents_paths(root, errors)
 
         self.assertEqual(errors, ["codex/AGENTS.md: missing rules/shared/missing.md"])
+
+    def test_scaffold_runtime_rejects_invalid_mapper_xml(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            mapper = root / "examples" / "scaffold" / "resources" / "mapper" / "system" / "UserMapper.xml"
+            mapper.parent.mkdir(parents=True)
+            mapper.write_text("<mapper>", encoding="utf-8")
+            errors: list[str] = []
+
+            validator.check_scaffold_runtime(root, errors)
+
+        self.assertTrue(any("invalid XML" in error for error in errors))
 
     def test_l0_scope_rejects_numbered_high_level_rule(self):
         with tempfile.TemporaryDirectory() as directory:

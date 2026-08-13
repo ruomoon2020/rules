@@ -52,6 +52,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
       - name: Install validator dependencies
         run: pip install pyyaml
       - name: Run backend validator unit tests
@@ -87,8 +91,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install validator dependencies
-        run: pip install pyyaml
+        run: |
+          pip install pyyaml
+          npm install --global typescript@5.8.2
       - name: Run miniapp validator unit tests
         run: python -m unittest discover -s miniapp/rules/scripts/tests -v
       - name: Validate miniapp rules package
@@ -114,6 +123,7 @@ jobs:
           go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
           .github/workflows/*.yml
           examples/ci/*.yml
+          examples/adoption-fixture/frontend/.github/workflows/*.yml
           common-governance/examples/ci/*.yml
           web-backend/rules/examples/ci/*.yml
           web-front/rules/examples/ci/*.yml
@@ -124,10 +134,12 @@ jobs:
         run: git diff --exit-code -- web-backend/rules/evals/topic-manifest.yaml web-front/rules/evals/topic-manifest.yaml miniapp/rules/evals/topic-manifest.yaml
       - name: Governance script unit tests
         run: python -m unittest discover -s scripts/tests -v
+      - name: Validate release evidence sample
+        run: python scripts/validate-release-evidence.py --file examples/release-evidence.yaml
       - name: Strict governance adoption fixture
         run: |
           cp -R common-governance examples/adoption-fixture/frontend/common-governance
-          python common-governance/scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend --strict --require-governance
+          python common-governance/scripts/check-project-adoption.py --repo examples/adoption-fixture/frontend --stack frontend --level 2
       - name: Check common governance SSOT drift
         run: python scripts/sync-common-governance.py
       - name: Validate distributed common governance package

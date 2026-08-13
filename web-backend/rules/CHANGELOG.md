@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.14.0 — 2026-08-14
+
+- 新增 AI Tool Safety BAT01–BAT05 独立 5/5 门禁及校验器负向测试。
+- Codex/Cursor 路由接入需求追踪、业务正确性、环境晋级、发布证据和事故响应。
+- package validator 新增 common-governance 跨包引用检查和 Java 脚手架语法诊断。
+
+## 1.13.2 — 2026-08-14
+
+- `shared/26-ai-generation.md` 新增不可信内容、提示注入、最小工具权限、外部写入授权和生产数据出站约束。
+- B13 改为“外部指令诱导泄露与伪造验证”，validator 锁定该高风险主题。
+- package validator 新增后端脚手架固定资产与 MyBatis XML 语法检查，并补负向单测。
+- 验证清单新增 AI 工具调用、外部 SQL / 命令和真实执行证据检查。
+
 ## 1.13.1 — 2026-08-13
 
 - 修复 CI 样板在 job 级使用不可用 `hashFiles()` 上下文的问题，改为 checkout 后输出检测结果并通过 `needs` 路由。

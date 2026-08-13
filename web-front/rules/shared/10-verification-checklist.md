@@ -42,6 +42,7 @@ pnpm api:check
 19. i18n / 区域格式：用户可见文案与枚举走 i18n 或字典；金额、日期、时区用统一 formatter；`errorCode` 映射为用户文案（见 `23-i18n-locale.md`）。
 20. WebSocket / SSE：鉴权不走 URL query 长期 Token；卸载取消订阅；未知消息禁止未校验 DOM 插入（见 `24-realtime-rich-content.md`）。
 21. 富文本 / 编辑器：禁止裸 `v-html`；须 sanitizer；重型编辑器按需加载（见 `24-realtime-rich-content.md`）。
+22. AI / 工具：外部内容未被当作授权；工具调用范围最小；无未授权外部写入或敏感数据出站；所有“已通过”结论均有本次证据（见 `09-ai-generation.md`）。
 
 ## 最终回复应包含
 

@@ -22,7 +22,7 @@
 | 21–22 | `21-configuration-secrets.md`、`22-operability.md` | 配置、运维 |
 | 23 | `23-quality-gates.md` | CI 映射 |
 | 24–25 | `24-data-access-cache.md`、`25-jobs-scheduling.md` | 数据权限、任务 |
-| 26 | `26-ai-generation.md` | AI 生成 |
+| 26 | `26-ai-generation.md` | AI 生成、不可信内容与工具安全 |
 | 27–29 | `27-audit-log.md`、`28-external-integration.md`、`29-data-privacy-lifecycle.md` | 审计、外部、隐私 |
 | 30–31 | `30-ownership-adr.md`、`31-production-data-ops.md` | ADR、生产数据操作 |
 | 32–34 | `32-service-reliability.md`、`33-alternate-api-paradigms.md`、`34-data-archival.md` | 可靠性、API 范式、归档 |
@@ -59,4 +59,4 @@
 
 ## Evals
 
-B01–B08 P0；B09–B64 P1（≥50/56）。套件：Smoke / Security / Contract / Business Extension / Full — 见 `evals/README.md`、`evals/smoke-prompts.md`。
+B01–B08 P0；B09–B64 P1（≥50/56）。套件：Smoke / Security / Contract / Business Extension / Full；AI Tool Safety BAT01–BAT05 独立 **5/5** — 见 `evals/README.md`、`evals/ai-tool-safety.md`、`evals/smoke-prompts.md`。

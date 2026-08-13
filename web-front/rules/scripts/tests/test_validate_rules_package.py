@@ -64,6 +64,30 @@ class ValidateRulesPackageTests(unittest.TestCase):
 
         self.assertTrue(any("E42: rubric topic must contain" in error for error in errors))
 
+    def test_ai_tool_safety_rejects_lower_threshold(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "evals").mkdir()
+            text = validator.read(rules_root / "evals" / "ai-tool-safety.md")
+            (root / "evals" / "ai-tool-safety.md").write_text(text.replace("门槛：5/5", "门槛：4/5"), encoding="utf-8")
+            errors: list[str] = []
+            validator.check_ai_tool_safety(root, errors)
+
+        self.assertIn("AI Tool Safety suite threshold must be 5/5", errors)
+
+    def test_common_governance_ref_rejects_missing_target(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repo = Path(directory)
+            rules = repo / "web-front" / "rules"
+            rules.mkdir(parents=True)
+            (rules / "README.md").write_text("`common-governance/docs/missing.md`\n", encoding="utf-8")
+            (repo / "common-governance").mkdir()
+            errors: list[str] = []
+            validator.check_common_governance_refs(rules, errors)
+
+        self.assertTrue(any("common-governance ref missing docs/missing.md" in error for error in errors))
+
     def test_cursor_rejects_bare_shared_reference(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

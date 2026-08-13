@@ -9,6 +9,14 @@
 
 <!-- 1–3 句话说明做什么、为什么 -->
 
+## 需求追踪
+
+| 需求 / Issue | 验收条件 | 实现 / 契约 | 测试证据 | 状态 |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+- [ ] 工作流、数据、权限、API / UI 一致性和回归风险已按 `common-governance/docs/business-correctness-review.md` 人工复核
+
 ## 变更类型（勾选）
 
 - [ ] API / OpenAPI

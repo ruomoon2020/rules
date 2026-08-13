@@ -20,6 +20,8 @@
 | **小程序分包 / 支付 / 隐私** | 小程序 Owner + 合规（若涉及） | `pages.json` 分包、支付、隐私弹窗 |
 | **性能 / SLO 预算变更** | 领域 Owner + SRE（若有） | `PERFORMANCE_BUDGET.md`、告警阈值 |
 | **数据分级 / PII 新字段** | 安全 + 数据 Owner + 各端 Owner | OpenAPI 敏感标注、导出、日志 |
+| **核心业务规则 / 验收条件** | 领域 Owner + 产品 / 需求 Owner | 状态机、计费、审批、取消、补偿、需求追踪矩阵 |
+| **生产发布证据 / 高风险灰度** | 发布 Owner + 领域 Owner（高风险加 SRE / 安全） | `release-evidence.yaml`、发布工单、回滚 Runbook |
 
 ## 双人规则
 

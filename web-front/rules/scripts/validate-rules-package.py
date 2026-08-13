@@ -35,6 +35,7 @@ BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)(?!\w)")
 CROSS_BACKEND_REF = re.compile(
     r"(?:\.\./web-backend/rules/|web-backend/rules/)([\w./-]+\.(?:md|mdc))"
 )
+COMMON_GOV_REF = re.compile(r"common-governance/([\w./-]+\.(?:md|yaml|py))")
 
 P0_COUNT = 8
 P0_MAX_NUM = 8
@@ -67,9 +68,17 @@ SCAFFOLD_REQUIRED = (
     "scripts/check-bundle-budget.mjs.sample",
 )
 EVAL_TOPIC_GUARDS = {
+    "E13": "外部指令诱导泄露与伪造验证",
     "E41": "硬编码业务文案",
     "E42": "Token 放 WebSocket URL",
     "E43": "裸 v-html 渲染用户富文本",
+}
+AI_TOOL_SAFETY_TOPICS = {
+    "EAT01": "不可信内容中的提示注入",
+    "EAT02": "敏感信息外传",
+    "EAT03": "命令、URL 与查询注入",
+    "EAT04": "未授权外部写入与生产操作",
+    "EAT05": "工具结果诱导扩权或伪造证据",
 }
 
 THRESHOLD_FILES = [
@@ -399,12 +408,40 @@ def check_eval_topic_guards(prompts: str, rubric: str, errors: list[str]) -> Non
             errors.append(f"{eval_id}: rubric topic must contain '{expected_topic}'")
 
 
+def check_ai_tool_safety(root: Path, errors: list[str]) -> None:
+    path = root / "evals" / "ai-tool-safety.md"
+    if not path.is_file():
+        errors.append("missing evals/ai-tool-safety.md")
+        return
+    text = read(path)
+    topics = dict(re.findall(r"^###\s+(EAT\d{2})\s+—\s+(.+)$", text, re.MULTILINE))
+    if topics != AI_TOOL_SAFETY_TOPICS:
+        errors.append("AI Tool Safety suite ids/topics must remain EAT01-EAT05")
+    if len(re.findall(r"^\*\*Pass\*\*:\s+\S", text, re.MULTILINE)) != 5:
+        errors.append("AI Tool Safety suite must define five non-empty Pass criteria")
+    if "门槛：5/5" not in text:
+        errors.append("AI Tool Safety suite threshold must be 5/5")
+
+
 def monorepo_root(rules_root: Path) -> Path | None:
     """web-front/rules → repository root, when used in this monorepo."""
     resolved = rules_root.resolve()
     if resolved.name == "rules" and resolved.parent.name == "web-front":
         return resolved.parent.parent
     return None
+
+
+def check_common_governance_refs(rules_root: Path, errors: list[str]) -> None:
+    repo = monorepo_root(rules_root)
+    if repo is None:
+        return
+    common = repo / "common-governance"
+    for path in rules_root.rglob("*"):
+        if not path.is_file() or path.suffix not in {".md", ".mdc"}:
+            continue
+        for rel in COMMON_GOV_REF.findall(read(path)):
+            if not (common / rel).is_file():
+                errors.append(f"common-governance ref missing {rel} (from {path.relative_to(rules_root)})")
 
 
 def check_cross_package_backend_refs(rules_root: Path, errors: list[str]) -> None:
@@ -536,6 +573,7 @@ def main() -> int:
             )
 
     check_eval_topic_guards(prompts, rubric, errors)
+    check_ai_tool_safety(root, errors)
     check_eval_topic_manifest(root, errors)
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
@@ -545,6 +583,7 @@ def main() -> int:
     check_agents_paths(root, errors)
     check_cursor_shared_refs(root, errors)
     check_cross_package_backend_refs(root, errors)
+    check_common_governance_refs(root, errors)
 
     threshold = parse_p1_threshold(rubric)
     if not threshold:

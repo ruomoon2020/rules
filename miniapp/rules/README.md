@@ -160,7 +160,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | `shared/14-payment-subscribe-share.md` | 支付、订阅消息、分享 |
 | `shared/15-logging-observability.md` | 日志、埋点、监控 |
 | `shared/16-testing-quality-gates.md` | 测试与质量门禁 |
-| `shared/17-ai-generation.md` | AI 生成约束 |
+| `shared/17-ai-generation.md` | AI 生成、不可信内容与工具安全约束 |
 | `shared/18-business-module-extension.md` | 新业务分包二开 |
 | `shared/19-release-ops.md` | 发版、灰度、审核、环境隔离 |
 | `shared/20-app-runtime.md` | App 级生命周期与全局错误 |
@@ -189,6 +189,7 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | `docs/rule-maturity-model.md` | 采纳 Level 0/1/2 |
 | `examples/README.md` | 脚本、CI、脚手架说明 |
 | `evals/prompts.md` | 回归提示词 M01–M44 |
+| `evals/ai-tool-safety.md` | AI 工具安全独立门禁 MAT01–MAT05（5/5） |
 | `evals/rubric.md` | P0 8/8；核心 P1 >=10/12；Security 5/5；Resilience 4/4；Enterprise Hardening 6/6 |
 | `evals/smoke-prompts.md` | 套件索引 |
 | `evals/adoption-checklist.md` | 业务仓落地清单 |

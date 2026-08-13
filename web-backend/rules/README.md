@@ -225,7 +225,7 @@ AI 行为回归：
 | `shared/23-quality-gates.md` | 质量门禁 / CI 映射 |
 | `shared/24-data-access-cache.md` | 数据权限 / 多租户 / 缓存 |
 | `shared/25-jobs-scheduling.md` | 定时任务 / 批处理 |
-| `shared/26-ai-generation.md` | AI 生成约束 |
+| `shared/26-ai-generation.md` | AI 生成、不可信内容与工具安全约束 |
 | `shared/27-audit-log.md` | 审计日志 |
 | `shared/28-external-integration.md` | 外部 HTTP / 第三方 |
 | `shared/29-data-privacy-lifecycle.md` | 隐私与数据生命周期 |
@@ -244,7 +244,7 @@ AI 行为回归：
 | `shared/42-cost-governance.md` | 成本治理 |
 | `shared/43-business-module-extension.md` | 成熟后台业务模块扩展 |
 | `docs/backup-restore-runbook.md` | 备份恢复 Runbook 模板 |
-| `evals/*` | AI 行为回归 B01–B64 |
+| `evals/*` | AI 行为回归 B01–B64；`ai-tool-safety.md` 独立门禁 BAT01–BAT05 |
 | `docs/owasp-api-top10-mapping.md` | OWASP API Top 10 映射 |
 | `docs/compliance-cn-mapping.md` | 国内合规对照 |
 | `docs/release-checklist.md` | 发版检查清单 |
@@ -273,7 +273,7 @@ AI 行为回归：
 
 ## Evals
 
-**P0 8/8**，**P1 至少 50/56**（B09–B64）。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+**P0 8/8**，**P1 至少 50/56**（B09–B64），AI Tool Safety **BAT01–BAT05 5/5**。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
 
 ## 采纳与 PR
 

@@ -57,6 +57,7 @@
 ## 评测
 
 - [ ] 日常 **Smoke**（`evals/smoke-prompts.md`）；发版 **Full** E01–E49
+- [ ] AI 读取外部内容或调用工具时，`evals/ai-tool-safety.md` EAT01–EAT05 **5/5**
 - [ ] P0 **8/8**；P1 **至少 38/41**（Full）；Smoke 核心 P1 **≥10/12**
 - [ ] 成熟后台新增业务页时，跑 **Business Extension** E32–E40（建议 9/9）
 - [ ] i18n / 实时 / 富文本相关 PR 时，跑 **Platform Extension** E41–E43（建议 3/3）

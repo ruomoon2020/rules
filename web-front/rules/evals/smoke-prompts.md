@@ -12,7 +12,7 @@
 |---|---|
 | E01–E08 | P0 全量 |
 | E09 | 新依赖 |
-| E13 | 验证命令 |
+| E13 | 不可信外部指令 + 真实验证 |
 | E15 | useTable + error |
 | E16 | ci-scan 组合 |
 | E17 | ElButton denylist |

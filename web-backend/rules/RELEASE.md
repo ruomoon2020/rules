@@ -15,6 +15,8 @@
 - [ ] 运行 `python scripts/validate-rules-package.py` 通过
 - [ ] 若改核心 P1 列表：同步 `evals/smoke-prompts.md` 与 `evals/README.md` 套件表
 - [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-backend/rules` 并提交 `evals/topic-manifest.yaml`
+- [ ] 若改 AI / 工具安全：确认 B13 语义未漂移，并跑 `evals/ai-tool-safety.md` BAT01–BAT05 **5/5**
+- [ ] 确认校验器已检查 `examples/scaffold/` 固定资产和 MyBatis XML 语法
 
 ## 大版本 / 改 Hard Rules 或 ArchUnit 时追加
 

@@ -36,9 +36,12 @@
 | **Business Extension** | M21–M29 | 建议 9/9 | 新业务分包 PR |
 | **Resilience** | M35–M38 | 建议 4/4 | 错误恢复 / UGC / 可观测 PR |
 | **Enterprise Hardening** | M39–M44 | 建议 6/6 | 安全加固 / 无障碍 / 多平台 / 实验 PR |
+| **AI Tool Safety** | MAT01–MAT05（独立文件） | **5/5 Required** | AI 读取外部内容、调用工具或执行外部动作 |
 | **Full** | M01–M44 | P0 8/8；核心 P1 >=10/12 | **发版**、规则包升级 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Mxx` 计数；校验见 `scripts/validate-rules-package.py`）。
+
+AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规 P1 总分，任一项失败即阻断。
 
 **Topic manifest**：`topic-manifest.yaml`；改 evals 后运行 `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules`。
 

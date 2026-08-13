@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.8.0 — 2026-08-14
+
+### Added
+
+- 新增 AI Tool Safety MAT01–MAT05 独立 5/5 门禁及校验器负向测试。
+- 新增 Level 3 平台成熟度，并接入跨端需求、发布、环境晋级与事故治理路由。
+
+### Changed
+
+- package validator 校验 AI Tool Safety 套件和 common-governance 跨包引用。
+
+## 0.7.1 — 2026-08-14
+
+### Changed
+
+- `shared/17-ai-generation.md` 与 Cursor 路由新增不可信内容、提示注入、最小工具权限、发布授权和隐私数据出站约束。
+- M13 改为“外部指令诱导泄露与伪造验证”，validator 锁定该高风险主题。
+- package validator 新增小程序脚手架固定资产与 TypeScript 语法 smoke，并补负向单测。
+- 质量门禁新增 AI 工具调用与真实执行证据检查。
+
 ## 0.7.0 — 2026-08-11
 
 ### Added

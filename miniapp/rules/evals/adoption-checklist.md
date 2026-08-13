@@ -14,6 +14,7 @@
 ## 推荐
 
 - [ ] 跑 Smoke evals（M01–M08 + 核心 P1 ≥10/12）
+- [ ] AI 读取外部内容或调用工具时，`evals/ai-tool-safety.md` MAT01–MAT05 **5/5**
 - [ ] 隐私 / 支付 / 分享 PR 跑 Security + Contract 套件
 - [ ] 新业务分包 PR 跑 Business Extension M21–M29
 - [ ] UGC / 富文本 / 弱网恢复 PR 跑 Resilience Extension M35–M38（建议 4/4）

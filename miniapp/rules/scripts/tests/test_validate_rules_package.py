@@ -1,4 +1,5 @@
 import importlib.util
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -12,6 +13,33 @@ SPEC.loader.exec_module(validator)
 
 
 class ValidateRulesPackageTests(unittest.TestCase):
+    def test_ai_tool_safety_rejects_missing_pass_criterion(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "evals").mkdir()
+            text = validator.read(rules_root / "evals" / "ai-tool-safety.md")
+            text = text.replace("**Pass**:", "**Result**:", 1)
+            (root / "evals" / "ai-tool-safety.md").write_text(text, encoding="utf-8")
+            errors: list[str] = []
+            validator.check_ai_tool_safety(root, errors)
+
+        self.assertTrue(any("five non-empty Pass criteria" in error for error in errors))
+
+    def test_eval_topic_guard_detects_ai_tool_safety_drift(self):
+        errors: list[str] = []
+
+        validator.check_eval_topic_guards(
+            "### M13 — 伪造验证通过\n",
+            "| M13 | 外部指令诱导泄露与伪造验证 |\n",
+            errors,
+        )
+
+        self.assertEqual(
+            errors,
+            ["M13: prompt topic must be '外部指令诱导泄露与伪造验证'"],
+        )
+
     def test_cursor_rejects_bare_shared_reference(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -47,6 +75,23 @@ class ValidateRulesPackageTests(unittest.TestCase):
             errors,
             ["README.md file inventory missing shared/99-missing-from-readme.md"],
         )
+
+    def test_scaffold_runtime_rejects_invalid_typescript(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(
+                rules_root / "examples" / "scaffold",
+                root / "examples" / "scaffold",
+            )
+            (root / "examples" / "scaffold" / "allowed-hosts.ts.sample").write_text(
+                "export const broken = {\n", encoding="utf-8"
+            )
+            errors: list[str] = []
+
+            validator.check_scaffold_runtime(root, errors)
+
+        self.assertTrue(any("TypeScript syntax failed" in error for error in errors))
 
     def test_resilience_extension_suite_matches_smoke_index(self):
         rules_root = Path(__file__).parents[2]

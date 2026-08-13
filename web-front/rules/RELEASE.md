@@ -17,6 +17,7 @@
 - [ ] 运行 `python scripts/validate-rules-package.py` 通过
 - [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`（含 Platform E41–E43、Enterprise Hardening E44–E49）
 - [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-front/rules` 并提交 `evals/topic-manifest.yaml`
+- [ ] 若改 AI / 工具安全：确认 E13 语义未漂移，并跑 `evals/ai-tool-safety.md` EAT01–EAT05 **5/5**
 
 ## 大版本 / 改 ci-scan 或 Hard Rules 时追加
 

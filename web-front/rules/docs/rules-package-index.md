@@ -17,7 +17,7 @@
 | 全栈 Platform Extension | `docs/fullstack-contract.md`；完整版 `web-backend/rules/docs/fullstack-contract.md` §管理端 Platform Extension |
 | 测试 / CI / 发布 | `shared/15-testing.md`、`shared/08-quality-gates.md`、`cursor/08-quality-testing.mdc` |
 | 业务发布 / 回滚 | `docs/release-checklist.md` |
-| AI 生成 | `shared/09-ai-generation.md`、`cursor/21-ai-generation.mdc` |
+| AI 生成 / 外部内容 / 工具调用 | `shared/09-ai-generation.md`、`cursor/21-ai-generation.mdc` |
 | 验证 | `shared/10-verification-checklist.md`、`cursor/07-review-checklist.mdc` |
 | 企业治理（DoD / 豁免 / Owner） | `docs/enterprise-governance.md` → monorepo `docs/` |
 
@@ -25,4 +25,4 @@ Codex 从 `codex/AGENTS.md` 路由；Cursor 从 `cursor/00-project-overview.mdc`
 
 **跨包编号**：各端 `shared/` 编号不等义；全栈任务按文件名路由，见 monorepo `web-backend/rules/docs/fullstack-contract.md` §跨包编号说明。
 
-发版 evals 门槛：P0 8/8；P1 ≥38/41（E01–E49）。
+发版 evals 门槛：P0 8/8；P1 ≥38/41（E01–E49）；AI Tool Safety EAT01–EAT05 **5/5**。

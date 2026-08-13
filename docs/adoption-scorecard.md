@@ -32,6 +32,17 @@
 
 ## 评分维度（按 DoD 门禁拆分）
 
+### 0. 需求与业务评审（所有业务变更）
+
+| 项目 | Level 0 | Level 1 | Level 2 | Level 3 |
+|---|---|---|---|---|
+| 需求 / Issue 与验收条件可追溯 | Required | Required | Required | Required |
+| 工作流、数据、权限、契约和回归人工复核 | Required（按业务变更） | Required | Required | Required |
+| AI 外部内容与工具安全边界 | Required（使用 AI 时） | Required | Required | Required |
+| AI Tool Safety 独立评测 | Required（使用 AI 工具时） | 5/5 | 5/5 | 5/5 |
+
+证据字段建议：PR 需求追踪矩阵、关键业务测试名、Reviewer 结论，以及外部写入 / 数据出站审批（若有）。
+
 ### A. 代码门禁（DoD 第 1 道）
 | 项目 | Level 0 | Level 1 | Level 2 | Level 3 |
 |---|---|---|---|---|
@@ -111,11 +122,15 @@
 | 回滚机制可用（至少一键可回退） | Required | Required | Required | Required |
 | 灰度/金丝雀（按风险域） | Optional | Required（按项目） | Required | Required |
 | 发版后 24h 观察与复盘链路 | Optional | Required（按端） | Required | Required |
+| 结构化 `release-evidence.yaml` | Optional | Optional | Required | Required |
+| 不可变产物与环境晋级证据 | Optional | Optional | Required（生产） | Required |
+| 事故响应演练与行动项闭环 | Optional | Optional | Required（高风险系统） | Required |
 
 证据字段建议：
 - 发布清单/Release Note + 回滚步骤
 - 灰度策略与验证证据
 - 发版观察记录（至少 24h）
+- `validate-release-evidence.py` 通过记录与归档文件
 
 ---
 
@@ -126,4 +141,3 @@
    - 能补：给出 Owner + 截止时间
    - 必须跳过：创建豁免单，填到 [`docs/rule-exception-process.md`](rule-exception-process.md)
 4. 输出评分卡 PDF/链接（可直接作为业务接入推进材料）
-

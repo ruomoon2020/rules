@@ -16,6 +16,13 @@ PACKAGE = ROOT / "common-governance"
 SOURCE_DOCS = ROOT / "docs"
 TARGET_DOCS = PACKAGE / "docs"
 DOCS = (
+    "requirements-traceability.md",
+    "business-correctness-review.md",
+    "ai-tool-security.md",
+    "release-evidence.md",
+    "environment-promotion.md",
+    "incident-response.md",
+    "incident-postmortem-template.md",
     "definition-of-done.md",
     "rule-exception-process.md",
     "codeowners-matrix.md",
@@ -41,7 +48,11 @@ STATIC_PACKAGE_FILES = (
 )
 GENERATED_FILES = {
     "scripts/check-project-adoption.py": ROOT / "scripts" / "check-project-adoption.py",
+    "scripts/validate-release-evidence.py": ROOT / "scripts" / "validate-release-evidence.py",
+    "examples/release-evidence.yaml": ROOT / "examples" / "release-evidence.yaml",
     "examples/ci/supply-chain-required.yml": ROOT / "examples" / "ci" / "supply-chain-required.yml",
+    "examples/ci/rules-adoption-required.yml": ROOT / "examples" / "ci" / "rules-adoption-required.yml",
+    "examples/governance-adoption.yaml": ROOT / "examples" / "governance-adoption.yaml",
 }
 
 

@@ -7,6 +7,13 @@
 | 文档 | 用途 |
 |---|---|
 | [`project-adoption-guide.md`](project-adoption-guide.md) | **业务项目接入总指南**（全栈 monorepo / 分仓 / 单端） |
+| [`requirements-traceability.md`](requirements-traceability.md) | 需求 / Issue → 验收条件 → 实现 → 测试 → 发布证据追踪 |
+| [`business-correctness-review.md`](business-correctness-review.md) | 业务流程、数据、权限、契约与回归评审基线 |
+| [`ai-tool-security.md`](ai-tool-security.md) | 提示注入、不可信内容、工具权限与数据出站边界 |
+| [`release-evidence.md`](release-evidence.md) | 可机器校验的发布证据规范 |
+| [`environment-promotion.md`](environment-promotion.md) | Dev/Test/Staging/Production 晋级、配置漂移与回滚治理 |
+| [`incident-response.md`](incident-response.md) | 跨端事故分级、响应、沟通与证据保全 |
+| [`incident-postmortem-template.md`](incident-postmortem-template.md) | 无责复盘与行动项模板 |
 | [`definition-of-done.md`](definition-of-done.md) | 跨端 DoD（代码 / 契约 / 安全 / 数据 / 可观测 / 发布） |
 | [`rule-exception-process.md`](rule-exception-process.md) | 例外与豁免流程 |
 | [`codeowners-matrix.md`](codeowners-matrix.md) | 按变更类型的 Review 矩阵 |
@@ -27,8 +34,10 @@
 | 脚本 | 用途 |
 |---|---|
 | [`scripts/check-project-adoption.py`](../scripts/check-project-adoption.py) | 业务仓接入验收 |
+| [`scripts/validate-release-evidence.py`](../scripts/validate-release-evidence.py) | 发布证据 YAML 校验 |
 | [`common-governance/examples/ci/supply-chain-required.yml`](../common-governance/examples/ci/supply-chain-required.yml) | 可分发供应链 Required CI（npm/pnpm audit + Maven/Gradle OWASP） |
 | [`common-governance/examples/ci/credential-scan-required.yml`](../common-governance/examples/ci/credential-scan-required.yml) | 凭据泄露扫描 Required CI 样板 |
+| [`common-governance/examples/ci/rules-adoption-required.yml`](../common-governance/examples/ci/rules-adoption-required.yml) | 规则采纳 Level 2 Required CI 样板 |
 
 ## 业务仓最小落地
 
@@ -36,7 +45,7 @@
 # 从 code-rules 发布物复制 common-governance/ 到业务仓根
 
 # 接入验收
-python common-governance/scripts/check-project-adoption.py --repo . --stack frontend --strict --require-governance
+python common-governance/scripts/check-project-adoption.py --repo . --stack frontend --level 2
 ```
 
 各规则包内链：`web-*/rules/docs/enterprise-governance.md`。

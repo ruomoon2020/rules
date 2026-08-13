@@ -24,6 +24,7 @@
 | 任务 | 必读规则 |
 |---|---|
 | 任意后端改动 | `rules/codex/01-before-editing.md`、`rules/shared/00-must-follow.md` |
+| 需求分析 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
 | 写 API / Controller / DTO | `rules/shared/04-rest-api-design.md`、`rules/shared/05-openapi-contract.md`、`rules/shared/08-exception-errorcodes.md`、`rules/shared/12-dto-mapping.md`、`rules/shared/13-validation.md`、`rules/shared/19-pagination-query.md`、`rules/codex/02-api-implementation.md` |
 | 写持久化 / SQL / 多库 | `rules/shared/07-persistence-mybatis.md`、`rules/shared/19-pagination-query.md`、`rules/docs/sql-dialect-matrix.md`、`rules/codex/03-domain-persistence.md` |
 | 成熟后台二开 / CRUD / CodeGen / 菜单 / 树表 / 主子表 | `rules/shared/43-business-module-extension.md`、`rules/docs/business-feature-playbook.md`、`rules/shared/06-security-authz.md`、`rules/shared/14-file-import-export.md`、`rules/shared/24-data-access-cache.md`、`rules/shared/25-jobs-scheduling.md`、`rules/shared/27-audit-log.md` |
@@ -31,8 +32,9 @@
 | 集成 / 异步 / Job / MQ / Webhook | `rules/shared/17-messaging-async.md`、`rules/shared/18-idempotency-concurrency.md`、`rules/shared/25-jobs-scheduling.md`、`rules/shared/28-external-integration.md`、`rules/shared/37-service-to-service-auth.md`、`rules/shared/39-event-contracts.md` |
 | 平台 / 公共层 / framework / system / generator | `rules/shared/30-ownership-adr.md`、`rules/shared/43-business-module-extension.md`、`rules/docs/adr/0000-template.md` |
 | 测试 / 性能 / CI / 依赖 / 配置 | `rules/shared/15-testing.md`、`rules/shared/16-performance.md`、`rules/shared/20-dependency-governance.md`、`rules/shared/21-configuration-secrets.md`、`rules/shared/23-quality-gates.md` |
-| 发版 / 可靠性 / 运维 / 合规 | `rules/shared/22-operability.md`、`rules/shared/31-production-data-ops.md`、`rules/shared/32-service-reliability.md`、`rules/docs/release-checklist.md`、`rules/docs/incident-postmortem-template.md`、`rules/docs/owasp-api-top10-mapping.md`、`rules/docs/compliance-cn-mapping.md` |
-| AI 生成复杂后端代码 | `rules/shared/26-ai-generation.md` |
+| 发版 / 可靠性 / 运维 / 合规 | `rules/shared/22-operability.md`、`rules/shared/31-production-data-ops.md`、`rules/shared/32-service-reliability.md`、`rules/docs/release-checklist.md`、`common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md`、`rules/docs/owasp-api-top10-mapping.md`、`rules/docs/compliance-cn-mapping.md` |
+| 生产事故 / 安全事件 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
+| AI 生成复杂后端代码；读取网页 / Issue / 日志；调用外部工具 | `rules/shared/26-ai-generation.md` |
 | 收尾 / Review | `rules/shared/10-verification-checklist.md`、`rules/codex/05-verification.md` |
 
 - 不要读 `rules/cursor/*.mdc`（仅供 Cursor）。

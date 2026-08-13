@@ -211,7 +211,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `shared/06-state-route-permission.md` | 路由 / Store / 权限 | 路由、登录、权限 |
 | `shared/07-security-performance.md` | 安全 / a11y / 性能 | 安全、体验、性能相关 |
 | `shared/08-quality-gates.md` | 测试 / CI / 发布 | 提测、发布 |
-| `shared/09-ai-generation.md` | AI 行为约束 | AI 生成代码 |
+| `shared/09-ai-generation.md` | AI 生成、不可信内容与工具安全约束 | AI 生成代码、读取外部内容或调用工具 |
 | `shared/10-verification-checklist.md` | 完成前检查 | 收尾 |
 | `shared/11-base-components-context.md` | Base 组件锚定 | 写 `views` 前 |
 | `shared/12-schema-ssot.md` | Schema 锚定 | 写字段 / API 前 |
@@ -237,6 +237,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `codex/05-verification.md` | Codex 验证说明 | 收尾 |
 | `cursor/*.mdc` | Cursor 触发摘要 | 按 glob 自动 |
 | `evals/prompts.md` | AI 规则回归提示词 | 发版前 / 季度 |
+| `evals/ai-tool-safety.md` | AI 工具安全独立门禁 EAT01–EAT05（5/5） | AI 读取外部内容或调用工具 |
 | `evals/smoke-prompts.md` | 回归套件索引（不计提示词正文） | 日常 Smoke |
 | `evals/adoption-checklist.md` | 业务仓落地勾选 | 新项目 onboarding |
 | `scripts/validate-rules-package.py` | 规则包一致性校验 | 发版前 |
@@ -263,7 +264,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 
 发版或大改 `shared/` 后，在测试仓库执行 `evals/prompts.md` 中 **E01–E49**，按 `evals/rubric.md` 记分，结果记入 `evals/results-YYYY-MM-DD.md`（由 `results-template.md` 复制）。
 
-通过门槛：**P0 8/8 Pass**，**P1 至少 38/41 Pass**。日常 Smoke、成熟后台 Business E32–E40、i18n/实时/富文本 Platform E41–E43、受监管 Web Enterprise Hardening E44–E49、发版 Full（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+通过门槛：**P0 8/8 Pass**，**P1 至少 38/41 Pass**，AI Tool Safety **EAT01–EAT05 5/5**。日常 Smoke、成熟后台 Business E32–E40、i18n/实时/富文本 Platform E41–E43、受监管 Web Enterprise Hardening E44–E49、发版 Full（见 `evals/README.md`、`evals/smoke-prompts.md`）。
 
 维护者发版前运行 `python scripts/validate-rules-package.py`；本 monorepo 见 `.github/workflows/validate-rules-packages.yml`。
 

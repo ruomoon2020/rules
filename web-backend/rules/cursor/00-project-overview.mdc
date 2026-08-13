@@ -12,6 +12,9 @@ Spring Boot 3.x + Java 17+ + MyBatis-Plus + MySQL/PostgreSQL。Spring Boot 4.x �
 - 全栈契约：`rules/docs/fullstack-contract.md`
 - Evals：P0 8/8，P1 ≥50/56（B09–B64）；日常 Smoke、发版 Full（见 `evals/README.md`）
 - 采纳分层：`rules/docs/rule-maturity-model.md`
-- Cursor 路由：改业务模块看 `35-business-module-extension.mdc`；改 `common/system/generator` 看 `36-platform-boundary.mdc`；测试/性能/运维/AI 生成见 `codex/AGENTS.md` 任务表（`shared/15`、`16`、`22`、`26`），无独立 cursor 触发时按 AGENTS 追加阅读。
+- Cursor 路由：改业务模块看 `35-business-module-extension.mdc`；改 `common/system/generator` 看 `36-platform-boundary.mdc`；测试/性能/运维/AI 生成见 `codex/AGENTS.md` 任务表（`shared/15`、`16`、`22`、`26`）。AI 处理网页、Issue、日志或工具输出时必须追加读取 `shared/26-ai-generation.md` 的不可信内容与工具安全要求。
+- 需求 / 业务 PR / 缺陷修复：读取 `common-governance/docs/requirements-traceability.md` 与 `common-governance/docs/business-correctness-review.md`。
+- 生产发布 / 灰度 / 回滚：读取 `common-governance/docs/environment-promotion.md` 与 `common-governance/docs/release-evidence.md`。
+- 生产事故 / 安全事件 / 复盘：读取 `common-governance/docs/incident-response.md` 与 `common-governance/docs/incident-postmortem-template.md`。
 
 须能访问完整 `rules/` 目录。持久化见 shared `07`；可靠性见 `32`；安全高阶治理见 shared `35`–`42`（非 cursor/35 业务扩展）；业务扩展见 shared `43`；CI 样板须按项目裁剪（见 `examples/README.md`）。

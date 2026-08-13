@@ -19,7 +19,7 @@
 | 14 | `14-payment-subscribe-share.md` | 支付 / 订阅 / 分享 |
 | 15 | `15-logging-observability.md` | 日志 / 埋点 |
 | 16 | `16-testing-quality-gates.md` | 测试与 CI |
-| 17 | `17-ai-generation.md` | AI 生成约束 |
+| 17 | `17-ai-generation.md` | AI 生成、不可信内容与工具安全约束 |
 | 18 | `18-business-module-extension.md` | 新业务分包二开 |
 | 19 | `19-release-ops.md` | 发版 / 环境隔离 |
 | 20 | `20-app-runtime.md` | App 级生命周期 |
@@ -31,5 +31,7 @@
 | 26 | `26-security-hardening-risk.md` | 安全加固 / 风控 / 实验 |
 
 文档：`docs/observability-metrics.md`、`docs/owasp-miniapp-mapping.md`、`docs/fullstack-contract.md`（含与管理端 E41–E43 边界说明）、`docs/enterprise-governance.md`（DoD / 豁免 / 接入验收）。
+
+Evals：M01–M44；核心 P1 ≥10/12；AI Tool Safety MAT01–MAT05 独立 **5/5**，见 `evals/README.md` 与 `evals/ai-tool-safety.md`。
 
 Codex：`codex/AGENTS.md`。Cursor：`cursor/*.mdc`。

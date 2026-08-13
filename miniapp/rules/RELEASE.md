@@ -17,6 +17,8 @@
 - [ ] 核对 `examples/README.md` 与脚手架/脚本样板一致
 - [ ] 若改核心 P1 / 套件：同步 `evals/smoke-prompts.md` 与 `evals/README.md`
 - [ ] 改 eval 主题后：运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir miniapp/rules` 并提交 `evals/topic-manifest.yaml`
+- [ ] 若改 AI / 工具安全：确认 M13 语义未漂移，并跑 `evals/ai-tool-safety.md` MAT01–MAT05 **5/5**
+- [ ] 确认 `tsc` 可用；校验器已执行 `examples/scaffold/` TypeScript 语法 smoke
 
 ## 大版本 / 改 Hard Rules 时追加
 

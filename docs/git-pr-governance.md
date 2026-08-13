@@ -22,7 +22,7 @@
 ## 分支与 Pull Request
 
 1. 受保护分支禁止直接推送；通过 PR、Required Checks 和 CODEOWNERS 合并。
-2. PR 描述必须包含范围、需求 / Issue、风险、验证证据、跳过项和回滚方式。
+2. PR 描述必须包含范围、需求 / Issue、逐条验收条件、风险、验证证据、跳过项和回滚方式；业务变更按 `requirements-traceability.md` 建立追踪矩阵。
 3. 契约、数据库、安全、CI 和规则包变更按 `codeowners-matrix.md` 请求 Reviewer。
 4. 跳过门禁或紧急合并必须走 `rule-exception-process.md`，记录 Owner、期限和补偿控制。
 5. 合并策略由项目统一选择；禁止因个人偏好在同一仓库混用不可追溯策略。
@@ -34,4 +34,4 @@
 - 不使用 Node.js 的仓库可以采用平台原生规则校验 PR 标题，无需为了 commitlint 引入 Node 工具链。
 - 自动生成 changelog 时，release 仍须由 Owner 审阅 breaking change 和回滚信息。
 
-落地时同时配置 `branch-protection.md`、`codeowners-matrix.md` 和业务仓 PR 模板。
+落地时同时配置 `branch-protection.md`、`codeowners-matrix.md` 和业务仓 PR 模板。生产发布按 `release-evidence.md` 生成结构化证据。

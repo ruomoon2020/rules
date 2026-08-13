@@ -7,7 +7,7 @@
 | [web-front/rules/](web-front/rules/README.md) | Vue 3 + TypeScript + Element Plus | 前端规则包 |
 | [web-backend/rules/](web-backend/rules/README.md) | Spring Boot 3 + MyBatis-Plus + 多数据库 | 后端规则包 |
 | [miniapp/rules/](miniapp/rules/README.md) | Vue 3 + TypeScript + uni-app + Vite | 小程序规则包 |
-| [common-governance/](common-governance/README.md) | 技术栈无关 | DoD、豁免、Owner、供应链、数据分级、Git / PR 治理发布包 |
+| [common-governance/](common-governance/README.md) | 技术栈无关 | DoD、需求追踪、业务评审、AI 工具安全、环境晋级、事故响应、发布证据与组织治理发布包 |
 
 ## 这些 README 怎么看
 
@@ -91,6 +91,7 @@ backend-repo/
 2. 各端最小安全硬规则仍保留在对应 `rules/shared/00-must-follow.md`，不依赖通用包加载。
 3. 业务仓 CI 运行 `python common-governance/scripts/validate-package.py`，并使用包内 `scripts/check-project-adoption.py --require-governance` 验收规则与治理接入。
 4. 严格接入运行 `check-project-adoption.py --require-governance`。
+5. 按成熟度接入优先使用 `--level 0..3`；Level 2 会自动要求完整治理包、严格 Review 资产和真实控制证据，Level 3 再要求平台治理 Scorecard 与已完成证据项。
 5. 从包内 `examples/ci/` 复制凭据扫描和供应链 Required workflows；Node 供应链样板要求恰好一个 pnpm/npm 锁文件。
 
 根 `docs/` 是维护 SSOT；`common-governance/docs/` 由同步脚本生成，禁止手工双写。
@@ -222,12 +223,14 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | [`docs/adr/0001-rules-governance-baseline.md`](docs/adr/0001-rules-governance-baseline.md) | 根级治理原则基线（ADR） |
 | [`SECURITY.md`](SECURITY.md) | 安全策略与漏洞报告入口（含 SLA / secret 泄露处置） |
 | [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) | **业务仓**接入验收（AGENTS、rules、cursor、契约） |
+| [`scripts/validate-release-evidence.py`](scripts/validate-release-evidence.py) | 生产发布证据 YAML 校验 |
 | [`scripts/generate-eval-topic-manifest.py`](scripts/generate-eval-topic-manifest.py) | Eval 全量 topic manifest（防 prompts/rubric drift） |
 
 业务仓落地后建议：
 
 ```bash
 python scripts/check-project-adoption.py --repo /path/to/your-app --stack frontend --strict
+python scripts/check-project-adoption.py --repo /path/to/your-app --stack frontend --level 2
 ```
 
 ## 验证与 CI

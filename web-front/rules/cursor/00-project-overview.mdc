@@ -18,6 +18,7 @@ alwaysApply: true
 
 | 场景 | Cursor |
 |---|---|
+| 需求 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
 | 成熟后台业务页 | `18-business-module-extension.mdc` |
 | 改 layout / router / store / base | `19-platform-boundary.mdc` |
 | 表单 / 详情 | `20-form-detail.mdc` |
@@ -26,6 +27,8 @@ alwaysApply: true
 | i18n / 金额 / 时区 | `22-i18n-locale.mdc` |
 | WebSocket / 富文本 | `23-realtime-rich-content.mdc` |
 | 测试 / CI | `08-quality-testing.mdc` |
+| 生产发布 / 灰度 / 回滚 | `common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md` |
+| 生产事故 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
 | 列表 / schema / Base | `10` / `11` / `13`；路由权限见 `06` 相关规则 |
 
 ## 落地要求

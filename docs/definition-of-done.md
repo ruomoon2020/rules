@@ -11,6 +11,8 @@
 | 含 DB 变更 PR | 上述 + 数据 |
 | 发版 / 灰度 | 全部 + 可观测 + 发布 |
 
+所有业务行为变更还须按 [`requirements-traceability.md`](requirements-traceability.md) 建立需求、验收条件、实现与验证证据链，并按 [`business-correctness-review.md`](business-correctness-review.md) 完成人工业务评审。
+
 豁免见 [`rule-exception-process.md`](rule-exception-process.md)。
 
 ---
@@ -89,6 +91,9 @@
 | 回滚 | 上一版本镜像 / 配置可一键回退 |
 | Owner 签字 | 发布清单 `release-checklist`（后端）+ 各端 smoke |
 | Evals（规则驱动团队） | 发版前跑 Full / Smoke（见各包 `evals/README.md`） |
+| 发布证据 | 按 [`release-evidence.md`](release-evidence.md) 生成并校验 `release-evidence.yaml` |
+| 环境晋级 | 同一不可变产物按 [`environment-promotion.md`](environment-promotion.md) 晋级，配置漂移、灰度与回滚有证据 |
+| 事故准备 | 值班、升级和证据路径明确；高风险发布可按 [`incident-response.md`](incident-response.md) 响应并使用复盘模板 |
 
 ---
 
@@ -102,11 +107,19 @@
 - [ ] 若改 DB：migration + 回滚已附
 - [ ] traceId / 关键指标 / 告警已确认
 - [ ] 回滚方案与 Owner 已写明
+- [ ] 需求追踪矩阵完整，关键业务场景已完成人工评审
+- [ ] `release-evidence.yaml` 已通过校验（生产发布）
 
 ## 相关文档
 
 | 文档 | 用途 |
 |---|---|
+| [`requirements-traceability.md`](requirements-traceability.md) | 需求与验收证据链 |
+| [`business-correctness-review.md`](business-correctness-review.md) | 业务正确性评审 |
+| [`release-evidence.md`](release-evidence.md) | 结构化发布证据 |
+| [`environment-promotion.md`](environment-promotion.md) | 环境晋级与生产变更 |
+| [`incident-response.md`](incident-response.md) | 事故响应 |
+| [`incident-postmortem-template.md`](incident-postmortem-template.md) | 事故复盘模板 |
 | [`rule-exception-process.md`](rule-exception-process.md) | 豁免流程 |
 | [`codeowners-matrix.md`](codeowners-matrix.md) | Review 矩阵 |
 | [`supply-chain-baseline.md`](supply-chain-baseline.md) | 依赖强制基线 |

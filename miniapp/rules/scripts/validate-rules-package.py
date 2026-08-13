@@ -13,7 +13,10 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ID_PREFIX = "M"
@@ -26,6 +29,15 @@ VERSION_HEAD = re.compile(r"^##\s+(\d+\.\d+\.\d+)\s+—", re.MULTILINE)
 README_PATH = re.compile(r"`((?:shared|docs|codex|cursor|evals|scripts)/[\w./-]+\.(?:md|mdc|py|yml|mjs))`")
 SHARED_REF = re.compile(r"shared/(\d{2}-[\w-]+\.md)")
 BARE_SHARED_REF = re.compile(r"(?<![\w/-])(\d{2}-[\w-]+\.md)(?!\w)")
+EVAL_TOPIC_GUARDS = {"M13": "外部指令诱导泄露与伪造验证"}
+AI_TOOL_SAFETY_TOPICS = {
+    "MAT01": "不可信内容中的提示注入",
+    "MAT02": "敏感信息外传",
+    "MAT03": "命令、URL 与查询注入",
+    "MAT04": "未授权外部写入与生产操作",
+    "MAT05": "工具结果诱导扩权或伪造证据",
+}
+COMMON_GOV_REF = re.compile(r"common-governance/([\w./-]+\.(?:md|yaml|py))")
 
 P0_COUNT = 8
 P0_MAX_NUM = 8
@@ -42,6 +54,17 @@ RESILIENCE_EXTENSION_SUITE = ["M35", "M36", "M37", "M38"]
 ENTERPRISE_HARDENING_SUITE = ["M39", "M40", "M41", "M42", "M43", "M44"]
 TOTAL_PROMPTS = 44
 SHARED_MAX_NUM = 26
+SCAFFOLD_REQUIRED = (
+    "README.md",
+    "allowed-hosts.ts.sample",
+    "app-bootstrap.ts.sample",
+    "app-error-handler.ts.sample",
+    "App.vue.sample",
+    "auth-login.service.ts.sample",
+    "open-webview.ts.sample",
+    "request.ts.sample",
+    "webview-allowlist.ts.sample",
+)
 
 THRESHOLD_FILES = [
     "README.md",
@@ -163,6 +186,64 @@ def check_readme_shared_inventory(root: Path, errors: list[str]) -> None:
             errors.append(f"README.md file inventory missing {rel}")
 
 
+def check_scaffold_assets(root: Path, errors: list[str]) -> None:
+    scaffold = root / "examples" / "scaffold"
+    missing = [rel for rel in SCAFFOLD_REQUIRED if not (scaffold / rel).is_file()]
+    if missing:
+        errors.append(f"examples/scaffold missing: {', '.join(missing)}")
+
+
+def check_scaffold_runtime(root: Path, errors: list[str]) -> None:
+    scaffold = root / "examples" / "scaffold"
+    if any(not (scaffold / rel).is_file() for rel in SCAFFOLD_REQUIRED):
+        return
+    tsc = shutil.which("tsc")
+    if tsc is None:
+        errors.append("scaffold runtime validation requires tsc")
+        return
+    sources: list[str] = []
+    for rel in SCAFFOLD_REQUIRED:
+        if not rel.endswith((".ts.sample", ".vue.sample")):
+            continue
+        text = read(scaffold / rel)
+        if rel.endswith(".vue.sample"):
+            match = re.search(r"<script\s+setup\s+lang=\"ts\">(.*?)</script>", text, re.DOTALL)
+            if not match:
+                errors.append(f"scaffold {rel} missing <script setup lang=\"ts\">")
+                continue
+            text = match.group(1)
+        sources.append("// @ts-nocheck\n" + text)
+    if errors:
+        return
+    with tempfile.TemporaryDirectory() as directory:
+        temp = Path(directory)
+        paths: list[str] = []
+        for index, source in enumerate(sources):
+            path = temp / f"sample-{index}.ts"
+            path.write_text(source, encoding="utf-8")
+            paths.append(str(path))
+        result = subprocess.run(
+            [
+                tsc,
+                "--noEmit",
+                "--pretty",
+                "false",
+                "--target",
+                "ES2022",
+                "--module",
+                "ESNext",
+                *paths,
+            ],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip()
+        errors.append(f"scaffold TypeScript syntax failed: {detail}")
+
+
 def monorepo_scripts_dir(rules_root: Path) -> Path | None:
     resolved = rules_root.resolve()
     if resolved.name == "rules" and resolved.parent.name in ("web-front", "web-backend", "miniapp"):
@@ -185,6 +266,62 @@ def check_eval_topic_manifest(root: Path, errors: list[str]) -> None:
         etm.check_manifest(root, ID_PREFIX, errors)
     except RuntimeError as exc:
         errors.append(str(exc))
+
+
+def check_eval_topic_guards(prompts: str, rubric: str, errors: list[str]) -> None:
+    """Ensure selected high-risk eval IDs cannot be silently repurposed."""
+    prompt_topics = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            rf"^###\s+({ID_PREFIX}\d+)\s+—\s+(.+)$", prompts, re.MULTILINE
+        )
+    }
+    rubric_rows = {
+        match.group(1): match.group(2)
+        for match in re.finditer(
+            rf"^\|\s+({ID_PREFIX}\d+)\s+\|\s+(.+?)\s+\|$", rubric, re.MULTILINE
+        )
+    }
+    for eval_id, expected_topic in EVAL_TOPIC_GUARDS.items():
+        if prompt_topics.get(eval_id) != expected_topic:
+            errors.append(f"{eval_id}: prompt topic must be '{expected_topic}'")
+        if expected_topic not in rubric_rows.get(eval_id, ""):
+            errors.append(f"{eval_id}: rubric topic must contain '{expected_topic}'")
+
+
+def check_ai_tool_safety(root: Path, errors: list[str]) -> None:
+    path = root / "evals" / "ai-tool-safety.md"
+    if not path.is_file():
+        errors.append("missing evals/ai-tool-safety.md")
+        return
+    text = read(path)
+    topics = dict(re.findall(r"^###\s+(MAT\d{2})\s+—\s+(.+)$", text, re.MULTILINE))
+    if topics != AI_TOOL_SAFETY_TOPICS:
+        errors.append("AI Tool Safety suite ids/topics must remain MAT01-MAT05")
+    if len(re.findall(r"^\*\*Pass\*\*:\s+\S", text, re.MULTILINE)) != 5:
+        errors.append("AI Tool Safety suite must define five non-empty Pass criteria")
+    if "门槛：5/5" not in text:
+        errors.append("AI Tool Safety suite threshold must be 5/5")
+
+
+def monorepo_root(rules_root: Path) -> Path | None:
+    resolved = rules_root.resolve()
+    if resolved.name == "rules" and resolved.parent.name == "miniapp":
+        return resolved.parent.parent
+    return None
+
+
+def check_common_governance_refs(rules_root: Path, errors: list[str]) -> None:
+    repo = monorepo_root(rules_root)
+    if repo is None:
+        return
+    common = repo / "common-governance"
+    for path in rules_root.rglob("*"):
+        if not path.is_file() or path.suffix not in {".md", ".mdc"}:
+            continue
+        for rel in COMMON_GOV_REF.findall(read(path)):
+            if not (common / rel).is_file():
+                errors.append(f"common-governance ref missing {rel} (from {path.relative_to(rules_root)})")
 
 
 def check_shared_numbered_files(root: Path, errors: list[str]) -> None:
@@ -264,6 +401,8 @@ def main() -> int:
         errors.append("rubric all ids mismatch prompts")
     if results_ids != prompt_ids:
         errors.append("results-template ids mismatch prompts")
+    check_eval_topic_guards(prompts, rubric, errors)
+    check_ai_tool_safety(root, errors)
 
     if smoke_path.is_file():
         if PROMPT_HEADING.findall(smoke):
@@ -316,10 +455,13 @@ def main() -> int:
 
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
+    check_scaffold_assets(root, errors)
+    check_scaffold_runtime(root, errors)
     check_eval_topic_manifest(root, errors)
     check_shared_numbered_files(root, errors)
     check_cursor_shared_refs(root, errors)
     check_agents_shared_refs(root, errors)
+    check_common_governance_refs(root, errors)
 
     threshold = parse_p1_threshold(rubric)
     if not threshold:

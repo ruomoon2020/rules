@@ -10,5 +10,5 @@ alwaysApply: false
 - Stack: frontend
 - Rules path: `rules/`
 - Source path: `src/`
-- Contract path: optional for this fixture
-- Adoption level: strict fixture baseline
+- Contract path: `contracts/openapi.yaml`
+- Adoption level: 3
