@@ -11,9 +11,11 @@
 | **3. 安全** | 鉴权 / 输入 / secret scan | + dependency audit；PII 脱敏（`29`） | + 威胁建模；越权测试；供应链 Required | + 密评映射；服务间认证 |
 | **4. 数据** | migration validate（若改库） | + 生产数据操作工单（`31`） | + 备份演练；归档策略 | + 冷热分层 / 大规模归档 |
 | **5. 可观测** | traceId；无敏感日志 | + 指标 / 错误率观察 | + SLO / 告警 Owner（[`slo-alerting-template.md`](slo-alerting-template.md)） | + 成本 / 容量治理 |
-| **6. 发布** | PR 说明 + 可回滚 | + release-checklist 核心项 | + 结构化发布证据、灰度与事故响应 | + 不可变产物多环境晋级、演练与跨项目治理 |
+| **6. 发布** | PR 说明 + 可回滚 | + release-checklist 核心项 | + 结构化发布证据、SBOM / attestation、灰度与事故响应 | + 不可变产物多环境晋级、演练与跨项目治理 |
 
-所有 Level 的业务变更都要求需求与验收条件可追溯；Level 2 起生产发布须归档通过校验的 `release-evidence.yaml` 并遵守 [`environment-promotion.md`](environment-promotion.md)；生产事故按 [`incident-response.md`](incident-response.md) 留痕和复盘。使用 AI 读取外部内容或调用工具时，各 Level 均须遵守 [`ai-tool-security.md`](ai-tool-security.md)，并通过各端 AI Tool Safety **5/5** 独立门禁。
+所有 Level 的业务变更都要求需求与验收条件可追溯；Level 2 起生产发布须归档通过校验的 `release-evidence.yaml` 并遵守 [`environment-promotion.md`](environment-promotion.md)，同时提交 90 天内的平台控制快照。生产事故按 [`incident-response.md`](incident-response.md) 留痕和复盘。使用 AI 读取外部内容或调用工具时，各 Level 均须遵守 [`ai-tool-security.md`](ai-tool-security.md) 的行为边界；**AI Tool Safety 5/5 套件**是发版、规则包升级与高风险 AI 变更的条件门禁（见控制目录 `CR-AI-001`），不是业务仓 Level 0 采纳检查。结果由 `validate-ai-eval-results.py` 校验并绑定套件摘要。
+
+Level 2 的平台快照须记录组织 MFA、最小默认权限、主干保护和生产非自审配置；仓内脚本只校验快照结构，发布负责人还须核对平台当前状态。外部标准与内部控制的版本化映射见 [`control-catalog.yaml`](control-catalog.yaml)；映射用于审计追踪，不代表仅凭规则包即可获得标准认证。
 
 **金融 / 政务**：在 Level 1 基础上，Level 2 前须完成 `27`/`29`/`15` 越权与留存，并启用 [`compliance-evidence-log.md`](compliance-evidence-log.md) 留痕。
 
@@ -23,10 +25,10 @@
 
 | Level | DoD 最低集 | CI 样板 | Evals |
 |---|---|---|---|
-| **0** | 1–2 全绿；3 secret scan | `backend-ci-required.yml` | P0 B01–B08 |
+| **0** | 1–2 全绿；3 secret scan；使用 AI 时遵守工具安全行为边界 | `backend-ci-required.yml` | P0 B01–B08 |
 | **1** | + 3 audit；5 traceId；PR 模板 | + `supply-chain-required.yml` | Smoke ≥17/20 |
-| **2** | 1–6 核心项；数据 / 发版清单 | + `backend-ci-optional.yml`（Maven）或 `backend-ci-optional-gradle.yml`（Gradle） | Security + Business B55–B63；发版 Full |
-| **3** | + SBOM / 镜像扫描 / 事件契约 | 自定义平台 workflow | Full + Contract |
+| **2** | 1–6 核心项；数据 / 发版清单；SBOM / attestation；发版时 AI 5/5（若本变更使用 AI） | + `backend-ci-optional.yml`（Maven）或 `backend-ci-optional-gradle.yml`（Gradle）+ `artifact-trust-required.yml` | Security + Business B55–B63；发版 Full |
+| **3** | + 镜像扫描 / 事件契约 / 跨项目 Scorecard | 自定义平台 workflow | Full + Contract |
 
 详见 `web-backend/rules/docs/rule-maturity-model.md`。
 
@@ -36,9 +38,9 @@
 
 | Level | DoD 最低集 | CI 样板 | Evals |
 |---|---|---|---|
-| **0** | 1 全绿；2 schema 一致 | lint + `lint:views-el` | P0 E01–E08 |
+| **0** | 1 全绿；2 schema 一致；使用 AI 时遵守工具安全行为边界 | lint + `lint:views-el` | P0 E01–E08 |
 | **1** | + 3；5 日志脱敏 | + `api:check` | Smoke 核心 P1 ≥10/12 |
-| **2** | + 4–6；性能预算 | + `supply-chain-required.yml` | Full P1 ≥38/41；业务 E32–E40；受监管 E44–E49 |
+| **2** | + 4–6；性能预算；SBOM / attestation；发版时 AI 5/5（若本变更使用 AI） | + `supply-chain-required.yml` + `artifact-trust-required.yml` | Full P1 ≥38/41；业务 E32–E40；受监管 E44–E49 |
 | **3** | + RUM / 看板 / 季度演练 | 自定义 | Full + Platform E41–E43 + Enterprise Hardening E44–E49（若适用） |
 
 i18n / 实时 / 富文本 PR 另跑 **Platform Extension** E41–E43（Level 2 起建议 Required）。
@@ -52,10 +54,10 @@ i18n / 实时 / 富文本 PR 另跑 **Platform Extension** E41–E43（Level 2 �
 
 | Level | DoD 最低集 | CI 样板 | Evals |
 |---|---|---|---|
-| **0** | 1 全绿；request 封装 | lint + build:mp-weixin | P0 M01–M08 |
+| **0** | 1 全绿；request 封装；使用 AI 时遵守工具安全行为边界 | lint + build:mp-weixin | P0 M01–M08 |
 | **1** | + 2 api:check；+ size:check | + api:check | Smoke 核心 P1 ≥10/12 |
-| **2** | + 3 隐私；5 指标；6 发版 | + audit；Resilience 套件 | Full M01–M38；M35–M38 |
-| **3** | 多平台 / 多环境隔离 | 自定义 | Full + Security 满配 |
+| **2** | + 3 隐私；5 指标；6 发版；SBOM / attestation；发版时 AI 5/5（若本变更使用 AI） | + audit；Resilience 套件；`artifact-trust-required.yml` | Full M01–M50；专项套件按场景 |
+| **3** | 多平台 / 多环境隔离；跨项目 Scorecard | 自定义 | Full + Security Extension / Hardening 满配 |
 
 详见 `miniapp/rules/docs/rule-maturity-model.md`。
 

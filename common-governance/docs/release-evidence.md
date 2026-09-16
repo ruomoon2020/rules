@@ -10,6 +10,7 @@
 
 - 发布 ID、语义化版本、`staging` / `production` 环境、Owner、变更引用和带时区的批准时间；
 - 7–40 位 Git commit SHA、`sha256:` 产物摘要和本次使用的规则包版本（必须包含 `common-governance`）；
+- SBOM、build provenance、签名 / attestation、builder 身份、验签命令和带时区的验签时间；
 - 至少一个需求 / Issue 及其验收证据；
 - 风险等级与摘要；
 - 已验证的回滚命令或 Runbook 与回滚 Owner；
@@ -21,12 +22,17 @@
 
 ```bash
 python common-governance/scripts/validate-release-evidence.py --file releases/1.8.0/release-evidence.yaml
+
+# 生产发布 CI 必须把实际产物交给校验器，避免只填一个格式正确的摘要
+python common-governance/scripts/validate-release-evidence.py --file releases/1.8.0/release-evidence.yaml --artifact dist/app.tgz --require-artifact
 ```
 
 校验器会拒绝：
 
 - 空值和 `TODO`、`TBD`、`N/A` 等占位内容；
 - 非语义化版本、无时区批准时间、无效 commit SHA 或产物摘要；
+- 缺少 SBOM、provenance、签名 / attestation、builder 或验签证据；
+- 使用 `--artifact` 时，YAML 摘要与实际产物字节不一致；
 - 无需求或无验收证据；
 - 回滚未测试或没有可执行命令 / Runbook；
 - 观察窗口小于 60 分钟；
@@ -36,6 +42,6 @@ python common-governance/scripts/validate-release-evidence.py --file releases/1.
 
 ## 责任边界
 
-文件通过校验只证明证据结构完整。发布 Owner 仍须确认链接可访问、证据真实、业务验收有效、回滚在目标环境可执行。
+不传 `--artifact` 时，文件通过校验只证明证据结构完整；生产发布必须使用 `--artifact --require-artifact`。发布 Owner 仍须确认远程 attestation 可验证、业务验收有效、回滚在目标环境可执行。
 
 相关文档：[`definition-of-done.md`](definition-of-done.md)、[`requirements-traceability.md`](requirements-traceability.md)、[`slo-alerting-template.md`](slo-alerting-template.md)。

@@ -12,7 +12,7 @@ alwaysApply: true
 - Level 0 硬规则：`rules/shared/00-must-follow.md`（当前 34 条）；场景能力按文末条件路由和项目 Level 触发
 - Evals：P0 8/8，P1 ≥38/41（E01–E49）；成熟后台业务 PR 跑 Business E32–E40；i18n/实时/富文本跑 Platform E41–E43；受监管 Web 跑 Enterprise Hardening E44–E49
 - Codex：`rules/codex/AGENTS.md`（复制为仓库根 `AGENTS.md`）
-- Cursor：本目录 `.mdc` 文件（复制到业务仓 `.cursor/rules/`）
+- Cursor：本目录 `.mdc` 文件（复制到业务仓 `.cursor/rules/`）；**编号 ≠ shared**，对照 `rules/docs/cursor-shared-map.md`
 
 ## Cursor 路由
 

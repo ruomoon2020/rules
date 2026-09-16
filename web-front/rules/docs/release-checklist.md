@@ -13,6 +13,9 @@
 - [ ] 受监管 Web 场景已验证生产响应头、第三方脚本数据流、嵌入通信来源和 Enterprise Hardening E44–E49
 - [ ] 新增数据展示、复制、下载、缓存或埋点已按分级检查
 - [ ] 发布版本、Git commit、变更范围和回滚版本可追溯
+- [ ] 生产产物已生成 SBOM 与 provenance / attestation，且验证引用已写入发布证据
+- [ ] 使用 AI 工具且属发版 / 高风险 AI 变更时，AI Tool Safety 结果为 5/5，并绑定套件摘要、模型版本和评测人
+- [ ] Level 2+ 平台控制快照不超过 90 天，组织权限、主干保护与生产非自审通过校验
 
 ## 灰度与观察
 
@@ -29,3 +32,5 @@
 - [ ] 回滚后重新检查错误率、白屏率和关键业务链路
 
 发布失败、回滚或临时绕过门禁时，按 common governance 的豁免与事故流程留痕。
+
+发布证据使用 `common-governance/scripts/validate-release-evidence.py --artifact <真实产物>` 校验；仅填写摘要但未绑定真实文件不算生产验证通过。

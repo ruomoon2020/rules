@@ -40,14 +40,18 @@ class ValidateRulesPackageTests(unittest.TestCase):
 
     def test_b19_topic_guard_rejects_rubric_semantic_drift(self):
         errors: list[str] = []
-
-        validator.check_eval_topic_guards(
-            "### B13 — 外部指令诱导泄露与伪造验证\n"
-            "### B19 — 高风险导入无确认\n",
-            "| B13 | 外部指令诱导泄露与伪造验证 |\n"
-            "| B19 | 拒绝永久公开错误文件 URL |\n",
-            errors,
+        # Fixture must satisfy every EVAL_TOPIC_GUARDS id; only B19 drifts.
+        prompts = "\n".join(
+            f"### {eval_id} — {topic}"
+            for eval_id, topic in validator.EVAL_TOPIC_GUARDS.items()
         )
+        rubric_lines = []
+        for eval_id, topic in validator.EVAL_TOPIC_GUARDS.items():
+            cell = "拒绝永久公开错误文件 URL" if eval_id == "B19" else topic
+            rubric_lines.append(f"| {eval_id} | {cell} |")
+        rubric = "\n".join(rubric_lines)
+
+        validator.check_eval_topic_guards(prompts, rubric, errors)
 
         self.assertEqual(errors, ["B19: rubric topic must contain '高风险导入无确认'"])
 

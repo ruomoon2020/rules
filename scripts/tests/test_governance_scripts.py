@@ -12,13 +12,58 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
 CHECK_SCRIPT = SCRIPTS / "check-project-adoption.py"
+DEBT_BASELINE_SCRIPT = SCRIPTS / "check-debt-baseline.py"
 RELEASE_EVIDENCE_SCRIPT = SCRIPTS / "validate-release-evidence.py"
 SYNC_GOVERNANCE_SCRIPT = SCRIPTS / "sync-common-governance.py"
 COMMON_GOVERNANCE_VALIDATOR = ROOT / "common-governance" / "scripts" / "validate-package.py"
 REPOSITORY_VALIDATOR = SCRIPTS / "validate-repository.py"
+WORKFLOW_SECURITY_VALIDATOR = SCRIPTS / "validate-workflow-security.py"
+CONTROL_CATALOG_VALIDATOR = SCRIPTS / "validate-control-catalog.py"
+AI_EVAL_RESULTS_VALIDATOR = SCRIPTS / "validate-ai-eval-results.py"
+PREPARE_AI_EVAL_SCRIPT = SCRIPTS / "prepare-ai-eval-run.py"
+EXCEPTIONS_VALIDATOR = SCRIPTS / "validate-exceptions.py"
+PR_GOVERNANCE_VALIDATOR = SCRIPTS / "validate-pr-governance.py"
 
 
 class CheckProjectAdoptionTests(unittest.TestCase):
+    def test_strict_codeowners_rejects_declared_placeholders(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_codeowners", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "CODEOWNERS").write_text(
+                "# Replace sample teams with real owners.\n* @architecture-team\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod.check_codeowners(repo, errors, strict=True)
+        self.assertTrue(any("sample/placeholder" in error for error in errors))
+
+    def test_report_only_preserves_target_gaps_but_exits_zero(self):
+        repo = ROOT / "examples" / "adoption-fixture" / "frontend"
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(CHECK_SCRIPT),
+                "--repo",
+                str(repo),
+                "--stack",
+                "frontend",
+                "--level",
+                "3",
+                "--report-only",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("TARGET GAPS:", result.stdout)
+
     def test_frontend_fixture_passes(self):
         repo = ROOT / "examples" / "adoption-fixture" / "frontend"
         result = subprocess.run(
@@ -127,6 +172,168 @@ class CheckProjectAdoptionTests(unittest.TestCase):
 
         self.assertTrue(any("evidence not found" in error for error in errors))
 
+    def test_workflow_evidence_ignores_name_and_comments(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_workflow_semantics", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            workflow = repo / ".github" / "workflows" / "credential.yml"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "name: gitleaks credential scan\non: [pull_request]\n"
+                "permissions: {contents: read}\njobs:\n  scan:\n"
+                "    runs-on: ubuntu-latest\n    steps:\n      - run: echo safe\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod._check_workflow_control(
+                repo,
+                ".github/workflows/credential.yml",
+                (("gitleaks",),),
+                "checks.credential_scan",
+                errors,
+            )
+
+        self.assertTrue(any("lacks executable marker group" in error for error in errors))
+
+    def test_manual_or_disabled_workflow_is_not_active_control(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_inactive_workflow", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            workflow = repo / ".github" / "workflows" / "credential.yml"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "on: [workflow_dispatch]\njobs:\n  scan:\n    if: false\n"
+                "    steps:\n      - run: gitleaks git .\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod._check_workflow_control(repo, ".github/workflows/credential.yml", (("gitleaks",),), "checks.credential_scan", errors)
+        self.assertTrue(any("no automatic trigger" in error for error in errors))
+        self.assertTrue(any("lacks executable marker" in error for error in errors))
+
+    def test_manual_contract_attestation_does_not_prove_artifact_trust(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_artifact_workflow", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            workflow = repo / ".github" / "workflows" / "artifact.yml"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "on: [workflow_dispatch]\njobs:\n  attest:\n    steps:\n"
+                "      - uses: anchore/sbom-action@0123456789012345678901234567890123456789\n"
+                "      - uses: actions/attest-build-provenance@0123456789012345678901234567890123456789\n"
+                "        with: {subject-path: contracts/openapi.yaml}\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod._check_workflow_control(repo, ".github/workflows/artifact.yml", (("sbom",), ("attest",)), "checks.artifact_trust", errors)
+        self.assertTrue(any("release-tag workflow" in error for error in errors))
+        self.assertTrue(any("build artifact" in error for error in errors))
+
+    def test_release_caller_can_use_reusable_artifact_workflow(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_reusable_artifact", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            workflows = repo / ".github" / "workflows"
+            workflows.mkdir(parents=True)
+            shutil.copyfile(ROOT / "examples" / "ci" / "artifact-trust-required.yml", workflows / "reusable.yml")
+            (workflows / "release.yml").write_text(
+                "on:\n  push:\n    tags: ['v*']\njobs:\n  build:\n    runs-on: ubuntu-latest\n"
+                "    steps:\n      - run: npm run build\n"
+                "      - uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
+                "        with: {name: release, path: dist}\n"
+                "  attest:\n    needs: build\n    uses: ./.github/workflows/reusable.yml\n"
+                "    with: {artifact-name: release, subject-path: app.tar.gz}\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod._check_workflow_control(repo, ".github/workflows/release.yml", (("sbom",), ("attest",)), "checks.artifact_trust", errors)
+        self.assertEqual(errors, [])
+
+    def test_gitlab_workflow_evidence_reads_script_commands(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_gitlab_semantics", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            workflow = repo / ".gitlab-ci.yml"
+            workflow.write_text(
+                "scan:\n  image: example/scanner:1\n  script:\n    - gitleaks git --redact .\n",
+                encoding="utf-8",
+            )
+            errors: list[str] = []
+            mod._check_workflow_control(
+                repo,
+                ".gitlab-ci.yml",
+                (("gitleaks",),),
+                "checks.credential_scan",
+                errors,
+            )
+
+        self.assertEqual(errors, [])
+
+    def test_platform_evidence_rejects_missing_mfa_and_self_review_control(self):
+        import json
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_platform", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            evidence = json.loads((ROOT / "examples" / "governance-platform-evidence.json").read_text(encoding="utf-8"))
+            evidence["organization_controls"]["mfa_required"] = False
+            evidence["production_environment"]["prevent_self_review"] = False
+            (repo / "evidence.json").write_text(json.dumps(evidence), encoding="utf-8")
+            errors: list[str] = []
+            mod._check_platform_evidence(repo, "evidence.json", errors)
+
+        self.assertTrue(any("mfa_required" in error for error in errors))
+        self.assertTrue(any("prevent_self_review" in error for error in errors))
+
+    def test_platform_evidence_separates_pr_and_release_checks(self):
+        import json
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("adoption_release_gate", CHECK_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            evidence = json.loads((ROOT / "examples" / "governance-platform-evidence.json").read_text(encoding="utf-8"))
+            evidence["release_checks"] = []
+            (repo / "evidence.json").write_text(json.dumps(evidence), encoding="utf-8")
+            errors: list[str] = []
+            mod._check_platform_evidence(repo, "evidence.json", errors)
+        self.assertTrue(any("release_checks must include artifact-trust" in error for error in errors))
+
     def test_frontend_fixture_passes_level_three_evidence(self):
         repo = ROOT / "examples" / "adoption-fixture" / "frontend"
         result = subprocess.run(
@@ -230,7 +437,7 @@ class CheckProjectAdoptionTests(unittest.TestCase):
             errors: list[str] = []
             mod.check_pr_template(repo, errors, strict=True)
 
-        self.assertEqual(len(errors), 4)
+        self.assertEqual(len(errors), 8)
         self.assertTrue(any("acceptance criteria" in error for error in errors))
 
     def test_strict_pr_template_ignores_keywords_only_in_comments(self):
@@ -249,7 +456,7 @@ class CheckProjectAdoptionTests(unittest.TestCase):
             errors: list[str] = []
             mod.check_pr_template(repo, errors, strict=True)
 
-        self.assertEqual(len(errors), 4)
+        self.assertEqual(len(errors), 8)
 
     def test_required_governance_rejects_missing_package(self):
         import tempfile
@@ -413,7 +620,7 @@ class CheckProjectAdoptionTests(unittest.TestCase):
 
         self.assertEqual(workflow["permissions"], {"contents": "read"})
         steps = workflow["jobs"]["scan"]["steps"]
-        checkout = next(step for step in steps if step.get("uses") == "actions/checkout@v4")
+        checkout = next(step for step in steps if step.get("uses", "").startswith("actions/checkout@"))
         self.assertEqual(checkout["with"]["fetch-depth"], 0)
         self.assertEqual(workflow["env"]["GITLEAKS_VERSION"], "8.30.0")
         install = next(step for step in steps if step.get("name") == "Install pinned scanner")
@@ -454,6 +661,180 @@ class CheckProjectAdoptionTests(unittest.TestCase):
         )
         self.assertIn("python scripts/validate-repository.py", workflow)
         self.assertIn("actionlint/cmd/actionlint@v1.7.12", workflow)
+
+    def test_workflow_security_validator_passes(self):
+        result = subprocess.run(
+            [sys.executable, str(WORKFLOW_SECURITY_VALIDATOR)],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_workflow_security_rejects_floating_action_and_write_all(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("workflow_security", WORKFLOW_SECURITY_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            path = root / ".github" / "workflows" / "unsafe.yml"
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                "name: unsafe\non: [push]\npermissions:\n  contents: write\n"
+                "jobs:\n  test:\n    runs-on: ubuntu-latest\n"
+                "    steps:\n      - uses: actions/checkout@v4\n",
+                encoding="utf-8",
+            )
+            errors = mod.validate_workflow(path, root)
+
+        self.assertTrue(any("40-character commit SHA" in error for error in errors))
+        self.assertTrue(any("top-level permissions" in error for error in errors))
+
+    def test_control_catalog_passes(self):
+        result = subprocess.run(
+            [sys.executable, str(CONTROL_CATALOG_VALIDATOR)],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_control_catalog_rejects_unversioned_reference_and_missing_path(self):
+        spec = importlib.util.spec_from_file_location("control_catalog", CONTROL_CATALOG_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import yaml
+
+        data = yaml.safe_load((ROOT / "docs" / "control-catalog.yaml").read_text(encoding="utf-8"))
+        data["controls"][0]["standards"] = ["NIST-SSDF-PO.1.1"]
+        data["controls"][0]["verification"] = ["scripts/missing.py"]
+        errors = mod.validate_catalog(data, ROOT)
+
+        self.assertTrue(any("unversioned or unknown" in error for error in errors))
+        self.assertTrue(any("path not found" in error for error in errors))
+
+    def test_control_catalog_rejects_ai_control_as_level_zero(self):
+        spec = importlib.util.spec_from_file_location("control_catalog", CONTROL_CATALOG_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import yaml
+
+        data = yaml.safe_load((ROOT / "docs" / "control-catalog.yaml").read_text(encoding="utf-8"))
+        ai = next(item for item in data["controls"] if item["id"] == "CR-AI-001")
+        ai["level"] = 0
+        ai["gate"] = "always"
+        errors = mod.validate_catalog(data, ROOT)
+
+        self.assertTrue(any("CR-AI-001 must not be Level 0" in error for error in errors))
+        self.assertTrue(any("CR-AI-001.gate must be" in error for error in errors))
+
+    def test_ai_eval_results_are_suite_bound(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(AI_EVAL_RESULTS_VALIDATOR),
+                "--file",
+                "examples/ai-eval-results.yaml",
+                "--suite",
+                "web-front/rules/evals/ai-tool-safety.md",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_prepare_ai_eval_run_prints_plan_and_writes_fail_skeleton(self):
+        import tempfile
+
+        plan = subprocess.run(
+            [
+                sys.executable,
+                str(PREPARE_AI_EVAL_SCRIPT),
+                "--stack",
+                "frontend",
+                "--print-plan",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(plan.returncode, 0, plan.stdout + plan.stderr)
+        self.assertIn("suite_sha256:", plan.stdout)
+        self.assertIn("EAT01", plan.stdout)
+        self.assertIn("do not invent pass", plan.stdout)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            skeleton = Path(tmp) / "ai-eval-results.yaml"
+            written = subprocess.run(
+                [
+                    sys.executable,
+                    str(PREPARE_AI_EVAL_SCRIPT),
+                    "--stack",
+                    "frontend",
+                    "--write-skeleton",
+                    str(skeleton),
+                ],
+                capture_output=True,
+                text=True,
+                cwd=ROOT,
+            )
+            self.assertEqual(written.returncode, 0, written.stdout + written.stderr)
+            self.assertTrue(skeleton.is_file())
+            text = skeleton.read_text(encoding="utf-8")
+            self.assertIn("result: fail", text)
+            self.assertNotIn("result: pass", text)
+            failing = subprocess.run(
+                [
+                    sys.executable,
+                    str(AI_EVAL_RESULTS_VALIDATOR),
+                    "--file",
+                    str(skeleton),
+                    "--suite",
+                    "web-front/rules/evals/ai-tool-safety.md",
+                ],
+                capture_output=True,
+                text=True,
+                cwd=ROOT,
+            )
+            self.assertEqual(failing.returncode, 1)
+
+    def test_ai_eval_results_reject_failed_case_and_suite_drift(self):
+        spec = importlib.util.spec_from_file_location("ai_eval_results", AI_EVAL_RESULTS_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import tempfile
+        import yaml
+
+        data = yaml.safe_load((ROOT / "examples" / "ai-eval-results.yaml").read_text(encoding="utf-8"))
+        data["cases"][0]["result"] = "fail"
+        with tempfile.TemporaryDirectory() as tmp:
+            suite = Path(tmp) / "suite.md"
+            suite.write_text("changed suite\n", encoding="utf-8")
+            errors = mod.validate_results(data, suite)
+
+        self.assertTrue(any("result must be pass" in error for error in errors))
+        self.assertTrue(any("does not match" in error for error in errors))
+
+    def test_ai_eval_results_reject_placeholder_model_metadata(self):
+        spec = importlib.util.spec_from_file_location("ai_eval_metadata", AI_EVAL_RESULTS_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import yaml
+
+        data = yaml.safe_load((ROOT / "examples" / "ai-eval-results.yaml").read_text(encoding="utf-8"))
+        data["run"]["model_version"] = "latest"
+        errors = mod.validate_results(data, ROOT / "web-front" / "rules" / "evals" / "ai-tool-safety.md")
+
+        self.assertTrue(any("run.model_version must be meaningful" in error for error in errors))
 
     def test_repository_hygiene_validator_passes(self):
         result = subprocess.run(
@@ -554,6 +935,224 @@ class ReleaseEvidenceTests(unittest.TestCase):
         errors = mod.validate_release_evidence(data)
 
         self.assertTrue(any("exception gates lack approved exception records" in error for error in errors))
+
+    def test_release_evidence_binds_digest_to_artifact_bytes(self):
+        import hashlib
+        import tempfile
+        import yaml
+
+        spec = importlib.util.spec_from_file_location("release_artifact", RELEASE_EVIDENCE_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        data = yaml.safe_load((ROOT / "examples" / "release-evidence.yaml").read_text(encoding="utf-8"))
+
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact = Path(tmp) / "artifact.bin"
+            artifact.write_bytes(b"trusted artifact\n")
+            data["release"]["artifact_digest"] = f"sha256:{hashlib.sha256(artifact.read_bytes()).hexdigest()}"
+            self.assertEqual(mod.validate_release_evidence(data, artifact), [])
+            artifact.write_bytes(b"tampered\n")
+            errors = mod.validate_release_evidence(data, artifact)
+
+        self.assertIn("release.artifact_digest does not match --artifact bytes", errors)
+
+
+class GovernanceEvidenceTests(unittest.TestCase):
+    def test_closed_exception_sample_passes(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(EXCEPTIONS_VALIDATOR),
+                "--file",
+                "examples/rule-exception.yaml",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_open_expired_exception_fails(self):
+        spec = importlib.util.spec_from_file_location("exceptions", EXCEPTIONS_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import datetime as dt
+        import yaml
+
+        data = yaml.safe_load((ROOT / "examples" / "rule-exception.yaml").read_text(encoding="utf-8"))
+        data["status"] = "open"
+        data.pop("closed_at")
+        data.pop("closure_evidence")
+        errors = mod.validate_exception(data, dt.date(2026, 9, 15))
+        self.assertIn("open exception is expired", errors)
+
+    def test_exception_longer_than_ninety_days_fails(self):
+        spec = importlib.util.spec_from_file_location("exceptions_duration", EXCEPTIONS_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        import datetime as dt
+        import yaml
+
+        data = yaml.safe_load((ROOT / "examples" / "rule-exception.yaml").read_text(encoding="utf-8"))
+        data["expires_at"] = "2026-12-31"
+        errors = mod.validate_exception(data, dt.date(2026, 9, 15))
+        self.assertIn("exception duration must not exceed 90 days", errors)
+
+    def test_pr_governance_rejects_blank_template(self):
+        spec = importlib.util.spec_from_file_location("pr_governance", PR_GOVERNANCE_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        body = (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+        errors = mod.validate_body(body)
+        self.assertTrue(any("completed six-column row" in error for error in errors))
+        self.assertTrue(any("risk level" in error for error in errors))
+
+    def test_pr_governance_accepts_completed_body(self):
+        spec = importlib.util.spec_from_file_location("pr_governance_valid", PR_GOVERNANCE_VALIDATOR)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        body = """## 变更摘要
+补齐治理门禁并提供可审计证据。
+
+## 需求 / Issue 与验收证据
+| 需求 / Issue | 验收条件 | 影响面 | 实现 / 契约 | 验证证据 | 状态 |
+|---|---|---|---|---|---|
+| GOV-1 | 提交时校验完整证据 | CI | validator | unit test | Pass |
+
+## 变更类型
+- [x] 规则包 `rules/**` 变更
+
+## 风险
+- [x] Low（低风险）
+
+## 回滚方案
+回退该治理提交并重新运行校验。
+
+## 已运行命令
+python -m unittest discover -s scripts/tests -v
+"""
+        self.assertEqual(mod.validate_body(body), [])
+
+
+class DebtBaselineTests(unittest.TestCase):
+    def test_regex_count_passes_at_baseline_and_fails_on_growth(self):
+        import json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "src").mkdir()
+            source = root / "src" / "page.vue"
+            source.write_text("legacy-component\n", encoding="utf-8")
+            config = root / "baseline.json"
+            config.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "baseline_commit": "0123456789abcdef0123456789abcdef01234567",
+                        "captured_at": "2026-09-15T12:00:00+08:00",
+                        "owner": "test-owner",
+                        "scan_command": "python scripts/check-debt-baseline.py --config baseline.json",
+                        "metrics": [
+                            {
+                                "name": "legacy",
+                                "kind": "regex-count",
+                                "root": ".",
+                                "globs": ["src/**/*.vue"],
+                                "pattern": "legacy-component",
+                                "maximum": 1,
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            passing = subprocess.run(
+                [sys.executable, str(DEBT_BASELINE_SCRIPT), "--config", str(config)],
+                capture_output=True,
+                text=True,
+            )
+            source.write_text("legacy-component\nlegacy-component\n", encoding="utf-8")
+            failing = subprocess.run(
+                [sys.executable, str(DEBT_BASELINE_SCRIPT), "--config", str(config)],
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertEqual(passing.returncode, 0, passing.stdout + passing.stderr)
+        self.assertEqual(failing.returncode, 1)
+        self.assertIn("delta=+1", failing.stdout)
+
+    def test_debt_baseline_rejects_empty_scan_by_default(self):
+        import tempfile
+
+        spec = importlib.util.spec_from_file_location("debt_empty_scan", DEBT_BASELINE_SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "src").mkdir()
+            config = root / "baseline.json"
+            metric = {"name": "legacy", "kind": "regex-count", "root": ".", "globs": ["src/**/*.vue"], "pattern": "legacy", "maximum": 2}
+            with self.assertRaisesRegex(ValueError, "scan matched 0 files"):
+                mod.regex_count(metric, config)
+            metric["minimum_files"] = 0
+            metric["allow_empty_reason"] = "project has no Vue files"
+            self.assertEqual(mod.regex_count(metric, config)[0]["files_scanned"], 0)
+
+    def test_path_allowlist_reports_added_and_removed_paths(self):
+        import json
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "legacy").mkdir()
+            (root / "legacy" / "new.txt").write_text("new\n", encoding="utf-8")
+            config = root / "baseline.json"
+            config.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "baseline_commit": "0123456789abcdef0123456789abcdef01234567",
+                        "captured_at": "2026-09-15T12:00:00+08:00",
+                        "owner": "test-owner",
+                        "scan_command": "python scripts/check-debt-baseline.py --config baseline.json",
+                        "metrics": [
+                            {
+                                "name": "paths",
+                                "kind": "path-allowlist",
+                                "root": ".",
+                                "globs": ["legacy/**"],
+                                "allowed": ["legacy/old.txt"],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(DEBT_BASELINE_SCRIPT),
+                    "--config",
+                    str(config),
+                    "--format",
+                    "json",
+                ],
+                capture_output=True,
+                text=True,
+            )
+            payload = json.loads(result.stdout)
+
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(payload["metrics"][0]["added"], ["legacy/new.txt"])
+        self.assertEqual(payload["metrics"][0]["removed"], ["legacy/old.txt"])
 
 
 class EvalTopicManifestTests(unittest.TestCase):

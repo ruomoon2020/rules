@@ -39,6 +39,17 @@ code-rules 源仓提供的 Required Checks 参考实现位于 `.github/workflows
 4. （可选但建议）**Restrict who can push to matching branches**
    - 仅允许 Maintainers/DevOps/Release 角色推送；普通开发仅 PR。
 
+## Level 2+ 组织与生产环境控制
+
+以下配置不能仅写在制度文档中，必须从代码托管平台接口、基础设施状态或平台导出结果生成结构化快照：
+
+- 组织强制 MFA；仓库默认权限为 `read` 或 `none`；CI 内置身份默认只读。
+- 主干至少 1 名审批人，要求 CODEOWNERS、驳回过期审批、至少 1 名非作者审批，禁止强制推送和删除。
+- 生产环境至少 1 名 Reviewer，并启用禁止自审或平台等价控制。
+- 主干 PR Required Checks 至少覆盖 `rules-adoption`、`credential-scan`、`supply-chain`；生产发布另以 `artifact-trust` 为发布门禁。仅在发布标签触发的 job 不应登记为 PR Required Check。
+
+证据使用 `examples/governance-platform-evidence.json` 的 schema；`captured_at` 必须带时区且不早于验收日 90 天。业务仓在 `governance-adoption.yaml` 的 `branch_protection.evidence` 引用该快照。Level 2 接入脚本只检查仓内快照与工作流的结构，不能证明平台当前设置、Required Checks 状态或工作流实际执行；发布负责人须核对平台导出/API 结果，并在 PR 或发布证据中记录核对时间与来源。截图可作为附件，但不能替代结构化快照。
+
 ---
 
 ## Recommended: Required Checks 清单
@@ -47,18 +58,22 @@ code-rules 源仓提供的 Required Checks 参考实现位于 `.github/workflows
 ### 全栈 monorepo
 适用于同一仓库同时维护后端、管理端、小程序或跨端规则包：
 
-- `validate-rules-packages / validate-backend-rules`
-- `validate-rules-packages / validate-frontend-rules`
-- `validate-rules-packages / validate-miniapp-rules`
-- `validate-rules-packages / validate-governance-scripts`
+- 规则包 / 治理脚本：`validate-rules-packages / validate-backend-rules`、`validate-frontend-rules`、`validate-miniapp-rules`、`validate-governance-scripts`
+- 规则采纳：`rules-adoption`（Level 2+ Required）
+- 凭据扫描：`credential-scan`
+- 供应链：`supply-chain`
+- 发布产物信任：`artifact-trust`（SBOM + provenance / attestation，发布门禁）
+- 有存量债务时追加：`debt-baseline`；有开放豁免时追加：`exceptions`
 
 ### 后端单仓
 适用于只接入 `web-backend/rules/` 的业务仓：
 
 - 后端构建门禁：`mvn verify` 或 `./gradlew check`
 - 契约门禁：OpenAPI diff / Spectral（若改 API）
-- 安全门禁：secret scan
+- 规则采纳：`rules-adoption`（Level 2+）
+- 凭据扫描：`credential-scan`
 - 供应链门禁：`supply-chain-required`（按 [`supply-chain-baseline.md`](supply-chain-baseline.md)）
+- 产物信任门禁：`artifact-trust`（生产发布）
 - 规则接入门禁：`python common-governance/scripts/check-project-adoption.py --repo . --stack backend --strict --require-governance`
 
 ### 前端单仓
@@ -66,8 +81,10 @@ code-rules 源仓提供的 Required Checks 参考实现位于 `.github/workflows
 
 - 前端构建门禁：`pnpm lint`、`pnpm type-check`、`pnpm build`
 - 契约门禁：`api:gen` / `api:check`（若消费 OpenAPI）
-- 安全门禁：secret scan
+- 规则采纳：`rules-adoption`（Level 2+）
+- 凭据扫描：`credential-scan`
 - 供应链门禁：`supply-chain-required`
+- 产物信任门禁：`artifact-trust`（生产发布）
 - 规则接入门禁：`python common-governance/scripts/check-project-adoption.py --repo . --stack frontend --strict --require-governance`
 
 ### 小程序单仓
@@ -75,8 +92,10 @@ code-rules 源仓提供的 Required Checks 参考实现位于 `.github/workflows
 
 - 小程序构建门禁：`pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`
 - 契约门禁：`api:check`
-- 安全门禁：secret scan
+- 规则采纳：`rules-adoption`（Level 2+）
+- 凭据扫描：`credential-scan`
 - 供应链门禁：`supply-chain-required`
+- 产物信任门禁：`artifact-trust`（生产发布）
 - 规则接入门禁：`python common-governance/scripts/check-project-adoption.py --repo . --stack miniapp --strict --require-governance`
 
 说明：

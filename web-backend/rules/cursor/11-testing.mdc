@@ -1,0 +1,15 @@
+---
+description: 单测、集成测试与越权覆盖
+globs:
+  - "src/test/**/*.java"
+  - "**/src/test/**/*.java"
+alwaysApply: false
+---
+
+# 测试
+
+- Service 单测 Mock Mapper；复杂 SQL 优先 Testcontainers。
+- 敏感接口覆盖未登录、无权限、跨租户越权用例。
+- 禁止依赖共享脏数据或 `@Order` 隐式顺序。
+
+全文：`rules/shared/15-testing.md`

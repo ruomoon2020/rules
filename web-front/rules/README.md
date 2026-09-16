@@ -21,7 +21,7 @@
 
 ```text
 L0  shared/00-must-follow.md          — 可拒 PR 的硬规则
-L1  shared/01–24 等场景文件          — 细节与流程
+L1  shared/01–25 等场景文件          — 细节与流程
 L2  codex/*.md、cursor/*.mdc         — 任务索引 + 触发摘要（不重复 L1 全文）
 ```
 
@@ -247,6 +247,7 @@ CI 硬门禁建议至少包含：`lint`、`type-check`、`build`、schema check�
 | `docs/onboarding-new-project.md` | 新项目接入步骤 | 首次接入 rules/ |
 | `docs/rules-package-index.md` | 规则主题索引 | 不确定读哪个规则 |
 | `docs/rule-maturity-model.md` | 成熟度与证据要求 | 规划治理提升 |
+| `docs/cursor-shared-map.md` | Cursor ↔ shared 编号对照 | 部署 / 排障 |
 | `docs/release-checklist.md` | 业务发布、灰度与回滚证据 | 提测 / 发布 |
 | `docs/pull-request-template.md` | 前端 PR 模板 | 接入 CI / review |
 | `docs/PERFORMANCE_BUDGET.template.md` | 性能预算样板 | 重依赖、大列表、性能治理 |

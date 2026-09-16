@@ -1,20 +1,13 @@
-# CODEOWNERS（code-rules monorepo 示例）
-# 团队名请替换为实际 GitHub Team；详见 web-backend/rules/docs/codeowners-guidance.md
+# CODEOWNERS（code-rules 源仓）
+# 当前仓库由 GitHub 账号 ruomoon2020 承担最终 Review 责任；扩展为组织团队时须同步更新平台分支保护证据。
 
-/contracts/                           @architecture-team
-/web-backend/rules/                     @architecture-team @backend-leads
-/web-front/rules/                       @architecture-team @frontend-leads
-/web-backend/rules/shared/00-must-follow.md  @architecture-team @security-team
-/web-front/rules/shared/00-must-follow.md    @architecture-team @security-team
-/web-backend/rules/evals/              @architecture-team @backend-leads
-/web-front/rules/evals/                @architecture-team @frontend-leads
-/miniapp/rules/                        @architecture-team @miniapp-leads
-/miniapp/rules/shared/00-must-follow.md @architecture-team @security-team
-/miniapp/rules/evals/                  @architecture-team @miniapp-leads
-/docs/                                @architecture-team @rules-governance-team
-/docs/adr/                            @architecture-team @rules-governance-team
-/SECURITY.md                          @security-team @architecture-team
-/CODEOWNERS                           @architecture-team @devops-team
-/.github/pull_request_template.md     @devops-team @architecture-team
-/.github/ISSUE_TEMPLATE/              @devops-team @architecture-team
-/.github/workflows/                   @devops-team
+*                                      @ruomoon2020
+/contracts/                            @ruomoon2020
+/web-backend/rules/                    @ruomoon2020
+/web-front/rules/                      @ruomoon2020
+/miniapp/rules/                        @ruomoon2020
+/common-governance/                    @ruomoon2020
+/docs/                                 @ruomoon2020
+/SECURITY.md                           @ruomoon2020
+/CODEOWNERS                            @ruomoon2020
+/.github/                              @ruomoon2020

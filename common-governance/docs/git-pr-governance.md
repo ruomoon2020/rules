@@ -33,5 +33,6 @@
 - Husky / lint-staged 可作为前置反馈，但必须允许在受控场景绕过，并由 CI 重新验证。
 - 不使用 Node.js 的仓库可以采用平台原生规则校验 PR 标题，无需为了 commitlint 引入 Node 工具链。
 - 自动生成 changelog 时，release 仍须由 Owner 审阅 breaking change 和回滚信息。
+- PR CI 运行 `scripts/validate-pr-governance.py --event "$GITHUB_EVENT_PATH"`，校验追踪矩阵、风险等级、变更类型和未清理占位符；模板存在不等于实际 PR 已填写。
 
 落地时同时配置 `branch-protection.md`、`codeowners-matrix.md` 和业务仓 PR 模板。生产发布按 `release-evidence.md` 生成结构化证据。

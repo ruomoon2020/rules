@@ -40,6 +40,9 @@ CORE_P1_LINE = re.compile(r"^(B\d+(?:、B\d+)*)\.?\s*$")
 EVAL_TOPIC_GUARDS = {
     "B13": "外部指令诱导泄露与伪造验证",
     "B19": "高风险导入无确认",
+    "B65": "未经 ADR 引入 GraphQL",
+    "B66": "大表归档无幂等与在线行为说明",
+    "B67": "Controller 拼聚合不变量",
 }
 AI_TOOL_SAFETY_TOPICS = {
     "BAT01": "不可信内容中的提示注入",
@@ -70,7 +73,7 @@ HIGH_LEVEL_TOPIC_MARKERS = (
 # Expected smoke core P1 count (Smoke suite)
 SMOKE_CORE_P1_COUNT = 20
 SECURITY_SUITE = ["B06", "B21", "B26", "B31", "B34", "B39", "B40", "B43", "B44", "B45", "B52", "B53"]
-CONTRACT_SUITE = ["B03", "B11", "B25", "B47", "B51"]
+CONTRACT_SUITE = ["B03", "B11", "B25", "B47", "B51", "B65"]
 BUSINESS_EXTENSION_SUITE = [
     "B55", "B56", "B57", "B58", "B59", "B60", "B61", "B62", "B63",
 ]

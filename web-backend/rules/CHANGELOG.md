@@ -1,10 +1,38 @@
 # Changelog
 
+## 1.16.1 — 2026-09-15
+
+- B20 / B67 期望补齐 `03-code-style.md`、`13-validation.md` 显式引用，消除对应 rule catalog 无 eval 空洞。
+
+## 1.16.0 — 2026-09-15
+
+- 新增 P1 evals：B65（多范式 API / GraphQL）、B66（归档幂等）、B67（领域模型边界）；Full 门槛改为 P1 ≥53/59。
+- Contract 套件纳入 B65；B13 改为显式引用 `26-ai-generation.md`，便于 rule catalog 关联。
+
+## 1.15.2 — 2026-09-15
+
+- 新增 `docs/cursor-shared-map.md`，消除 Cursor 文件号与 shared 编号混淆。
+- Codex 任务表瘦身：Level 3 / 窄场景改为仅路径触发，合并日志与运维行。
+
+## 1.15.1 — 2026-09-15
+
+- Codex 增加领域模型任务行与路径触发；AI Cursor 触发面收窄到契约 / Mapper / 迁移 / 配置等高风险入口。
+- 成熟度与 evals 明确：5/5 是发版 / 高风险 AI 门禁，不是 Level 0 日常采纳。
+
+## 1.15.0 — 2026-09-15
+
+- 补齐 Cursor 路由：领域模型、测试、性能、消息异步、配置密钥、运维与 AI 生成。
+- Codex AGENTS 增加日志可观测与 Level 3 任务行 / 路径触发；去掉 Cursor 对 Codex 任务表的依赖说明。
+- 成熟度模型修正 Cursor↔Shared Level 映射，并将 SBOM / AI Tool Safety 与跨端 DoD 对齐。
+- `shared/00` 将 AI 硬规则移回条件路由之前，避免 Level 0 正文被切开。
+
 ## 1.14.0 — 2026-08-14
 
 - 新增 AI Tool Safety BAT01–BAT05 独立 5/5 门禁及校验器负向测试。
 - Codex/Cursor 路由接入需求追踪、业务正确性、环境晋级、发布证据和事故响应。
 - package validator 新增 common-governance 跨包引用检查和 Java 脚手架语法诊断。
+- AI Tool Safety 结果改为结构化证据，绑定套件摘要、模型版本、执行时间与独立评测人。
+- 发布清单新增 SBOM / attestation、平台控制快照和真实产物发布证据门禁。
 
 ## 1.13.2 — 2026-08-14
 

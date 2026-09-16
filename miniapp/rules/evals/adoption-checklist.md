@@ -15,10 +15,11 @@
 
 - [ ] 跑 Smoke evals（M01–M08 + 核心 P1 ≥10/12）
 - [ ] AI 读取外部内容或调用工具时，`evals/ai-tool-safety.md` MAT01–MAT05 **5/5**
-- [ ] 隐私 / 支付 / 分享 PR 跑 Security + Contract 套件
+- [ ] 隐私 / 支付 / 分享 / 上传媒体 PR 跑 Security + Contract 套件（Contract 含 M51）
 - [ ] 新业务分包 PR 跑 Business Extension M21–M29
 - [ ] UGC / 富文本 / 弱网恢复 PR 跑 Resilience Extension M35–M38（建议 4/4）
 - [ ] 安全加固 / 无障碍 / 多平台 / 实验 PR 跑 Enterprise Hardening Extension M39–M44（建议 6/6）
+- [ ] 组件 / 样式 / 生命周期 / 测试 / 性能 PR 跑 Component Engineering Extension M45–M50（建议 6/6）
 - [ ] 管理端 evals **E41–E43** 不适用小程序（见 `docs/fullstack-contract.md` §与管理端 Platform Extension 的边界）
 - [ ] 与后端 `web-backend/rules/docs/fullstack-contract.md` §小程序 对齐 traceId / errorCode / 分页
 - [ ] 已复制 `examples/.github/pull_request_template.md`；可选 `examples/ci/rules-package-validate.yml`

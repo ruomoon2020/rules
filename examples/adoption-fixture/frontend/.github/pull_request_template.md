@@ -3,9 +3,9 @@
 
 ## Requirement / Issue and Acceptance Criteria
 
-| Requirement / Issue | Acceptance criteria | Implementation | Validation evidence | Status |
-|---|---|---|---|---|
-|  |  |  |  |  |
+| Requirement / Issue | Acceptance criteria | Impact | Implementation / Contract | Validation evidence | Status |
+|---|---|---|---|---|---|
+|  |  |  |  |  |  |
 
 ## Required Checks
 - [ ] `pnpm lint`

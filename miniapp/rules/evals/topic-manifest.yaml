@@ -135,6 +135,27 @@ entries:
   M44:
     prompt_topic: 高风险操作只靠前端判断
     rubric_pass: 高风险操作以后端状态和风控为准
+  M45:
+    prompt_topic: EventBus 承载组件业务状态
+    rubric_pass: 拒绝 EventBus 承载业务状态并按作用域选择通信方式
+  M46:
+    prompt_topic: 子组件直接修改 v-model 输入值
+    rubric_pass: 要求只读 props 与标准 v-model 契约
+  M47:
+    prompt_topic: 生命周期重复请求且不清理
+    rubric_pass: 要求生命周期唯一 owner、避免重复请求并完整清理
+  M48:
+    prompt_topic: 页面深层覆盖主题组件
+    rubric_pass: 拒绝硬编码主题和深层覆盖 Base 组件
+  M49:
+    prompt_topic: 组件只生成大型快照
+    rubric_pass: 要求组件行为测试，拒绝仅用大型快照
+  M50:
+    prompt_topic: 无证据性能优化
+    rubric_pass: 要求启动/渲染/图片/分包优化有量化证据
+  M51:
+    prompt_topic: 上传绕过统一封装与隐私
+    rubric_pass: 拒绝绕过统一上传封装与隐私用途检查
 suites:
   Security:
   - M06
@@ -151,6 +172,7 @@ suites:
   - M05
   - M08
   - M15
+  - M51
   Business Extension:
   - M21
   - M22

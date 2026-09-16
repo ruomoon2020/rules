@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.8.4 — 2026-09-15
+
+### Changed
+
+- `evals/prompts.md`：为 E01/E03/E06/E28/E32 补齐 `04-ui-patterns`、`12-schema-ssot`、`03-code-style`、`16-design-tokens`、`17-shell-navigation` 显式引用，打通 rule catalog 关联。
+
+## 1.8.3 — 2026-09-15
+
+### Added
+
+- 新增 `docs/cursor-shared-map.md`，消除 Cursor 文件号与 shared 编号混淆。
+
+## 1.8.2 — 2026-09-15
+
+### Changed
+
+- AI Cursor 触发面补齐 router / stores / permission / schema / contracts；成熟度与 evals 对齐 5/5 条件门禁口径。
+
+## 1.8.1 — 2026-09-15
+
+### Fixed
+
+- README 层级范围更正为 `shared/01–25`。
+- 成熟度模型补齐 Level 2+ 的 SBOM / artifact-trust 与 AI Tool Safety 5/5 要求。
+
 ## 1.8.0 — 2026-08-14
 
 ### Added
@@ -10,6 +35,8 @@
 ### Changed
 
 - package validator 锁定 AI Tool Safety 题号、主题、Pass 判据和门槛，并校验 common-governance 跨包引用。
+- AI Tool Safety 结果改为结构化证据，绑定套件摘要、模型版本、执行时间与独立评测人。
+- 发布清单新增 SBOM / attestation、平台控制快照和真实产物发布证据门禁。
 
 ## 1.7.1 — 2026-08-14
 

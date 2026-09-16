@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import re
 import sys
 from pathlib import Path
@@ -48,7 +49,7 @@ def _evidence_ref(value: str) -> bool:
     return bool(HTTPS_URL.fullmatch(value) or REPO_PATH.fullmatch(value))
 
 
-def validate_release_evidence(data: Any) -> list[str]:
+def validate_release_evidence(data: Any, artifact_path: Path | None = None) -> list[str]:
     errors: list[str] = []
     root = _mapping(data, "root", errors)
     if root.get("schema_version") != 2:
@@ -69,6 +70,13 @@ def validate_release_evidence(data: Any) -> list[str]:
     artifact_digest = str(release.get("artifact_digest", "")).strip()
     if artifact_digest and not ARTIFACT_DIGEST.fullmatch(artifact_digest):
         errors.append("release.artifact_digest must be sha256:<64 hex characters>")
+    if artifact_path is not None:
+        if not artifact_path.is_file():
+            errors.append(f"artifact file not found: {artifact_path}")
+        else:
+            actual_digest = f"sha256:{hashlib.sha256(artifact_path.read_bytes()).hexdigest()}"
+            if artifact_digest and actual_digest.lower() != artifact_digest.lower():
+                errors.append("release.artifact_digest does not match --artifact bytes")
     environment = str(release.get("environment", "")).strip().lower()
     if environment and environment not in ENVIRONMENTS:
         errors.append(f"release.environment must be one of {sorted(ENVIRONMENTS)}")
@@ -88,6 +96,22 @@ def validate_release_evidence(data: Any) -> list[str]:
     for name, value in rules_versions.items():
         if not isinstance(name, str) or not isinstance(value, str) or not SEMVER.fullmatch(value):
             errors.append(f"release.rules_versions.{name} must be semantic versioning")
+
+    artifact_trust = _mapping(root.get("artifact_trust"), "artifact_trust", errors)
+    for key in ("sbom_ref", "provenance_ref", "signature_ref"):
+        ref = _required_text(artifact_trust, key, "artifact_trust", errors)
+        if ref and not _evidence_ref(ref):
+            errors.append(f"artifact_trust.{key} must be HTTPS URL or repository path")
+    _required_text(artifact_trust, "builder_id", "artifact_trust", errors)
+    _required_text(artifact_trust, "verification_command", "artifact_trust", errors)
+    verified_at = _required_text(artifact_trust, "verified_at", "artifact_trust", errors)
+    if verified_at:
+        try:
+            parsed = dt.datetime.fromisoformat(verified_at.replace("Z", "+00:00"))
+            if parsed.utcoffset() is None:
+                errors.append("artifact_trust.verified_at must include a timezone offset")
+        except ValueError:
+            errors.append("artifact_trust.verified_at must be ISO-8601")
 
     requirements = root.get("requirements")
     if not isinstance(requirements, list) or not requirements:
@@ -178,6 +202,12 @@ def validate_release_evidence(data: Any) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate release-evidence.yaml")
     parser.add_argument("--file", type=Path, required=True)
+    parser.add_argument("--artifact", type=Path, help="Artifact whose SHA-256 must match release.artifact_digest")
+    parser.add_argument(
+        "--require-artifact",
+        action="store_true",
+        help="Fail unless --artifact is supplied; recommended for production release CI",
+    )
     args = parser.parse_args()
     if yaml is None:
         print("FAILED: PyYAML is required (pip install pyyaml)", file=sys.stderr)
@@ -190,7 +220,10 @@ def main() -> int:
     except (OSError, yaml.YAMLError) as exc:
         print(f"FAILED: invalid YAML: {exc}", file=sys.stderr)
         return 1
-    errors = validate_release_evidence(data)
+    if args.require_artifact and args.artifact is None:
+        print("FAILED: --require-artifact requires --artifact", file=sys.stderr)
+        return 1
+    errors = validate_release_evidence(data, args.artifact)
     if errors:
         print("FAILED:", file=sys.stderr)
         for error in errors:

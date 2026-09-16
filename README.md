@@ -22,6 +22,8 @@
 
 **新业务接入**：全栈 monorepo / 前后端分仓 / 单端三种形态的完整步骤见 **[`docs/project-adoption-guide.md`](docs/project-adoption-guide.md)**。
 
+已有项目采用更高目标规则时，按 [`docs/migration-baseline.md`](docs/migration-baseline.md) 分离目标规范与当前基线；不要因为存量不合规而降低通用规则。
+
 ## 推荐目录结构
 
 ### 全栈 monorepo
@@ -91,8 +93,8 @@ backend-repo/
 2. 各端最小安全硬规则仍保留在对应 `rules/shared/00-must-follow.md`，不依赖通用包加载。
 3. 业务仓 CI 运行 `python common-governance/scripts/validate-package.py`，并使用包内 `scripts/check-project-adoption.py --require-governance` 验收规则与治理接入。
 4. 严格接入运行 `check-project-adoption.py --require-governance`。
-5. 按成熟度接入优先使用 `--level 0..3`；Level 2 会自动要求完整治理包、严格 Review 资产和真实控制证据，Level 3 再要求平台治理 Scorecard 与已完成证据项。
-5. 从包内 `examples/ci/` 复制凭据扫描和供应链 Required workflows；Node 供应链样板要求恰好一个 pnpm/npm 锁文件。
+5. 按成熟度接入优先使用 `--level 0..3`；Level 2 会检查完整治理包、严格 Review 资产与控制声明文件的静态结构，Level 3 再检查平台治理 Scorecard 与证据项。平台当前配置、Required check 状态和实际执行须另行核对。
+6. 从包内 `examples/ci/` 复制凭据扫描、供应链和产物信任 Required workflows；Node 供应链样板要求恰好一个 pnpm/npm 锁文件。
 
 根 `docs/` 是维护 SSOT；`common-governance/docs/` 由同步脚本生成，禁止手工双写。
 
@@ -218,12 +220,19 @@ Cursor 靠 `.cursor/rules/*.mdc` 的 `alwaysApply` 和 `globs` 触发。
 | [`docs/dod-maturity-mapping.md`](docs/dod-maturity-mapping.md) | DoD × 采纳 Level 0–3 对照 |
 | [`docs/adoption-scorecard.md`](docs/adoption-scorecard.md) | 成熟度评分卡：Required Evidence / Owner / 到期复查 |
 | [`docs/compliance-evidence-log.md`](docs/compliance-evidence-log.md) | 合规证据留痕（金融 / 政务） |
+| [`docs/control-catalog.yaml`](docs/control-catalog.yaml) | SSDF / ASVS / OSPS / SLSA 版本化控制映射 |
 | [`docs/branch-protection.md`](docs/branch-protection.md) | 分支保护与 Required Checks 实施指南（含豁免链路） |
 | [`docs/git-pr-governance.md`](docs/git-pr-governance.md) | Conventional Commits、PR 证据、本地 hook 与 CI 边界 |
 | [`docs/adr/0001-rules-governance-baseline.md`](docs/adr/0001-rules-governance-baseline.md) | 根级治理原则基线（ADR） |
 | [`SECURITY.md`](SECURITY.md) | 安全策略与漏洞报告入口（含 SLA / secret 泄露处置） |
 | [`scripts/check-project-adoption.py`](scripts/check-project-adoption.py) | **业务仓**接入验收（AGENTS、rules、cursor、契约） |
+| [`scripts/check-debt-baseline.py`](scripts/check-debt-baseline.py) | 存量债务回归门禁：数量上限与路径白名单只能收敛 |
 | [`scripts/validate-release-evidence.py`](scripts/validate-release-evidence.py) | 生产发布证据 YAML 校验 |
+| [`scripts/validate-control-catalog.py`](scripts/validate-control-catalog.py) | 控制目录版本、映射与验证路径校验 |
+| [`scripts/validate-workflow-security.py`](scripts/validate-workflow-security.py) | CI action 固定 SHA 与最小权限校验 |
+| [`scripts/validate-ai-eval-results.py`](scripts/validate-ai-eval-results.py) | AI Tool Safety 5/5 结果与套件摘要绑定校验 |
+| [`scripts/validate-exceptions.py`](scripts/validate-exceptions.py) | 机器校验豁免有效期、审批、补偿控制与关闭证据 |
+| [`scripts/validate-pr-governance.py`](scripts/validate-pr-governance.py) | 校验实际 PR 描述中的需求追踪、风险等级和占位符 |
 | [`scripts/generate-eval-topic-manifest.py`](scripts/generate-eval-topic-manifest.py) | Eval 全量 topic manifest（防 prompts/rubric drift） |
 
 业务仓落地后建议：
@@ -242,6 +251,9 @@ python scripts/check-project-adoption.py --repo /path/to/your-app --stack fronte
 | 小程序规则包 | `python miniapp/rules/scripts/validate-rules-package.py` |
 | 通用治理 SSOT 漂移 | `python scripts/sync-common-governance.py` |
 | 通用治理发布包 | `python common-governance/scripts/validate-package.py`（一致性） |
+| 控制目录 / CI 安全 | `python scripts/validate-control-catalog.py` + `python scripts/validate-workflow-security.py` |
+| AI 工具安全证据 | `python scripts/validate-ai-eval-results.py --file examples/ai-eval-results.yaml --suite web-front/rules/evals/ai-tool-safety.md` |
+| 豁免与 PR 治理 | `python scripts/validate-exceptions.py`；PR 事件运行 `python scripts/validate-pr-governance.py --event "$GITHUB_EVENT_PATH"` |
 | 后端业务仓 | `mvn verify` 或 `./gradlew check` |
 | 前端业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build` |
 | 小程序业务仓 | `pnpm lint`、`pnpm type-check`、`pnpm build:mp-weixin`、`pnpm api:check`、`pnpm size:check`、`pnpm audit`（若配置） |

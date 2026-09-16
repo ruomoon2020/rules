@@ -20,7 +20,7 @@
 
 ## 大版本 / 改 Hard Rules 或 ArchUnit 时追加
 
-- [ ] 跑 **Full** evals：`evals/prompts.md` B01–B64，P0 **8/8**、P1 **≥50/56**（日常可用 Smoke，见 `evals/README.md`）
+- [ ] 跑 **Full** evals：`evals/prompts.md` B01–B67，P0 **8/8**、P1 **≥53/59**（日常可用 Smoke，见 `evals/README.md`）
 - [ ] 多库 CI：至少 MySQL + PostgreSQL 迁移或 Testcontainers 通过
 
 ## 不要做

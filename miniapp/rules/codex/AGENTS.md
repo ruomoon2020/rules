@@ -26,8 +26,9 @@
 | 任务 | 必读规则 |
 |---|---|
 | 任意小程序改动 | `rules/codex/01-before-editing.md`、`rules/shared/00-must-follow.md` |
+| 新建项目 / 调整目录 / 移动跨层文件 | `rules/shared/01-project-structure.md`、`rules/shared/02-naming.md` |
 | 需求分析 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
-| 写页面 / 组件 / 生命周期 | `rules/shared/03-vue3-typescript-uniapp.md`、`rules/shared/04-page-ui-lifecycle.md`、`rules/shared/12-list-form-pagination.md`、`rules/codex/02-page-generation.md` |
+| 写页面 / 组件 / 生命周期 | `rules/shared/02-naming.md`、`rules/shared/03-vue3-typescript-uniapp.md`、`rules/shared/04-page-ui-lifecycle.md`、`rules/shared/12-list-form-pagination.md`、`rules/shared/24-design-system-mobile.md`、`rules/codex/02-page-generation.md` |
 | App.vue / 应用级生命周期 | `rules/shared/20-app-runtime.md`、`rules/codex/06-app-runtime.md`、`rules/shared/14-payment-subscribe-share.md`（若 scene/分享） |
 | API / 契约 / request | `rules/shared/05-api-contract-request.md`、`rules/shared/21-network-security.md`、`rules/shared/12-list-form-pagination.md` |
 | 网络 / web-view / 上传域名 | `rules/shared/21-network-security.md`、`rules/codex/07-network-security.md`、`rules/shared/05-api-contract-request.md` |
@@ -35,17 +36,17 @@
 | pages.json / 路由 / 分包 / 页面栈 | `rules/shared/07-pages-routing-subpackages.md`、`rules/shared/10-performance-package-size.md` |
 | storage / store / 缓存 | `rules/shared/08-state-storage-cache.md`、`rules/shared/06-login-auth-session.md` |
 | 隐私 / 授权 / 敏感能力 | `rules/shared/09-privacy-permission.md`、`rules/shared/11-platform-differences.md`、`rules/codex/04-platform-capability.md` |
-| 性能 / 包体积 / 首屏 | `rules/shared/10-performance-package-size.md`、`rules/shared/07-pages-routing-subpackages.md` |
+| 性能 / 包体积 / 首屏 / 渲染 / 图片 | `rules/shared/10-performance-package-size.md`、`rules/shared/07-pages-routing-subpackages.md`、`rules/shared/15-logging-observability.md` |
 | 平台差异 / adapter | `rules/shared/11-platform-differences.md`、`rules/codex/04-platform-capability.md` |
 | 上传 / 下载 / 媒体 | `rules/shared/13-upload-download-media.md`、`rules/shared/09-privacy-permission.md` |
 | 支付 / 订阅消息 / 分享 | `rules/shared/14-payment-subscribe-share.md`、`rules/shared/06-login-auth-session.md`、`rules/shared/09-privacy-permission.md` |
 | 弱网 / 错误恢复 / 离线 | `rules/shared/22-error-recovery-offline.md`、`rules/codex/08-error-recovery.md` |
 | 富文本 / UGC / 内容安全 | `rules/shared/23-content-safety.md`、`rules/codex/09-content-safety.md` |
-| 设计系统 / Base 组件 | `rules/shared/24-design-system-mobile.md` |
+| 样式架构 / 主题 / 设计系统 / Base 组件 | `rules/shared/02-naming.md`、`rules/shared/24-design-system-mobile.md` |
 | 依赖 / 供应链 | `rules/shared/25-dependency-supply-chain.md` |
 | 安全加固 / 风控 / 远程配置 / 多平台矩阵 | `rules/shared/26-security-hardening-risk.md`、`rules/shared/19-release-ops.md`、`rules/shared/21-network-security.md` |
 | 日志 / 埋点 / 监控 | `rules/shared/15-logging-observability.md`、`rules/docs/observability-metrics.md` |
-| 测试 / CI / 发布 | `rules/shared/16-testing-quality-gates.md`、`rules/shared/19-release-ops.md`、`rules/codex/05-verification.md` |
+| 单元 / 组件 / 快照 / E2E / CI / 发布 | `rules/shared/16-testing-quality-gates.md`、`rules/shared/19-release-ops.md`、`rules/codex/05-verification.md` |
 | 生产发布 / 灰度 / 回滚 | `common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md` |
 | 生产事故 / 安全事件 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
 | 新业务分包 / 二开 | `rules/shared/18-business-module-extension.md`、`rules/docs/business-feature-playbook-miniapp.md`（修 bug/样式可不读 18，见 `99-project-local`） |
@@ -63,6 +64,8 @@
 - 编辑 `src/platform/**` → 追加读取 `11`，若涉及支付 / 分享 / 订阅消息则追加 `14`。
 - 编辑 `src/platform/**` 中多平台能力矩阵、风控信号或敏感能力 adapter → 追加读取 `26`。
 - 编辑 `src/stores/**` → 追加读取 `08`。
+- 编辑项目声明的 Base 组件目录、`src/components/**`、`src/composables/**` → 追加读取 `02` + `03` + `04` + `16` + `24`。
+- 编辑 `src/styles/**` 或主题配置 → 追加读取 `02` + `10` + `16` + `24`。
 - 编辑 `src/subpackages/**`（新业务域 / CRUD / 支付链路）→ 追加读取 `18` + `07` + `10`。
 - 编辑 `package.json`、`.github/**` → 追加读取 `16` + `19`，若涉及第三方 SDK 或供应链风险则追加 `25` + `26`。
 - 编辑远程配置、灰度、实验、审核临时开关、source map 或生产构建脚本 → 追加读取 `26` + `19`。
@@ -71,7 +74,9 @@
 
 安全与合规 > `00-must-follow` > 项目本地约定（`99-project-local`、ESLint）> 场景 shared。
 
-## Hard Rules 摘要
+## Level 0 与场景规则摘要
+
+`rules/shared/00-must-follow.md` 的 15 条通用不变量始终适用。以下摘要涉及具体能力时，仅在任务命中该能力后强制执行；按上面的任务表读取对应 shared 全文。
 
 - 页面禁止直接 `uni.request`、`uni.login`、支付、订阅消息、手机号授权。
 - API 字段来自 OpenAPI / schema / generated，禁止手写后端字段。

@@ -23,7 +23,7 @@ Vue 3 + TypeScript + uni-app + Vite
 ## 规则层级
 
 ```text
-L0  shared/00-must-follow.md       — 可拒 PR 的硬规则（45 条）
+L0  shared/00-must-follow.md       — 通用不变量（15 条）；场景规则命中时强制
 L1  shared/01–26                  — 场景规则
 L2  codex/*.md、cursor/*.mdc       — 任务入口与触发摘要
 ```
@@ -185,12 +185,15 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | `docs/compliance-wechat-checklist.md` | 微信合规与审核 |
 | `docs/contributing-rules-package.md` | 维护者变更清单 |
 | `docs/onboarding-new-project.md` | 新建小程序项目落地 |
+| `docs/release-checklist.md` | 业务发布 / 灰度 / 回滚证据清单 |
+| `docs/component-engineering-coverage.md` | 组件、样式、生命周期、测试与性能覆盖矩阵 |
 | `docs/rules-package-index.md` | shared 00–26 索引 |
-| `docs/rule-maturity-model.md` | 采纳 Level 0/1/2 |
+| `docs/rule-maturity-model.md` | 采纳 Level 0–3 |
+| `docs/cursor-shared-map.md` | Cursor ↔ shared 编号对照（含 AI `27`→`17`） |
 | `examples/README.md` | 脚本、CI、脚手架说明 |
-| `evals/prompts.md` | 回归提示词 M01–M44 |
+| `evals/prompts.md` | 回归提示词 M01–M51 |
 | `evals/ai-tool-safety.md` | AI 工具安全独立门禁 MAT01–MAT05（5/5） |
-| `evals/rubric.md` | P0 8/8；核心 P1 >=10/12；Security 5/5；Resilience 4/4；Enterprise Hardening 6/6 |
+| `evals/rubric.md` | P0 8/8；核心 P1 >=10/12；Security 5/5；Resilience 4/4；Enterprise Hardening 6/6；Component Engineering 6/6；Media 1/1 |
 | `evals/smoke-prompts.md` | 套件索引 |
 | `evals/adoption-checklist.md` | 业务仓落地清单 |
 | `scripts/validate-rules-package.py` | 规则包一致性校验 |
@@ -207,6 +210,8 @@ Codex 必须在改代码前输出「实现前命中声明」：任务包、将�
 | Security Extension | M30–M34 | 建议 5/5 |
 | Resilience Extension | M35–M38 | 建议 4/4 |
 | Enterprise Hardening Extension | M39–M44 | 建议 6/6 |
+| Component Engineering Extension | M45–M50 | 建议 6/6 |
+| Media Extension | M51 | 建议 1/1 |
 
 详见 `evals/README.md`。
 

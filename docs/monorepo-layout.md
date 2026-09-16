@@ -59,7 +59,7 @@ python miniapp/rules/scripts/validate-rules-package.py
 
 Workflow：`.github/workflows/validate-rules-packages.yml`（三端各一条 job）。
 
-企业级治理维护 SSOT 位于仓库根 [`docs/`](../docs/definition-of-done.md)；业务仓应引入由它生成的 `common-governance/`，并运行包内 validator 与 `--require-governance` 接入检查。
+企业级治理维护 SSOT 位于仓库根 [`definition-of-done.md`](definition-of-done.md)；业务仓应引入由它生成的 `common-governance/`，并运行包内 validator 与 `--require-governance` 接入检查。
 
 成熟后台全栈新增业务：后端 `shared/43` + `docs/business-feature-playbook.md`；管理端 `shared/22` + `docs/business-feature-playbook-frontend.md`；小程序 `shared/18` + `docs/business-feature-playbook-miniapp.md`；evals **B55–B63** / **E32–E40** / **M21–M29**（均建议 9/9）。管理端 i18n/实时/富文本另跑 E41–E43；受监管 Web 另跑 E44–E49；联调见 `web-backend/rules/docs/fullstack-contract.md`。
 

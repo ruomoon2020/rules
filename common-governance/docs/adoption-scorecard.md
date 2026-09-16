@@ -39,9 +39,9 @@
 | 需求 / Issue 与验收条件可追溯 | Required | Required | Required | Required |
 | 工作流、数据、权限、契约和回归人工复核 | Required（按业务变更） | Required | Required | Required |
 | AI 外部内容与工具安全边界 | Required（使用 AI 时） | Required | Required | Required |
-| AI Tool Safety 独立评测 | Required（使用 AI 工具时） | 5/5 | 5/5 | 5/5 |
+| AI Tool Safety 5/5 套件 | Optional（行为仍须遵守） | Optional（高风险 AI 变更建议） | Required（发版 / 规则包升级 / 高风险 AI 变更） | Required |
 
-证据字段建议：PR 需求追踪矩阵、关键业务测试名、Reviewer 结论，以及外部写入 / 数据出站审批（若有）。
+证据字段建议：PR 需求追踪矩阵、关键业务测试名、Reviewer 结论、外部写入 / 数据出站审批（若有）。触发 5/5 套件时另附绑定套件摘要、模型版本和独立评测人的 AI 结果 YAML。`check-project-adoption.py` 不验收 5/5；见 [`ai-tool-security.md`](ai-tool-security.md)「评测执行边界」。
 
 ### A. 代码门禁（DoD 第 1 道）
 | 项目 | Level 0 | Level 1 | Level 2 | Level 3 |
@@ -78,6 +78,7 @@
 | 依赖漏洞审计与 SLA | Required（基础） | Required | Required | Required |
 | PII/隐私日志脱敏 | Optional | Required（按 PII 触发） | Required | Required |
 | 威胁建模/越权回归（高风险时） | Optional | Optional（推荐） | Required（按高风险） | Required |
+| 组织 MFA / 最小默认权限 / 生产非自审 | Optional | Optional | Required | Required |
 
 证据字段建议：
 - 依赖/许可证/漏洞扫描报告（CI 链接）
@@ -124,6 +125,7 @@
 | 发版后 24h 观察与复盘链路 | Optional | Required（按端） | Required | Required |
 | 结构化 `release-evidence.yaml` | Optional | Optional | Required | Required |
 | 不可变产物与环境晋级证据 | Optional | Optional | Required（生产） | Required |
+| SBOM + provenance / attestation 验证 | Optional | Optional | Required（生产） | Required |
 | 事故响应演练与行动项闭环 | Optional | Optional | Required（高风险系统） | Required |
 
 证据字段建议：
@@ -131,6 +133,7 @@
 - 灰度策略与验证证据
 - 发版观察记录（至少 24h）
 - `validate-release-evidence.py` 通过记录与归档文件
+- 90 天内的 `governance-platform-evidence.json` 与 Level 2 接入校验通过记录
 
 ---
 

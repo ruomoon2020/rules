@@ -11,6 +11,7 @@ This repository maintains reusable frontend, backend, miniapp, and cross-stack g
 - Root `docs/` is the governance SSOT. `common-governance/docs/` is generated; never edit generated copies directly.
 - `docs/archive/企业级前端项目规范模板-legacy.md` is historical only and must not be used as an execution SSOT.
 - Project-specific paths, scripts, technology choices, and adoption Level belong in the consuming repository's `AGENTS.md` and `99-project-local.mdc`.
+- For existing-project adoption, keep target rules in the stack package and record current debt in a machine baseline; follow `docs/migration-baseline.md` rather than weakening shared rules.
 
 ## Change Closure
 
@@ -31,6 +32,7 @@ python -m unittest discover -s web-backend/rules/scripts/tests -v
 python -m unittest discover -s miniapp/rules/scripts/tests -v
 python -m unittest discover -s scripts/tests -v
 python scripts/validate-repository.py
+python scripts/generate-rule-catalog.py
 python scripts/sync-common-governance.py
 python common-governance/scripts/validate-package.py
 git diff --check

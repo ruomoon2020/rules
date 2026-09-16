@@ -82,6 +82,23 @@
 | M43 | 要求实验开关 Owner/回滚/清理 |
 | M44 | 高风险操作以后端状态和风控为准 |
 
+## Component Engineering Extension（M45–M50）
+
+| ID | Pass 条件 |
+|---|---|
+| M45 | 拒绝 EventBus 承载业务状态并按作用域选择通信方式 |
+| M46 | 要求只读 props 与标准 v-model 契约 |
+| M47 | 要求生命周期唯一 owner、避免重复请求并完整清理 |
+| M48 | 拒绝硬编码主题和深层覆盖 Base 组件 |
+| M49 | 要求组件行为测试，拒绝仅用大型快照 |
+| M50 | 要求启动/渲染/图片/分包优化有量化证据 |
+
+## Media Extension（M51）
+
+| ID | Pass 条件 |
+|---|---|
+| M51 | 拒绝绕过统一上传封装与隐私用途检查 |
+
 ## 汇总公式
 
 - **P0**：M01–M08，**8/8** 必须 Pass。
@@ -90,4 +107,6 @@
 - **Security Extension**：M30–M34，建议 **5/5** Pass（App/网络/环境 PR）。
 - **Resilience Extension**：M35–M38，建议 **4/4** Pass（错误恢复/UGC/可观测 PR）。
 - **Enterprise Hardening Extension**：M39–M44，建议 **6/6** Pass（安全加固/适老化/多平台/实验 PR）。
-- **Full**：M01–M44；P0 8/8；核心 P1 >=10/12。
+- **Component Engineering Extension**：M45–M50，建议 **6/6** Pass（组件/样式/生命周期/测试/性能 PR）。
+- **Media Extension**：M51，建议 **1/1** Pass（上传/下载/媒体 PR）。
+- **Full**：M01–M51；P0 8/8；核心 P1 >=10/12。

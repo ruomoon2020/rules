@@ -46,10 +46,14 @@
 |---|---|---|---|---|
 | 依赖 audit | OWASP DC（Maven / Gradle，见 `supply-chain-required.yml`）/ Dependabot | `pnpm audit` / Snyk | 同左 | **Required** |
 | 许可证 | license-check | license-check | 同左 | **Required**（金融政务） |
-| SBOM | 发版分支生成 | 发版分支生成 | 发版分支生成 | Optional → 核心域 Required |
+| SBOM | 发版分支生成 | 发版分支生成 | 发版分支生成 | Level 2+ / 核心域 Required |
+| Provenance / 签名 | 产物与 commit、builder、SBOM 绑定并可验签 | 同左 | 同左 | Level 2+ / 生产 Required |
 | 容器扫描 | 有镜像则 Required | N/A | Required |
 | 包体积 | N/A | bundle 预算 | 主包 / 分包预算 | **Required** |
 | **许可证（Node）** | — | `license-checker`（见 `supply-chain-required.yml`） | 同左 | **Required**（金融政务） |
+
+GitHub Actions 样板见 `examples/ci/artifact-trust-required.yml`：调用方先上传唯一命名的构建产物，再调用该 reusable workflow 生成 SPDX SBOM、build provenance 和 SBOM attestation。所有外部 Action 必须固定到 40 位 commit SHA。
+`governance-adoption.yaml` 的产物信任证据应指向自动触发的发布调用方；单独存在的 reusable workflow 只说明具备步骤，不能证明发布流程会运行它。
 
 样板：`common-governance/examples/ci/supply-chain-required.yml`（发布包内路径；源码位于 monorepo 根 `examples/ci/`）。Node 样板要求恰好一个 pnpm/npm 锁文件；Yarn 项目须提供组织批准的等价 workflow，禁止静默退化。后端另见 `web-backend/rules/examples/ci/backend-ci-required.yml`。
 

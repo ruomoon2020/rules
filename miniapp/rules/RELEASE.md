@@ -22,7 +22,7 @@
 
 ## 大版本 / 改 Hard Rules 时追加
 
-- [ ] 在测试业务仓跑 `evals/prompts.md` **M01–M44**，P0 **8/8**、核心 P1 **至少 10/12**；按需加 Business / Security / Resilience / Enterprise Hardening Extension 套件（见 `evals/README.md`）
+- [ ] 在测试业务仓跑 `evals/prompts.md` **M01–M51**，P0 **8/8**、核心 P1 **至少 10/12**；按需加 Business / Security / Resilience / Enterprise Hardening / Component Engineering Extension 套件（见 `evals/README.md`）
 - [ ] 通知业务仓同步 `rules/` 或升级 submodule 版本
 
 ## 不要做

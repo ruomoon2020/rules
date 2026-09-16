@@ -9,9 +9,11 @@ checks:
     evidence: .github/workflows/credential-scan-required.yml
   supply_chain:
     evidence: .github/workflows/supply-chain-required.yml
+  artifact_trust:
+    evidence: .github/workflows/artifact-trust-required.yml
 branch_protection:
   enabled: true
-  evidence: docs/branch-protection-evidence.md
+  evidence: governance-platform-evidence.json
 level3:
   scorecard: docs/adoption-scorecard.md
   evidence:

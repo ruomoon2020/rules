@@ -91,7 +91,9 @@
 | 回滚 | 上一版本镜像 / 配置可一键回退 |
 | Owner 签字 | 发布清单 `release-checklist`（后端）+ 各端 smoke |
 | Evals（规则驱动团队） | 发版前跑 Full / Smoke（见各包 `evals/README.md`） |
+| AI 工具安全证据 | 使用 AI 时遵守 [`ai-tool-security.md`](ai-tool-security.md)；**发版 / 规则包升级 / 高风险 AI 变更**须归档 AI Tool Safety 5/5 YAML（绑定套件摘要、模型版本、评测人）。日常 Level 0 采纳检查不要求 5/5 |
 | 发布证据 | 按 [`release-evidence.md`](release-evidence.md) 生成并校验 `release-evidence.yaml` |
+| 产物信任 | Level 2+ 生产产物生成 SBOM、provenance / attestation，并在发布证据中记录验证命令 |
 | 环境晋级 | 同一不可变产物按 [`environment-promotion.md`](environment-promotion.md) 晋级，配置漂移、灰度与回滚有证据 |
 | 事故准备 | 值班、升级和证据路径明确；高风险发布可按 [`incident-response.md`](incident-response.md) 响应并使用复盘模板 |
 
@@ -109,6 +111,7 @@
 - [ ] 回滚方案与 Owner 已写明
 - [ ] 需求追踪矩阵完整，关键业务场景已完成人工评审
 - [ ] `release-evidence.yaml` 已通过校验（生产发布）
+- [ ] Level 2+ 的平台快照与产物信任通过机器校验；若本变更使用 AI 且属发版 / 高风险 AI 场景，AI Tool Safety 5/5 YAML 已通过校验
 
 ## 相关文档
 
@@ -126,4 +129,5 @@
 | [`data-classification-matrix.md`](data-classification-matrix.md) | 数据分级 |
 | [`slo-alerting-template.md`](slo-alerting-template.md) | SLO 与告警 |
 | [`dod-maturity-mapping.md`](dod-maturity-mapping.md) | DoD × Level 对照 |
+| [`control-catalog.yaml`](control-catalog.yaml) | 版本化控制与外部标准映射 |
 | `web-backend/rules/docs/release-checklist.md` | 后端发版清单 |

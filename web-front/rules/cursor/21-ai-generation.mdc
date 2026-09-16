@@ -5,6 +5,12 @@ globs:
   - "src/components/**/*.vue"
   - "src/composables/**/*.ts"
   - "src/api/**/*.ts"
+  - "src/router/**/*.ts"
+  - "src/stores/**/*.ts"
+  - "src/permission*.ts"
+  - "src/schemas/**/*.ts"
+  - "schema/**/*.json"
+  - "contracts/**/*.yaml"
 alwaysApply: false
 ---
 

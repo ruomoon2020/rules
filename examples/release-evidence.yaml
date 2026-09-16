@@ -11,6 +11,13 @@ release:
   rules_versions:
     common-governance: 2.0.0
     frontend: 1.8.0
+artifact_trust:
+  sbom_ref: https://github.example.invalid/org/repo/attestations/sbom/123
+  provenance_ref: https://github.example.invalid/org/repo/attestations/provenance/123
+  signature_ref: https://github.example.invalid/org/repo/attestations/signature/123
+  builder_id: https://github.example.invalid/org/repo/actions/runs/123
+  verification_command: gh attestation verify artifact.tgz --repo org/repo
+  verified_at: "2026-08-14T10:05:00+08:00"
 requirements:
   - id: REQ-123
     acceptance_evidence: https://ci.example.invalid/runs/123

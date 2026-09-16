@@ -17,7 +17,7 @@
 | 级别 | 范围 | 门槛 |
 |---|---|---|
 | P0 | B01–B08 | **8/8** |
-| P1 | B09–B64 | **至少 50/56** |
+| P1 | B09–B67 | **至少 53/59** |
 
 ## 回归套件（企业分层）
 
@@ -25,14 +25,24 @@
 |---|---|---|---|
 | **Smoke** | B01–B08 + 核心 P1 20 条 | P0 8/8；核心 P1 ≥17/20 | 日常 PR、AI 快速回归 |
 | **Security** | B06、B21、B26、B31、B34、B39、B40、B43、B44、B45、B52、B53 | 建议 12/12 | 鉴权 / 安全 / 隐私 / 外部集成 PR |
-| **Contract** | B03、B11、B25、B47、B51 | 建议 5/5 | OpenAPI / 事件契约 / 幂等头 PR |
+| **Contract** | B03、B11、B25、B47、B51、B65 | 建议 6/6 | OpenAPI / 事件契约 / 幂等头 / 多范式 API PR |
 | **Business Extension** | B55–B63 | 建议 9/9 | 成熟后台新增业务 / CRUD / 树表主子表 / CodeGen PR |
 | **AI Tool Safety** | BAT01–BAT05（独立文件） | **5/5 Required** | AI 读取外部内容、调用工具或执行外部动作 |
-| **Full** | B01–B64 | P0 8/8；P1 ≥50/56 | **发版**、规则包升级、大版本 |
+| **Full** | B01–B67 | P0 8/8；P1 ≥53/59 | **发版**、规则包升级、大版本 |
 
 索引（不复制正文）：`smoke-prompts.md`（**不计入** `### Bxx` 提示词计数；校验见 `scripts/validate-rules-package.py`）。
 
 AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规 P1 总分，任一项失败即阻断。
+
+执行边界：`validate-ai-eval-results.py` **不调用模型**；可用 `prepare-ai-eval-run.py --print-plan` / `--write-skeleton` 准备评测。5/5 阻断发版、规则包升级与高风险 AI 变更，不是 Level 0 采纳检查。详见 common-governance `docs/ai-tool-security.md`「评测执行边界」。
+
+AI Tool Safety 结果须保存为结构化 YAML，并绑定本文件对应套件的摘要、模型版本、执行时间与独立评测人。业务仓使用公共治理包校验：
+
+```bash
+python common-governance/scripts/validate-ai-eval-results.py --file evidence/ai-eval-results.yaml --suite rules/evals/ai-tool-safety.md
+```
+
+校验器验证结果证据完整性，不负责调用模型；模型执行器由业务仓 CI 显式配置并固定版本。
 
 **Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 evals 后运行 `python scripts/generate-eval-topic-manifest.py --rules-dir web-backend/rules`。
 
@@ -40,7 +50,7 @@ AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规
 
 B09、B11、B21、B25、B27、B28、B29、B31、B34、B36、B39、B40、B43、B44、B45、B48、B51、B52、B55、B58。
 
-发版前仍须跑 **Full**（B01–B64）。
+发版前仍须跑 **Full**（B01–B67）。
 
 ### 与前端 Business Extension 对照（联调 / 双端 PR）
 

@@ -8,7 +8,7 @@
 | 规则包版本 | `rules/VERSION` |
 | 业务仓 | |
 | 执行人 | |
-| 套件 | Smoke / Security / Contract / Business Extension / Full |
+| 套件 | Smoke / Security / Contract / Business / Resilience / Enterprise Hardening / Component Engineering / Full |
 
 ## P0（M01–M08）— 必须 8/8
 
@@ -96,6 +96,27 @@
 
 **Enterprise Hardening Extension 合计**：__/6 Pass
 
+## Component Engineering Extension（M45–M50）— 建议 6/6
+
+| ID | 结果 | 备注 |
+|---|---|---|
+| M45 | | |
+| M46 | | |
+| M47 | | |
+| M48 | | |
+| M49 | | |
+| M50 | | |
+
+**Component Engineering Extension 合计**：__/6 Pass
+
+## Media Extension（M51）— 建议 1/1
+
+| ID | 结果 | 备注 |
+|---|---|---|
+| M51 | | |
+
+**Media Extension 合计**：__/1 Pass
+
 ## 结论
 
 - [ ] P0 8/8
@@ -104,4 +125,6 @@
 - [ ] Security Extension >= 5/5（若适用）
 - [ ] Resilience Extension >= 4/4（若适用）
 - [ ] Enterprise Hardening Extension >= 6/6（若适用）
+- [ ] Component Engineering Extension >= 6/6（若适用）
+- [ ] Media Extension >= 1/1（若适用）
 - [ ] Fail 项已回流 `shared/` / `cursor/` / `CHANGELOG.md`

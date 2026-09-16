@@ -16,6 +16,7 @@ PACKAGE = ROOT / "common-governance"
 SOURCE_DOCS = ROOT / "docs"
 TARGET_DOCS = PACKAGE / "docs"
 DOCS = (
+    "project-adoption-guide.md",
     "requirements-traceability.md",
     "business-correctness-review.md",
     "ai-tool-security.md",
@@ -34,25 +35,45 @@ DOCS = (
     "compliance-evidence-log.md",
     "branch-protection.md",
     "git-pr-governance.md",
+    "migration-baseline.md",
 )
 STATIC_PACKAGE_FILES = (
     "README.md",
     "CHANGELOG.md",
     "VERSION",
     "examples/commitlint.config.cjs.sample",
-    "examples/pull_request_template.md",
     "examples/SECURITY.md.sample",
     "examples/adr-template.md",
     "examples/ci/credential-scan-required.yml",
     "scripts/validate-package.py",
 )
 GENERATED_FILES = {
+    "examples/pull_request_template.md": ROOT / ".github" / "pull_request_template.md",
+    "docs/control-catalog.yaml": ROOT / "docs" / "control-catalog.yaml",
+    "docs/exceptions/README.md": ROOT / "docs" / "exceptions" / "README.md",
     "scripts/check-project-adoption.py": ROOT / "scripts" / "check-project-adoption.py",
+    "scripts/check-debt-baseline.py": ROOT / "scripts" / "check-debt-baseline.py",
+    "scripts/validate-ai-eval-results.py": ROOT / "scripts" / "validate-ai-eval-results.py",
+    "scripts/prepare-ai-eval-run.py": ROOT / "scripts" / "prepare-ai-eval-run.py",
+    "scripts/validate-control-catalog.py": ROOT / "scripts" / "validate-control-catalog.py",
+    "scripts/validate-exceptions.py": ROOT / "scripts" / "validate-exceptions.py",
+    "scripts/validate-pr-governance.py": ROOT / "scripts" / "validate-pr-governance.py",
     "scripts/validate-release-evidence.py": ROOT / "scripts" / "validate-release-evidence.py",
+    "scripts/validate-workflow-security.py": ROOT / "scripts" / "validate-workflow-security.py",
     "examples/release-evidence.yaml": ROOT / "examples" / "release-evidence.yaml",
+    "examples/rule-exception.yaml": ROOT / "examples" / "rule-exception.yaml",
+    "examples/ci/artifact-trust-required.yml": ROOT / "examples" / "ci" / "artifact-trust-required.yml",
     "examples/ci/supply-chain-required.yml": ROOT / "examples" / "ci" / "supply-chain-required.yml",
     "examples/ci/rules-adoption-required.yml": ROOT / "examples" / "ci" / "rules-adoption-required.yml",
+    "examples/ci/debt-baseline-required.yml": ROOT / "examples" / "ci" / "debt-baseline-required.yml",
+    "examples/ci/exceptions-required.yml": ROOT / "examples" / "ci" / "exceptions-required.yml",
+    "examples/ci/ai-eval-results-required.yml": ROOT / "examples" / "ci" / "ai-eval-results-required.yml",
+    "examples/ai-eval-results.yaml": ROOT / "examples" / "ai-eval-results.yaml",
     "examples/governance-adoption.yaml": ROOT / "examples" / "governance-adoption.yaml",
+    "examples/governance-platform-evidence.json": ROOT / "examples" / "governance-platform-evidence.json",
+    "examples/PROJECT_RULES.md.sample": ROOT / "examples" / "PROJECT_RULES.md.sample",
+    "examples/contract-baseline.md.sample": ROOT / "examples" / "contract-baseline.md.sample",
+    "examples/migration-baseline.json": ROOT / "examples" / "migration-baseline.json",
 }
 
 

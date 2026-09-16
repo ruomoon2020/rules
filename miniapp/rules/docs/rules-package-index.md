@@ -2,7 +2,7 @@
 
 | 编号 | 文件 | 一句话 |
 |---|---|---|
-| 00 | `00-must-follow.md` | PR 硬规则（45 条） |
+| 00 | `00-must-follow.md` | Level 0 通用不变量（15 条）与场景路由 |
 | 01 | `01-project-structure.md` | 目录与分层 |
 | 02 | `02-naming.md` | 命名 |
 | 03 | `03-vue3-typescript-uniapp.md` | Vue3 / TS 风格 |
@@ -32,6 +32,6 @@
 
 文档：`docs/observability-metrics.md`、`docs/owasp-miniapp-mapping.md`、`docs/fullstack-contract.md`（含与管理端 E41–E43 边界说明）、`docs/enterprise-governance.md`（DoD / 豁免 / 接入验收）。
 
-Evals：M01–M44；核心 P1 ≥10/12；AI Tool Safety MAT01–MAT05 独立 **5/5**，见 `evals/README.md` 与 `evals/ai-tool-safety.md`。
+Evals：M01–M51；核心 P1 ≥10/12；Component Engineering M45–M50 建议 **6/6**；AI Tool Safety MAT01–MAT05 独立 **5/5**，见 `evals/README.md` 与 `evals/ai-tool-safety.md`。
 
 Codex：`codex/AGENTS.md`。Cursor：`cursor/*.mdc`。

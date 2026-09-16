@@ -55,6 +55,8 @@ DoD × Level 全栈对照见 common governance 包 `docs/dod-maturity-mapping.md
 | 性能 / 测试 | `docs/PERFORMANCE_BUDGET.template.md`、关键路径 E2E、a11y、视觉回归（按项目） |
 | 治理 | common governance DoD、豁免、CODEOWNERS、供应链与发布证据 |
 | 受监管 Web | 金融、政务、高敏数据或第三方脚本 / 嵌入页面命中时追加 `25-regulated-web-hardening.md` 与 Enterprise Hardening E44–E49 |
+| CI | `supply-chain-required.yml`、`artifact-trust-required.yml`（SBOM / attestation） |
+| AI | 使用 AI 时遵守工具安全行为边界；发版 / 高风险 AI 变更另跑 **AI Tool Safety 5/5**（EAT01–EAT05） |
 | Evals | Full E01–E49：P0 8/8，P1 ≥38/41；相关场景追加专项套件 |
 
 ## Level 3：平台化治理
@@ -67,6 +69,7 @@ DoD × Level 全栈对照见 common governance 包 `docs/dod-maturity-mapping.md
 | 平台变更 | Owner + ADR / 等价设计记录 + 兼容矩阵 + 回滚与消费方回归 |
 | 视觉证据 | Storybook 或等价组件目录；核心组件视觉回归（按项目工具） |
 | 运行治理 | SLO 看板、规则升级记录、季度复盘和恢复演练 |
+| AI | 使用 AI 时继续要求 AI Tool Safety 5/5，并纳入跨项目 Scorecard |
 
 ## 推广原则
 

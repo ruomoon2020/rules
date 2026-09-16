@@ -19,7 +19,8 @@
 
 ## 按任务包追加阅读
 
-先判断属于下表哪一行，只读该行和被点名的细则；不要一次加载全部 `shared/`。Level 3 / 平台治理规则只在对应任务或平台组变更时读取。
+先判断属于下表哪一行，只读该行和被点名的细则；不要一次加载全部 `shared/`。
+**Level 3 / 窄场景**（多范式 API、归档、密钥、金额时间、状态机、成本）不进主表，只在「路径触发」命中时读取。
 
 | 任务 | 必读规则 |
 |---|---|
@@ -27,19 +28,21 @@
 | 需求分析 / 业务 PR / 缺陷修复 | `common-governance/docs/requirements-traceability.md`、`common-governance/docs/business-correctness-review.md` |
 | 写 API / Controller / DTO | `rules/shared/04-rest-api-design.md`、`rules/shared/05-openapi-contract.md`、`rules/shared/08-exception-errorcodes.md`、`rules/shared/12-dto-mapping.md`、`rules/shared/13-validation.md`、`rules/shared/19-pagination-query.md`、`rules/codex/02-api-implementation.md` |
 | 写持久化 / SQL / 多库 | `rules/shared/07-persistence-mybatis.md`、`rules/shared/19-pagination-query.md`、`rules/docs/sql-dialect-matrix.md`、`rules/codex/03-domain-persistence.md` |
+| 领域模型 / 聚合 / Entity 边界 | `rules/shared/11-domain-model.md`、`rules/shared/12-dto-mapping.md` |
 | 成熟后台二开 / CRUD / CodeGen / 菜单 / 树表 / 主子表 | `rules/shared/43-business-module-extension.md`、`rules/docs/business-feature-playbook.md`、`rules/shared/06-security-authz.md`、`rules/shared/14-file-import-export.md`、`rules/shared/24-data-access-cache.md`、`rules/shared/25-jobs-scheduling.md`、`rules/shared/27-audit-log.md` |
 | 安全 / 权限 / 隐私 / 审计 / 威胁建模 | `rules/shared/06-security-authz.md`、`rules/shared/27-audit-log.md`、`rules/shared/29-data-privacy-lifecycle.md`、`rules/shared/35-threat-modeling.md`、`rules/codex/04-security-integration.md` |
 | 集成 / 异步 / Job / MQ / Webhook | `rules/shared/17-messaging-async.md`、`rules/shared/18-idempotency-concurrency.md`、`rules/shared/25-jobs-scheduling.md`、`rules/shared/28-external-integration.md`、`rules/shared/37-service-to-service-auth.md`、`rules/shared/39-event-contracts.md` |
 | 平台 / 公共层 / framework / system / generator | `rules/shared/30-ownership-adr.md`、`rules/shared/43-business-module-extension.md`、`rules/docs/adr/0000-template.md` |
 | 测试 / 性能 / CI / 依赖 / 配置 | `rules/shared/15-testing.md`、`rules/shared/16-performance.md`、`rules/shared/20-dependency-governance.md`、`rules/shared/21-configuration-secrets.md`、`rules/shared/23-quality-gates.md` |
-| 发版 / 可靠性 / 运维 / 合规 | `rules/shared/22-operability.md`、`rules/shared/31-production-data-ops.md`、`rules/shared/32-service-reliability.md`、`rules/docs/release-checklist.md`、`common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md`、`rules/docs/owasp-api-top10-mapping.md`、`rules/docs/compliance-cn-mapping.md` |
+| 日志 / 可观测 / 发版 / 运维 / 合规 | `rules/shared/09-logging-observability.md`、`rules/shared/22-operability.md`、`rules/shared/31-production-data-ops.md`、`rules/shared/32-service-reliability.md`、`rules/docs/release-checklist.md`、`common-governance/docs/environment-promotion.md`、`common-governance/docs/release-evidence.md` |
 | 生产事故 / 安全事件 / 复盘 | `common-governance/docs/incident-response.md`、`common-governance/docs/incident-postmortem-template.md` |
-| AI 生成复杂后端代码；读取网页 / Issue / 日志；调用外部工具 | `rules/shared/26-ai-generation.md` |
+| AI 生成；读取网页 / Issue / 日志；调用外部工具 | `rules/shared/26-ai-generation.md` |
 | 收尾 / Review | `rules/shared/10-verification-checklist.md`、`rules/codex/05-verification.md` |
 
-- 不要读 `rules/cursor/*.mdc`（仅供 Cursor）。
+- 不要读 `rules/cursor/*.mdc`（仅供 Cursor；编号对照见 `rules/docs/cursor-shared-map.md`）。
 - 不要读 `rules/docs/migration-from-template.md`（维护者用）。
 - 新项目结构见 `rules/docs/scaffold-module-system.md`。
+- 合规映射按需追加：`rules/docs/owasp-api-top10-mapping.md`、`rules/docs/compliance-cn-mapping.md`。
 
 ## 业务扩展触发词
 
@@ -55,7 +58,14 @@
 - 编辑 `**/modules/**`、`**/ruoyi-modules/**`、`**/yudao-module-*/**`、`**/db/migration/**`、`**/sql/**/*menu*.sql` → 追加读取 `43` + `docs/business-feature-playbook.md`。
 - 编辑 `**/common/**`、`**/framework/**`、`**/core/**`、`**/starter/**`、`**/system/**`、`**/generator/**`、`**/gen/**` → 追加读取 `43` §公共模块例外 + `30-ownership-adr.md`。
 - 编辑 `contracts/openapi.yaml` 或等价契约文件 → 追加读取 `05-openapi-contract.md` + `12-dto-mapping.md`。
+- 编辑 `**/domain/**`、`**/model/**`、聚合根或 Entity 边界相关代码 → 追加读取 `11-domain-model.md`。
 - 编辑 `Dockerfile`、K8s、IaC、CI、依赖或配置 → 追加读取 `20`、`21`、`23`、`38` 中对应规则。
+- 编辑日志 / metric / tracing 相关代码 → 追加读取 `09-logging-observability.md`。
+- 编辑 GraphQL / gRPC / 非 REST 入口 → 追加读取 `33-alternate-api-paradigms.md` + `05-openapi-contract.md`。
+- 编辑归档 Job、冷热数据迁移 → 追加读取 `34-data-archival.md` + `31-production-data-ops.md`。
+- 编辑加密、密钥、KMS、签名校验 → 追加读取 `36-crypto-key-management.md` + `35-threat-modeling.md`。
+- 编辑金额、汇率、账单、时区边界、状态机、字典驱动流转 → 追加读取 `40`、`41`。
+- 编辑容量配额、成本标签、资源预算 → 追加读取 `42-cost-governance.md` + `16-performance.md`。
 
 ## Hard Rules（摘要）
 

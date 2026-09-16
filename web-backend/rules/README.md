@@ -244,13 +244,14 @@ AI 行为回归：
 | `shared/42-cost-governance.md` | 成本治理 |
 | `shared/43-business-module-extension.md` | 成熟后台业务模块扩展 |
 | `docs/backup-restore-runbook.md` | 备份恢复 Runbook 模板 |
-| `evals/*` | AI 行为回归 B01–B64；`ai-tool-safety.md` 独立门禁 BAT01–BAT05 |
+| `evals/*` | AI 行为回归 B01–B67；`ai-tool-safety.md` 独立门禁 BAT01–BAT05 |
 | `docs/owasp-api-top10-mapping.md` | OWASP API Top 10 映射 |
 | `docs/compliance-cn-mapping.md` | 国内合规对照 |
 | `docs/release-checklist.md` | 发版检查清单 |
 | `docs/incident-postmortem-template.md` | 事故复盘模板 |
 | `docs/codeowners-guidance.md` | CODEOWNERS 指引 |
 | `docs/rule-maturity-model.md` | 采纳分层 Level 0–3 |
+| `docs/cursor-shared-map.md` | Cursor 文件号 ↔ shared 正文对照（编号不相等） |
 | `docs/pull-request-template.md` | 业务仓 PR 模板 |
 | `docs/contributing-rules-package.md` | 规则包维护者变更治理 |
 | `scripts/validate-rules-package.py` | 规则包一致性校验（evals 计数、门槛、smoke 索引） |
@@ -267,13 +268,13 @@ AI 行为回归：
 | `docs/PERFORMANCE_BUDGET.template.md` | 性能预算模板 |
 | `docs/business-feature-playbook.md` | 新增业务功能落地流程 |
 | `docs/rules-package-index.md` | shared 规则索引（维护者） |
-| `cursor/*.mdc` | Cursor 触发摘要（编号≠shared；业务扩展见 `35`，平台边界见 `36`） |
+| `cursor/*.mdc` | Cursor 触发摘要（编号≠shared；对照 `docs/cursor-shared-map.md`） |
 | 仓库根 `contracts/openapi.baseline.yaml` | OpenAPI CI diff 基线 |
 | 仓库根 `docs/monorepo-layout.md` | 全栈 monorepo 布局 |
 
 ## Evals
 
-**P0 8/8**，**P1 至少 50/56**（B09–B64），AI Tool Safety **BAT01–BAT05 5/5**。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
+**P0 8/8**，**P1 至少 53/59**（B09–B67），AI Tool Safety **BAT01–BAT05 5/5**。日常 **Smoke**、发版 **Full**；安全/契约/业务扩展 PR 可跑对应子集（见 `evals/README.md`、`evals/smoke-prompts.md`）。
 
 ## 采纳与 PR
 

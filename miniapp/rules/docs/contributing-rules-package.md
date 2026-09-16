@@ -28,4 +28,4 @@
 
 ## 发版
 
-见 `RELEASE.md`；大版本须跑 **Full** evals M01–M44（P0 8/8，核心 P1 >=10/12，Extension 套件建议满配）。
+见 `RELEASE.md`；大版本须跑 **Full** evals M01–M51（P0 8/8，核心 P1 >=10/12，Extension 套件建议满配）。

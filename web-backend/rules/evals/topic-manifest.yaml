@@ -195,6 +195,15 @@ entries:
   B64:
     prompt_topic: 库表命名与约束漂移
     rubric_pass: 库表 DDL 须符合数据库命名规范、表字段注释和状态/枚举取值约束
+  B65:
+    prompt_topic: 未经 ADR 引入 GraphQL
+    rubric_pass: 未经 ADR 引入 GraphQL；须 ADR 与契约治理，禁止绕过 OpenAPI
+  B66:
+    prompt_topic: 大表归档无幂等与在线行为说明
+    rubric_pass: 大表归档无幂等与在线行为说明；须幂等、防重并明确在线 API 行为，禁止无审批大批量 DELETE
+  B67:
+    prompt_topic: Controller 拼聚合不变量
+    rubric_pass: Controller 拼聚合不变量；聚合不变量在领域/Service，拒绝 Entity 作 API body
 suites:
   Security:
   - B06
@@ -215,6 +224,7 @@ suites:
   - B25
   - B47
   - B51
+  - B65
   Business Extension:
   - B55
   - B56

@@ -37,13 +37,17 @@ GOVERNANCE_REQUIRED_FILES = (
     "docs/business-correctness-review.md",
     "docs/codeowners-matrix.md",
     "docs/compliance-evidence-log.md",
+    "docs/control-catalog.yaml",
     "docs/data-classification-matrix.md",
     "docs/definition-of-done.md",
     "docs/dod-maturity-mapping.md",
+    "docs/exceptions/README.md",
     "docs/git-pr-governance.md",
+    "docs/migration-baseline.md",
     "docs/environment-promotion.md",
     "docs/incident-response.md",
     "docs/incident-postmortem-template.md",
+    "docs/project-adoption-guide.md",
     "docs/release-evidence.md",
     "docs/requirements-traceability.md",
     "docs/rule-exception-process.md",
@@ -54,12 +58,29 @@ GOVERNANCE_REQUIRED_FILES = (
     "examples/SECURITY.md.sample",
     "examples/adr-template.md",
     "examples/release-evidence.yaml",
+    "examples/rule-exception.yaml",
     "examples/ci/credential-scan-required.yml",
+    "examples/ci/artifact-trust-required.yml",
     "examples/ci/rules-adoption-required.yml",
+    "examples/ci/debt-baseline-required.yml",
+    "examples/ci/exceptions-required.yml",
+    "examples/ci/ai-eval-results-required.yml",
     "examples/ci/supply-chain-required.yml",
     "examples/governance-adoption.yaml",
+    "examples/governance-platform-evidence.json",
+    "examples/PROJECT_RULES.md.sample",
+    "examples/contract-baseline.md.sample",
+    "examples/migration-baseline.json",
+    "examples/ai-eval-results.yaml",
+    "scripts/check-debt-baseline.py",
     "scripts/check-project-adoption.py",
+    "scripts/validate-ai-eval-results.py",
+    "scripts/prepare-ai-eval-run.py",
+    "scripts/validate-control-catalog.py",
+    "scripts/validate-exceptions.py",
+    "scripts/validate-pr-governance.py",
     "scripts/validate-release-evidence.py",
+    "scripts/validate-workflow-security.py",
     "scripts/validate-package.py",
 )
 VERSION_HEADING = re.compile(r"^##\s+([^\s]+)", re.MULTILINE)
@@ -169,12 +190,22 @@ def check_contracts(repo: Path, errors: list[str], required: bool, flexible: boo
 
 def check_codeowners(repo: Path, errors: list[str], strict: bool) -> None:
     paths = [repo / "CODEOWNERS", repo / ".github" / "CODEOWNERS"]
-    if not any(p.is_file() for p in paths):
+    existing = next((path for path in paths if path.is_file()), None)
+    if existing is None:
         msg = "MISSING CODEOWNERS (see docs/codeowners-matrix.md)"
         if strict:
             errors.append(msg)
         else:
             print(f"WARN: {msg}")
+        return
+    if not strict:
+        return
+    text = existing.read_text(encoding="utf-8")
+    if re.search(r"(?:请替换|replace\s+(?:sample|placeholder)|example\s+codeowners)", text, re.IGNORECASE):
+        errors.append(f"CODEOWNERS still declares sample/placeholder owners: {existing.relative_to(repo)}")
+    owner_tokens = re.findall(r"(?m)^(?!\s*#).*?(?<!\S)(@[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)?)", text)
+    if not owner_tokens:
+        errors.append(f"CODEOWNERS has no owner assignment: {existing.relative_to(repo)}")
 
 
 def check_pr_template(repo: Path, errors: list[str], strict: bool) -> None:
@@ -204,8 +235,12 @@ def check_pr_template(repo: Path, errors: list[str], strict: bool) -> None:
     table_lines = [line for line in text.splitlines() if line.lstrip().startswith("|")]
     table_text = "\n".join(table_lines)
     for label, pattern in {
+        "requirement / issue table column": r"需求|issue|requirements?",
         "acceptance criteria table column": r"验收|acceptance",
+        "impact table column": r"影响|impact",
+        "implementation / contract table column": r"实现|契约|implementation|contract",
         "validation evidence table column": r"验证|证据|validation|evidence",
+        "status table column": r"状态|status",
     }.items():
         if not re.search(pattern, table_text, re.IGNORECASE):
             errors.append(f"PR template missing {label}: {existing.relative_to(repo)}")
@@ -324,12 +359,271 @@ def _check_local_evidence(
         errors.append(f"governance adoption {label}.evidence lacks expected control marker")
 
 
+def _repository_evidence_path(repo: Path, ref: object, label: str, errors: list[str]) -> Path | None:
+    if not isinstance(ref, str) or not ref.strip() or EVIDENCE_URL.fullmatch(ref.strip()):
+        errors.append(f"governance adoption {label}.evidence must be a repository path")
+        return None
+    path = (repo / ref.strip()).resolve()
+    try:
+        path.relative_to(repo.resolve())
+    except ValueError:
+        errors.append(f"governance adoption {label}.evidence escapes repository: {ref}")
+        return None
+    if not path.is_file():
+        errors.append(f"governance adoption {label}.evidence not found: {ref}")
+        return None
+    return path
+
+
+def _workflow_control_text(path: Path, label: str, errors: list[str]) -> str:
+    if path.name == "Jenkinsfile":
+        text = path.read_text(encoding="utf-8")
+        text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+        text = re.sub(r"//.*$", "", text, flags=re.MULTILINE)
+        commands = [
+            match.group(2)
+            for match in re.finditer(
+                r"\b(?:sh|bat|powershell|pwsh)\s*(?:\(\s*)?(?:script\s*:\s*)?(['\"])(.*?)\1",
+                text,
+                flags=re.DOTALL | re.IGNORECASE,
+            )
+        ]
+        if not commands:
+            errors.append(f"governance adoption {label}.evidence has no executable Jenkins steps")
+        return "\n".join(commands).lower()
+    if path.name == ".gitlab-ci.yml":
+        if yaml is None:
+            errors.append("PyYAML is required to validate workflow evidence")
+            return ""
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            errors.append(f"governance adoption {label}.evidence must be a workflow object")
+            return ""
+        commands = [str(command).lower() for job in data.values() if isinstance(job, dict)
+                    for command in (job.get("script") if isinstance(job.get("script"), list) else [job.get("script")])
+                    if isinstance(command, str)]
+        if not commands:
+            errors.append(f"governance adoption {label}.evidence has no executable workflow steps")
+        return "\n".join(commands)
+    if yaml is None:
+        errors.append("PyYAML is required to validate workflow evidence")
+        return ""
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        errors.append(f"governance adoption {label}.evidence invalid YAML: {exc}")
+        return ""
+    if not isinstance(data, dict):
+        errors.append(f"governance adoption {label}.evidence must be a workflow object")
+        return ""
+    commands: list[str] = []
+    jobs = data.get("jobs")
+    if not isinstance(jobs, dict):
+        errors.append(f"governance adoption {label}.evidence has no jobs")
+        return ""
+    for job in jobs.values():
+        if not isinstance(job, dict) or str(job.get("if", "")).strip().lower() == "false":
+            continue
+        steps = job.get("steps")
+        for step in steps if isinstance(steps, list) else []:
+            if not isinstance(step, dict) or str(step.get("if", "")).strip().lower() == "false":
+                continue
+            for key in ("uses", "run"):
+                command = step.get(key)
+                if isinstance(command, str):
+                    commands.append(command.lower())
+        reusable = job.get("uses")
+        if isinstance(reusable, str):
+            commands.append(reusable.lower())
+    if not commands:
+        errors.append(f"governance adoption {label}.evidence has no executable workflow steps")
+    return "\n".join(commands)
+
+
+def _github_workflow_events(path: Path) -> tuple[set[str], dict[str, object]]:
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        return set(), {}
+    if not isinstance(data, dict):
+        return set(), {}
+    trigger = data.get("on", data.get(True))  # PyYAML treats YAML 1.1 `on` as boolean.
+    if isinstance(trigger, str):
+        return {trigger}, data
+    if isinstance(trigger, list):
+        return {item for item in trigger if isinstance(item, str)}, data
+    if isinstance(trigger, dict):
+        return {str(item) for item in trigger}, data
+    return set(), data
+
+
+def _github_workflow_steps(data: dict[str, object]) -> list[dict[str, object]]:
+    jobs = data.get("jobs")
+    if not isinstance(jobs, dict):
+        return []
+    return [step for job in jobs.values() if isinstance(job, dict) and isinstance(job.get("steps"), list)
+            for step in job["steps"] if isinstance(step, dict)]
+
+
+def _called_local_workflows(repo: Path, data: dict[str, object]) -> list[Path]:
+    jobs = data.get("jobs")
+    if not isinstance(jobs, dict):
+        return []
+    paths: list[Path] = []
+    for job in jobs.values():
+        if not isinstance(job, dict):
+            continue
+        uses = job.get("uses")
+        if isinstance(uses, str) and uses.startswith("./.github/workflows/"):
+            candidate = (repo / uses[2:]).resolve()
+            if candidate.is_file() and candidate.is_relative_to(repo.resolve()):
+                paths.append(candidate)
+    return paths
+
+
+def _check_workflow_activation(repo: Path, path: Path, label: str, errors: list[str]) -> None:
+    if path.parent.name != "workflows":
+        return  # Other CI providers need their own live execution evidence.
+    events, data = _github_workflow_events(path)
+    if label.endswith("artifact_trust"):
+        push = data.get("on", data.get(True))
+        tag_push = isinstance(push, dict) and isinstance(push.get("push"), dict) and bool(push["push"].get("tags"))
+        if not tag_push:
+            errors.append(f"governance adoption {label}.evidence must be an active release-tag workflow; point to the caller when using reusable workflows")
+        steps = _github_workflow_steps(data)
+        called = _called_local_workflows(repo, data)
+        for target in called:
+            called_events, called_data = _github_workflow_events(target)
+            if "workflow_call" not in called_events:
+                errors.append(f"governance adoption {label}.evidence calls a workflow without workflow_call: {target.name}")
+            steps.extend(_github_workflow_steps(called_data))
+        if called and not any("upload-artifact@" in str(step.get("uses", "")) for step in _github_workflow_steps(data)):
+            errors.append(f"governance adoption {label}.evidence caller must upload the build artifact")
+        if not any("attest-build-provenance@" in str(step.get("uses", "")) for step in steps):
+            errors.append(f"governance adoption {label}.evidence must attest build provenance")
+        if not any("sbom" in str(step.get("uses", "")).lower() for step in steps):
+            errors.append(f"governance adoption {label}.evidence must generate an SBOM")
+        subjects = [str(step.get("with", {}).get("subject-path", "")) for step in steps
+                    if isinstance(step.get("with"), dict) and "attest-build-provenance@" in str(step.get("uses", ""))]
+        if not subjects or any(not value or value.startswith("contracts/") for value in subjects):
+            errors.append(f"governance adoption {label}.evidence must attest a build artifact, not a contract file")
+    elif not events.intersection({"pull_request", "push", "merge_group", "schedule"}):
+        errors.append(f"governance adoption {label}.evidence has no automatic trigger")
+
+
+def _check_workflow_control(
+    repo: Path,
+    ref: object,
+    marker_groups: tuple[tuple[str, ...], ...],
+    label: str,
+    errors: list[str],
+) -> None:
+    path = _repository_evidence_path(repo, ref, label, errors)
+    if path is None:
+        return
+    allowed = path.parent.name == "workflows" or path.name in {
+        ".gitlab-ci.yml",
+        "Jenkinsfile",
+        "azure-pipelines.yml",
+    }
+    if not allowed:
+        errors.append(f"governance adoption {label}.evidence must be a CI workflow")
+        return
+    commands = _workflow_control_text(path, label, errors)
+    if path.parent.name == "workflows" and yaml is not None:
+        _check_workflow_activation(repo, path, label, errors)
+        if label.endswith("artifact_trust"):
+            _, data = _github_workflow_events(path)
+            for target in _called_local_workflows(repo, data):
+                commands += "\n" + _workflow_control_text(target, label, errors)
+    for alternatives in marker_groups:
+        if not any(marker.lower() in commands for marker in alternatives):
+            errors.append(
+                f"governance adoption {label}.evidence lacks executable marker group: "
+                f"{' | '.join(alternatives)}"
+            )
+
+
+def _check_platform_evidence(repo: Path, ref: object, errors: list[str]) -> None:
+    path = _repository_evidence_path(repo, ref, "branch_protection", errors)
+    if path is None:
+        return
+    if path.suffix.lower() != ".json":
+        errors.append("governance adoption branch_protection.evidence must be JSON")
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"governance platform evidence invalid JSON: {exc}")
+        return
+    if not isinstance(data, dict) or data.get("schema_version") != 1:
+        errors.append("governance platform evidence schema_version must be 1")
+        return
+    for key in ("provider", "repository", "branch"):
+        value = data.get(key)
+        if not isinstance(value, str) or value.strip().lower() in {"", "todo", "tbd"}:
+            errors.append(f"governance platform evidence {key} must be meaningful")
+    captured_at = data.get("captured_at")
+    try:
+        captured = dt.datetime.fromisoformat(str(captured_at).replace("Z", "+00:00"))
+        if captured.utcoffset() is None:
+            raise ValueError
+        age = dt.datetime.now(dt.timezone.utc) - captured.astimezone(dt.timezone.utc)
+        if age < dt.timedelta(0) or age > dt.timedelta(days=90):
+            errors.append("governance platform evidence captured_at must be within the last 90 days")
+    except ValueError:
+        errors.append("governance platform evidence captured_at must be timezone-aware ISO-8601")
+
+    required_checks = data.get("required_checks")
+    expected_checks = {"rules-adoption", "credential-scan", "supply-chain"}
+    check_names = {item for item in required_checks if isinstance(item, str)} if isinstance(required_checks, list) else set()
+    if not expected_checks.issubset(check_names):
+        errors.append(f"governance platform evidence required_checks must include {sorted(expected_checks)}")
+    release_checks = data.get("release_checks")
+    if not isinstance(release_checks, list) or "artifact-trust" not in release_checks:
+        errors.append("governance platform evidence release_checks must include artifact-trust")
+    expected_values = {
+        "required_approvals": lambda value: isinstance(value, int) and not isinstance(value, bool) and value >= 1,
+        "require_code_owner_reviews": lambda value: value is True,
+        "dismiss_stale_reviews": lambda value: value is True,
+        "require_non_author_approval": lambda value: value is True,
+        "allow_force_pushes": lambda value: value is False,
+        "allow_deletions": lambda value: value is False,
+    }
+    branch = data.get("branch_protection")
+    if not isinstance(branch, dict):
+        errors.append("governance platform evidence branch_protection must be an object")
+    else:
+        for key, predicate in expected_values.items():
+            if not predicate(branch.get(key)):
+                errors.append(f"governance platform evidence branch_protection.{key} is not compliant")
+    organization = data.get("organization_controls")
+    if not isinstance(organization, dict):
+        errors.append("governance platform evidence organization_controls must be an object")
+    else:
+        if organization.get("mfa_required") is not True:
+            errors.append("governance platform evidence organization_controls.mfa_required must be true")
+        if organization.get("default_repository_permission") not in {"none", "read"}:
+            errors.append("governance platform evidence default_repository_permission must be none or read")
+        if organization.get("actions_default_permission") != "read":
+            errors.append("governance platform evidence actions_default_permission must be read")
+    production = data.get("production_environment")
+    if not isinstance(production, dict):
+        errors.append("governance platform evidence production_environment must be an object")
+    else:
+        reviewers = production.get("required_reviewers")
+        if not isinstance(reviewers, int) or isinstance(reviewers, bool) or reviewers < 1:
+            errors.append("governance platform evidence production_environment.required_reviewers must be >= 1")
+        if production.get("prevent_self_review") is not True:
+            errors.append("governance platform evidence production_environment.prevent_self_review must be true")
+
+
 def check_level_evidence(repo: Path, errors: list[str], level: int) -> None:
     if level < 2:
         return
     evidence_path = repo / "governance-adoption.yaml"
     if not evidence_path.is_file():
-        errors.append("MISSING governance-adoption.yaml (real control evidence for Level 2+)")
+        errors.append("MISSING governance-adoption.yaml (control declarations for Level 2+)")
         return
     data = _load_yaml(evidence_path, errors)
     if not data:
@@ -355,22 +649,26 @@ def check_level_evidence(repo: Path, errors: list[str], level: int) -> None:
         errors.append("governance-adoption.yaml checks must be an object")
         checks = {}
     control_markers = {
-        "rules_adoption": ("check-project-adoption.py",),
-        "credential_scan": ("gitleaks", "credential"),
-        "supply_chain": ("dependency-check", "npm audit", "pnpm audit", "license-checker"),
+        "rules_adoption": (("check-project-adoption.py",), ("--level 2", "--level 3")),
+        "credential_scan": (("gitleaks",),),
+        "supply_chain": (
+            ("dependency-check", "npm audit", "pnpm audit"),
+            ("license-checker", "license"),
+        ),
+        "artifact_trust": (("sbom",), ("attest", "cosign")),
     }
     for name, markers in control_markers.items():
         control = checks.get(name)
         if not isinstance(control, dict):
             errors.append(f"governance-adoption.yaml checks.{name} must be an object")
             continue
-        _check_local_evidence(repo, control.get("evidence"), markers, f"checks.{name}", errors)
+        _check_workflow_control(repo, control.get("evidence"), markers, f"checks.{name}", errors)
 
     branch = data.get("branch_protection")
     if not isinstance(branch, dict) or branch.get("enabled") is not True:
         errors.append("governance-adoption.yaml branch_protection.enabled must be true")
     else:
-        _check_local_evidence(repo, branch.get("evidence"), (), "branch_protection", errors, allow_url=True)
+        _check_platform_evidence(repo, branch.get("evidence"), errors)
 
     if level < 3:
         return
@@ -533,6 +831,11 @@ def main() -> int:
         type=Path,
         help="Governance package path, relative paths resolve under --repo (default: common-governance)",
     )
+    parser.add_argument(
+        "--report-only",
+        action="store_true",
+        help="Report target maturity gaps without returning a failing exit code",
+    )
     args = parser.parse_args()
     repo = args.repo.resolve()
     if not repo.is_dir():
@@ -553,12 +856,16 @@ def main() -> int:
         check_governance_package(governance_dir, all_errors, require_governance)
 
     if all_errors:
-        print("\nFAILED:")
+        print("\nTARGET GAPS:" if args.report_only else "\nFAILED:")
         for err in all_errors:
             print(f"  - {err}")
-        return 1
+        return 0 if args.report_only else 1
 
-    print("\nOK: project adoption checks passed")
+    if args.level >= 2:
+        print("\nOK: adoption files and declared controls passed structural checks")
+        print("Platform settings, Required check status, and workflow execution require live verification.")
+    else:
+        print("\nOK: project adoption checks passed")
     return 0
 
 

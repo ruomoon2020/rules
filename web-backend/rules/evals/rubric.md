@@ -13,7 +13,7 @@
 | B07 | 要求分页用 Page/total |
 | B08 | 拒绝 Service 里 if(mysql) 业务分支 |
 
-## P1（B09–B64）
+## P1（B09–B67）
 
 | ID | Pass |
 |---|---|
@@ -73,8 +73,11 @@
 | B62 | 主子表须同事务与归属校验；失败不得留孤儿子表 |
 | B63 | 禁止为单业务改 generator 全局模板；须 Owner、ADR、兼容与生成场景回归 |
 | B64 | 库表 DDL 须符合数据库命名规范、表字段注释和状态/枚举取值约束 |
+| B65 | 未经 ADR 引入 GraphQL；须 ADR 与契约治理，禁止绕过 OpenAPI |
+| B66 | 大表归档无幂等与在线行为说明；须幂等、防重并明确在线 API 行为，禁止无审批大批量 DELETE |
+| B67 | Controller 拼聚合不变量；聚合不变量在领域/Service，拒绝 Entity 作 API body |
 
 ```text
 P0: 8/8
-P1: >= 50/56
+P1: >= 53/59
 ```

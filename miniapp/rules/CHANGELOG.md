@@ -1,5 +1,66 @@
 # Changelog
 
+## 0.9.6 — 2026-09-17
+
+### Changed
+
+- `shared/00-must-follow.md` 收敛为 15 条通用不变量；支付、分包、UGC、发布等细则改为命中场景时强制读取，避免未使用该能力的项目被 Level 0 错误要求。
+- Codex/Cursor 概览、成熟度模型与规则索引同步场景路由口径。
+
+## 0.9.5 — 2026-09-15
+
+### Changed
+
+- `evals/prompts.md`：M01–M50 期望统一显式引用 shared 文件名，便于 rule catalog 关联。
+- 根目录 `scripts/generate-rule-catalog.py` 支持匹配反引号编号引用（如 `` `05` ``）。
+
+### Added
+
+- 新增 Media Extension **M51**（上传绕过统一封装与隐私）；Contract 套件纳入 M51（建议 5/5）；Full 范围为 M01–M51。
+
+## 0.9.4 — 2026-09-15
+
+### Added
+
+- 新增 `docs/cursor-shared-map.md`，标明 `27-ai-generation` → shared `17` 等错位映射。
+
+## 0.9.3 — 2026-09-15
+
+### Changed
+
+- AI Cursor 触发面补齐 auth / platform / pages.json / manifest；成熟度与 evals 对齐 5/5 条件门禁口径。
+
+## 0.9.2 — 2026-09-15
+
+### Fixed
+
+- Hard Rules 计数文案去掉粗体数字，validator 同时兼容 `**N**` 写法。
+- 成熟度 Level 2 明确为 Security Extension 5/5；AI Tool Safety 各 Level 在使用 AI 时均适用。
+
+### Added
+
+- 新增 Cursor `27-ai-generation.mdc` 与业务发布清单 `docs/release-checklist.md`。
+- `LANGUAGE.md` 对齐前后端表格格式。
+
+## 0.9.1 — 2026-09-15
+
+### Fixed
+
+- Codex 与 Cursor 增加新建项目、目录调整和跨层文件移动任务路由，确保 `shared/01-project-structure.md` 有明确触发入口。
+
+## 0.9.0 — 2026-09-15
+
+### Added
+
+- 新增组件通信、生命周期、样式架构、主题管理、组件文档与组件测试规范。
+- 新增启动、渲染、图片、分包与包体积的量化优化约束。
+- 新增 Component Engineering Extension M45–M50 与 6/6 专项门槛。
+
+### Changed
+
+- Codex/Cursor 路由补齐组件、样式、主题、测试和性能触发路径。
+- package validator 锁定组件工程关键章节，并校验 M45–M50 套件完整性。
+
 ## 0.8.0 — 2026-08-14
 
 ### Added
@@ -10,6 +71,7 @@
 ### Changed
 
 - package validator 校验 AI Tool Safety 套件和 common-governance 跨包引用。
+- AI Tool Safety 结果改为结构化证据，绑定套件摘要、模型版本、执行时间与独立评测人。
 
 ## 0.7.1 — 2026-08-14
 

@@ -30,11 +30,11 @@ M06、M07、M12、M18、M30、M31、M32、M33、M34
 
 **门槛**：建议 **9/9** Pass。
 
-## Contract（OpenAPI / generated / 支付契约 PR）
+## Contract（OpenAPI / generated / 支付契约 / 上传媒体 PR）
 
-M03、M05、M08、M15
+M03、M05、M08、M15、M51
 
-**门槛**：建议 **4/4** Pass。
+**门槛**：建议 **5/5** Pass。
 
 ## Business Extension（新业务分包 PR）
 
@@ -54,8 +54,14 @@ M39、M40、M41、M42、M43、M44
 
 **门槛**：建议 **6/6** Pass。
 
+## Component Engineering（组件 / 样式 / 生命周期 / 测试 / 性能 PR）
+
+M45、M46、M47、M48、M49、M50
+
+**门槛**：建议 **6/6** Pass。
+
 ## Full（发版 / 规则包升级）
 
-M01–M44，见 `prompts.md` 全文。
+M01–M51，见 `prompts.md` 全文。
 
-**门槛**：P0 **8/8**；核心 P1 **>= 10/12**；Security / Resilience / Enterprise Hardening Extension 建议满配（见 `rubric.md`）。
+**门槛**：P0 **8/8**；核心 P1 **>= 10/12**；Security / Resilience / Enterprise Hardening / Component Engineering Extension 建议满配（见 `rubric.md`）。

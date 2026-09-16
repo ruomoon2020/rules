@@ -68,7 +68,8 @@
 | 治理 | `30-ownership-adr.md`、`31-production-data-ops.md`、`32-service-reliability.md` |
 | 安全高阶 | `35-threat-modeling.md` |
 | Docs | `release-checklist.md`、`incident-postmortem-template.md`、`backup-restore-runbook.md`、`PERFORMANCE_BUDGET.template.md`、`owasp-api-top10-mapping.md`、`compliance-cn-mapping.md`、`codeowners-guidance.md` |
-| CI | Flyway 多库（若声明多库）、dependency-check（按策略） |
+| CI | Flyway 多库（若声明多库）、dependency-check（按策略）、`artifact-trust-required.yml`（SBOM / attestation） |
+| AI | 使用 AI 时遵守工具安全行为边界；发版 / 高风险 AI 变更另跑 **AI Tool Safety 5/5**（BAT01–BAT05） |
 | Evals | **Security** 子集（见 `evals/README.md`）；成熟后台业务 PR 加 **Business Extension** B55–B63；发版前建议 **Full** |
 
 ---
@@ -80,8 +81,8 @@
 | 类型 | 文件 / 资产 |
 |---|---|
 | Shared | `33-alternate-api-paradigms.md`、`34-data-archival.md`、`36`–`42` |
-| Cursor | `cursor/27`–`cursor/34`（对应 35–42） |
-| CI 可选 | SBOM、容器扫描、Pact、性能冒烟（见 `23-quality-gates.md`） |
+| Cursor | 对照 `docs/cursor-shared-map.md`；Level 3 正文见 shared `33`/`34`/`36`–`42`（Cursor `25`/`26`/`28`–`34`）；威胁建模 `cursor/27`↔shared `35` 属 Level 2 |
+| CI 可选 | 容器扫描、Pact、性能冒烟（见 `23-quality-gates.md`）；跨项目 Scorecard |
 | Evals | **Contract** 子集 + 全量 **Full**（规则包发版 / 大版本必跑） |
 
 ---
@@ -94,7 +95,7 @@
 | Security | 见 `evals/README.md` | 建议全 Pass | 鉴权/安全/隐私 PR |
 | Contract | 见 `evals/README.md` | 建议全 Pass | OpenAPI / 事件契约 PR |
 | Business Extension | B55–B63 | 建议 9/9 | 成熟后台新增业务 / CRUD / 树表主子表 PR |
-| Full | B01–B64 | P0 8/8；P1 ≥50/56 | 发版、规则包升级、大版本 |
+| Full | B01–B67 | P0 8/8；P1 ≥53/59 | 发版、规则包升级、大版本 |
 
 索引提示词：`evals/smoke-prompts.md`（仅索引，正文在 `prompts.md`）。
 

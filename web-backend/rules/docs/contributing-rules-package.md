@@ -34,7 +34,7 @@
 - [ ] `evals/adoption-checklist.md`、`RELEASE.md`、`docs/onboarding-new-project.md`
 - [ ] `cursor/00-project-overview.mdc` 中硬规则条数、evals 门槛
 - [ ] 仓库根 `contracts/openapi.yaml` 与 `05-openapi-contract.md` 描述一致
-- [ ] 发版前：`evals/prompts.md` **Full** B01–B64（P0 8/8，P1 ≥50/56）
+- [ ] 发版前：`evals/prompts.md` **Full** B01–B67（P0 8/8，P1 ≥53/59）
 
 ## Evals 计数约定
 

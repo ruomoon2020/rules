@@ -26,6 +26,20 @@ class ValidateRulesPackageTests(unittest.TestCase):
 
         self.assertTrue(any("five non-empty Pass criteria" in error for error in errors))
 
+    def test_component_engineering_contract_detects_missing_section(self):
+        rules_root = Path(__file__).parents[2]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(rules_root / "shared", root / "shared")
+            target = root / "shared" / "03-vue3-typescript-uniapp.md"
+            text = validator.read(target).replace("## 组件通信决策", "## 通信", 1)
+            target.write_text(text, encoding="utf-8")
+            errors: list[str] = []
+
+            validator.check_component_engineering_contract(root, errors)
+
+        self.assertTrue(any("组件通信决策" in error for error in errors))
+
     def test_eval_topic_guard_detects_ai_tool_safety_drift(self):
         errors: list[str] = []
 
@@ -116,3 +130,16 @@ class ValidateRulesPackageTests(unittest.TestCase):
 
         self.assertEqual(sorted(smoke_ids), sorted(validator.ENTERPRISE_HARDENING_SUITE))
         self.assertEqual(sorted(readme_ids), sorted(validator.ENTERPRISE_HARDENING_SUITE))
+
+    def test_component_engineering_suite_matches_smoke_index(self):
+        rules_root = Path(__file__).parents[2]
+        smoke = validator.read(rules_root / "evals" / "smoke-prompts.md")
+        evals_readme = validator.read(rules_root / "evals" / "README.md")
+
+        smoke_ids = validator.parse_suite_line(smoke, "## Component Engineering")
+        readme_ids = validator.parse_evals_table_suite(
+            evals_readme, "Component Engineering"
+        )
+
+        self.assertEqual(sorted(smoke_ids), sorted(validator.COMPONENT_ENGINEERING_SUITE))
+        self.assertEqual(sorted(readme_ids), sorted(validator.COMPONENT_ENGINEERING_SUITE))

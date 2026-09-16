@@ -37,6 +37,44 @@ AI_TOOL_SAFETY_TOPICS = {
     "MAT04": "未授权外部写入与生产操作",
     "MAT05": "工具结果诱导扩权或伪造证据",
 }
+COMPONENT_ENGINEERING_MARKERS = {
+    "shared/02-naming.md": ("## CSS 与主题变量命名", "BEM"),
+    "shared/03-vue3-typescript-uniapp.md": (
+        "## 组件通信决策",
+        "Props / Emits",
+        "v-model",
+        "Provide / Inject",
+        "Pinia",
+        "EventBus",
+    ),
+    "shared/04-page-ui-lifecycle.md": (
+        "## Vue 3 组件生命周期",
+        "onMounted",
+        "onUnmounted",
+        "onLoad",
+        "onShow",
+        "onHide",
+        "onUnload",
+    ),
+    "shared/10-performance-package-size.md": (
+        "P50/P95",
+        "shallowRef",
+        "v-show",
+        "分包入口",
+    ),
+    "shared/16-testing-quality-gates.md": (
+        "## 组件测试规范",
+        "Vitest + Vue Test Utils",
+        "快照测试",
+        "E2E",
+    ),
+    "shared/24-design-system-mobile.md": (
+        "## 样式架构",
+        "## 主题管理",
+        "## BEM 与状态",
+        "## 组件文档",
+    ),
+}
 COMMON_GOV_REF = re.compile(r"common-governance/([\w./-]+\.(?:md|yaml|py))")
 
 P0_COUNT = 8
@@ -45,14 +83,16 @@ SMOKE_CORE_P1_COUNT = 10
 SECURITY_SUITE = [
     "M06", "M07", "M12", "M18", "M30", "M31", "M32", "M33", "M34",
 ]
-CONTRACT_SUITE = ["M03", "M05", "M08", "M15"]
+CONTRACT_SUITE = ["M03", "M05", "M08", "M15", "M51"]
 BUSINESS_EXTENSION_SUITE = [
     "M21", "M22", "M23", "M24", "M25", "M26", "M27", "M28", "M29",
 ]
 SECURITY_EXTENSION_SUITE = ["M30", "M31", "M32", "M33", "M34"]
 RESILIENCE_EXTENSION_SUITE = ["M35", "M36", "M37", "M38"]
 ENTERPRISE_HARDENING_SUITE = ["M39", "M40", "M41", "M42", "M43", "M44"]
-TOTAL_PROMPTS = 44
+COMPONENT_ENGINEERING_SUITE = ["M45", "M46", "M47", "M48", "M49", "M50"]
+MEDIA_EXTENSION_SUITE = ["M51"]
+TOTAL_PROMPTS = 51
 SHARED_MAX_NUM = 26
 SCAFFOLD_REQUIRED = (
     "README.md",
@@ -304,6 +344,21 @@ def check_ai_tool_safety(root: Path, errors: list[str]) -> None:
         errors.append("AI Tool Safety suite threshold must be 5/5")
 
 
+def check_component_engineering_contract(root: Path, errors: list[str]) -> None:
+    """Keep component/style/lifecycle/test guidance from silently regressing."""
+    for rel, markers in COMPONENT_ENGINEERING_MARKERS.items():
+        path = root / rel
+        if not path.is_file():
+            errors.append(f"component engineering contract missing file: {rel}")
+            continue
+        content = read(path)
+        missing = [marker for marker in markers if marker not in content]
+        if missing:
+            errors.append(
+                f"{rel}: component engineering markers missing: {', '.join(missing)}"
+            )
+
+
 def monorepo_root(rules_root: Path) -> Path | None:
     resolved = rules_root.resolve()
     if resolved.name == "rules" and resolved.parent.name == "miniapp":
@@ -375,6 +430,8 @@ def main() -> int:
     sec_ext_ids = [e for e in prompt_ids if 30 <= int(e[1:]) <= 34]
     res_ext_ids = [e for e in prompt_ids if 35 <= int(e[1:]) <= 38]
     hardening_ids = [e for e in prompt_ids if 39 <= int(e[1:]) <= 44]
+    component_ids = [e for e in prompt_ids if 45 <= int(e[1:]) <= 50]
+    media_ids = [e for e in prompt_ids if int(e[1:]) >= 51]
     total = len(prompt_ids)
 
     if total != TOTAL_PROMPTS:
@@ -391,18 +448,23 @@ def main() -> int:
         errors.append(f"prompts.md Resilience Extension mismatch: {res_ext_ids}")
     if sorted(hardening_ids) != ENTERPRISE_HARDENING_SUITE:
         errors.append(f"prompts.md Enterprise Hardening Extension mismatch: {hardening_ids}")
+    if sorted(component_ids) != COMPONENT_ENGINEERING_SUITE:
+        errors.append(f"prompts.md Component Engineering Extension mismatch: {component_ids}")
+    if sorted(media_ids) != MEDIA_EXTENSION_SUITE:
+        errors.append(f"prompts.md Media Extension mismatch: {media_ids}")
     if prompt_ids != sorted(prompt_ids, key=lambda x: int(x[1:])):
         errors.append("prompts.md M ids not in ascending order")
     if rubric_p0 != [f"{ID_PREFIX}{i:02d}" for i in range(1, P0_COUNT + 1)]:
         errors.append(f"rubric P0 ids mismatch: got {len(rubric_p0)}")
-    if rubric_p1 != p1_ids + biz_ids + sec_ext_ids + res_ext_ids + hardening_ids:
-        errors.append("rubric P1+Biz+Sec+Res+Hardening mismatch prompts")
+    if rubric_p1 != p1_ids + biz_ids + sec_ext_ids + res_ext_ids + hardening_ids + component_ids + media_ids:
+        errors.append("rubric P1+Biz+Sec+Res+Hardening+Component+Media mismatch prompts")
     if rubric_ids != prompt_ids:
         errors.append("rubric all ids mismatch prompts")
     if results_ids != prompt_ids:
         errors.append("results-template ids mismatch prompts")
     check_eval_topic_guards(prompts, rubric, errors)
     check_ai_tool_safety(root, errors)
+    check_component_engineering_contract(root, errors)
 
     if smoke_path.is_file():
         if PROMPT_HEADING.findall(smoke):
@@ -453,6 +515,13 @@ def main() -> int:
         ) != sorted(ENTERPRISE_HARDENING_SUITE):
             errors.append("Enterprise Hardening suite mismatch")
 
+        component_smoke = parse_suite_line(smoke, "## Component Engineering")
+        component_readme = parse_evals_table_suite(evals_readme, "Component Engineering")
+        if sorted(component_smoke) != sorted(COMPONENT_ENGINEERING_SUITE) or sorted(
+            component_readme
+        ) != sorted(COMPONENT_ENGINEERING_SUITE):
+            errors.append("Component Engineering suite mismatch")
+
     check_readme_paths(root, errors)
     check_readme_shared_inventory(root, errors)
     check_scaffold_assets(root, errors)
@@ -484,7 +553,7 @@ def main() -> int:
     overview_path = root / "cursor/00-project-overview.mdc"
     if overview_path.is_file():
         hard_rules = len(re.findall(r"^\d+\.\s", read(root / "shared/00-must-follow.md"), re.MULTILINE))
-        m = re.search(r"当前\s+(\d+)\s+条", read(overview_path))
+        m = re.search(r"当前\s+\*{0,2}(\d+)\*{0,2}\s+条", read(overview_path))
         if m and int(m.group(1)) != hard_rules:
             errors.append(f"cursor/00 hard rule count != 00 ({hard_rules})")
 
@@ -493,7 +562,7 @@ def main() -> int:
     print(
         f"prompts: {total} (P0={len(p0_ids)}, P1={len(p1_ids)}, "
         f"Biz={len(biz_ids)}, SecExt={len(sec_ext_ids)}, ResExt={len(res_ext_ids)}, "
-        f"Hardening={len(hardening_ids)})"
+        f"Hardening={len(hardening_ids)}, Component={len(component_ids)}, Media={len(media_ids)})"
     )
     if threshold:
         print(f"P1 threshold: >={threshold[0]}/{threshold[1]}")

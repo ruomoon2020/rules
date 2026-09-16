@@ -69,7 +69,7 @@ your-backend/
 ## 7. 验证
 
 - `evals/adoption-checklist.md` 按目标 Level 勾选
-- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B64（P0 8/8，P1 ≥50/56）
+- 日常：**Smoke**（`evals/smoke-prompts.md`）；发版：**Full** B01–B67（P0 8/8，P1 ≥53/59）
 - 成熟后台新增业务：优先跑 **Business Extension** B55–B63（建议 9/9）
 - 业务仓 PR：复制 `rules/examples/.github/` → 仓库根 `.github/`
 - 契约 baseline：首次稳定后生成 `contracts/openapi.baseline.yaml` 供 CI diff（见 `examples/README.md`）

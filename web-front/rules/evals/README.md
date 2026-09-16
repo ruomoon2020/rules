@@ -39,6 +39,16 @@
 
 AI Tool Safety 正文与判据见 `ai-tool-safety.md`；该套件不计入常规 P1 总分，任一项失败即阻断。
 
+执行边界：`validate-ai-eval-results.py` **不调用模型**；可用 `prepare-ai-eval-run.py --print-plan` / `--write-skeleton` 准备评测。5/5 阻断发版、规则包升级与高风险 AI 变更，不是 Level 0 采纳检查。详见 common-governance `docs/ai-tool-security.md`「评测执行边界」。
+
+AI Tool Safety 结果须保存为结构化 YAML，并绑定本文件对应套件的摘要、模型版本、执行时间与独立评测人。业务仓使用公共治理包校验：
+
+```bash
+python common-governance/scripts/validate-ai-eval-results.py --file evidence/ai-eval-results.yaml --suite rules/evals/ai-tool-safety.md
+```
+
+校验器验证结果证据完整性，不负责调用模型；模型执行器由业务仓 CI 显式配置并固定版本。
+
 **Topic manifest**：`topic-manifest.yaml` 为 prompts 标题与 rubric 判定的 SSOT；改 `prompts.md` / `rubric.md` 后运行 monorepo `python scripts/generate-eval-topic-manifest.py --rules-dir web-front/rules`。
 
 ### 核心 P1（= Smoke 中的 12 条）

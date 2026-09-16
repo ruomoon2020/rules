@@ -1,7 +1,6 @@
-# Example CODEOWNERS for strict adoption checks.
-# Replace sample teams with real GitHub/GitLab groups in business repositories.
+# Fixture CODEOWNERS used to exercise strict adoption checks.
 
-* @frontend-leads
-/rules/ @frontend-leads @architecture-team
-/.cursor/rules/ @frontend-leads @architecture-team
-/package.json @frontend-leads
+* @acme/frontend-leads
+/rules/ @acme/frontend-leads @acme/architecture
+/.cursor/rules/ @acme/frontend-leads @acme/architecture
+/package.json @acme/frontend-leads
